@@ -349,8 +349,18 @@ tr:hover td{background:rgba(255,255,255,0.015)}
             <div id="canvas-ph" style="color:var(--text3);font-size:13px;padding:32px;text-align:center">Rendering…</div>
             <canvas id="ann-canvas" style="display:none"></canvas>
           </div>
+          <div id="field-desc-box" class="hidden" style="margin-top:12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;">
+            <div style="font-size:9px;font-family:monospace;text-transform:uppercase;letter-spacing:0.12em;color:var(--cyan);margin-bottom:8px">Field Assessment</div>
+            <div id="field-desc-text" style="font-size:12px;color:var(--text2);line-height:1.7"></div>
+          </div>
         </div>
-        <div id="summary-panel"></div>
+        <div>
+          <div id="summary-panel"></div>
+          <div id="insights-panel" class="hidden" style="margin-top:14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px;">
+            <div style="font-size:9px;font-family:monospace;text-transform:uppercase;letter-spacing:0.12em;color:var(--gold);margin-bottom:12px">Sample Insights</div>
+            <div id="insights-content"></div>
+          </div>
+        </div>
       </div>
 
       <div class="sep"></div>
@@ -496,13 +506,120 @@ function loadFile(file){
 }
 
 // ── PROMPTS ──────────────────────────────────────────────────
-var PETRI_PROMPT = 'You are a sputum inflammometry expert. Analyse this sputum sample in a Petri dish or well plate viewed under an inverted microscope — PRE-PROCESSING quality assessment.\n\nCRITICAL: Only annotate structures WITHIN the visible illuminated field. Do NOT annotate anything in dark surrounding areas.\n\nIdentify:\n- mucus_plug: Dense opaque whitish/yellowish mucus plugs — BEST for processing\n- saliva: Thin watery translucent material — avoid selecting\n- squamous: Large flat epithelial cells — contamination\n- blood_streak: Reddish/brownish streaks — haemoptysis\n- refractile_cell: Bright shiny refractile structures WITHIN FIELD ONLY\n- mucin: Stringy amorphous mucin threads\n- debris: Non-specific debris\n- fungal_hyphae: Branching filamentous structures\n- food_matter: Vegetable/food contaminants\n\nFor EACH structure, x,y as % (0-100) from top-left. In fieldNarrative write 3-5 sentences describing what is seen: overall sample appearance, areas of dense mucus vs saliva, cellularity impression, contamination, and recommendation for which areas to select for processing.\n\nReturn ONLY valid JSON:\n{"mode":"petri","imageQuality":"good","cells":[{"id":1,"type":"mucus_plug","x":40.0,"y":50.0,"confidence":"high"}],"summary":{"mucus_plug_present":true,"saliva_dominant":false,"blood_present":false,"squamous_contamination":"low","overall_quality":"adequate","best_selection_area":"centre","adequacy":"adequate","adequacyNote":"","recommendation":"Select dense mucus plugs from centre"},"fieldNarrative":"Describe the field here.","miscFindings":[],"notes":""}';
+var PETRI_PROMPT = 'You are a sputum inflammometry expert performing pre-processing quality assessment. This image shows sputum in a Petri dish or well plate viewed under an INVERTED microscope at low power.
 
-var INVERTED_PROMPT = 'You are a sputum inflammometry expert. Analyse this hemocytometer image under an inverted microscope with trypan blue staining.\n\nCRITICAL: Only annotate cells WITHIN the visible illuminated grid area. Do NOT annotate anything outside the field boundary. All x,y must be within the illuminated area.\n\nIdentify:\n- viable_cell: Bright refractile unstained cells — live leukocytes (trypan blue excluded)\n- dead_cell: Blue-stained cells — non-viable (trypan blue positive)\n- squamous: Large flat irregular cells — contamination\n- rbc: Small anucleate biconcave cells — red blood cells\n- debris: Amorphous mucus or debris\n- refractile_cell: Any bright shiny refractile structure WITHIN FIELD ONLY\n- mucin: Stringy mucin threads WITHIN FIELD\n- charcot_leyden: Needle-like elongated crystals WITHIN FIELD\n- fungal_spores: Round refractile particles WITHIN FIELD\n\nIf Neubauer grid visible, count per square: TL, TR, C, BL, BR.\nFor EACH structure, x,y as % (0-100) from top-left.\nIn fieldNarrative write 3-5 sentences: describe the hemocytometer field, cell density, proportion of viable vs dead cells, appearance of cells, staining quality, and any notable features.\n\nReturn ONLY valid JSON:\n{"mode":"inverted","gridDetected":false,"imageQuality":"good","cells":[{"id":1,"type":"viable_cell","x":30.0,"y":50.0,"confidence":"high"}],"gridSquares":{"detected":[],"counts":{"TL":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"TR":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"C":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"BL":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"BR":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0}}},"summary":{"totalViable":0,"totalDead":0,"totalSquamous":0,"totalRBC":0,"totalDebris":0,"viabilityPercent":0.0,"squamousPercent":0.0,"adequacy":"adequate","adequacyNote":""},"fieldNarrative":"Describe the field here.","miscFindings":[],"notes":""}';
+CRITICAL — FIELD BOUNDARY: Only identify structures WITHIN the visible illuminated field. Do NOT annotate anything in dark surrounding areas.
 
-var UPRIGHT_HEMO_PROMPT = 'You are a sputum inflammometry expert. Analyse this hemocytometer image under an UPRIGHT microscope with trypan blue staining.\n\nCRITICAL: Only annotate cells WITHIN the visible illuminated grid area. Do NOT annotate anything outside the field boundary.\n\nIdentify:\n- viable_cell: Bright refractile unstained cells — live leukocytes\n- dead_cell: Blue-stained cells — non-viable\n- squamous: Large flat irregular cells — contamination\n- rbc: Small anucleate biconcave cells\n- debris: Amorphous mucus or debris\n- refractile_cell: Any bright shiny refractile structure WITHIN FIELD ONLY\n- mucin: Stringy mucin threads WITHIN FIELD\n- charcot_leyden: Needle-like crystals WITHIN FIELD\n\nIf Neubauer grid visible, count per square: TL, TR, C, BL, BR.\nFor EACH structure, x,y as % (0-100) from top-left.\nIn fieldNarrative write 3-5 sentences describing the field, cell density, viability, and notable features.\n\nReturn ONLY valid JSON:\n{"mode":"upright_hemo","gridDetected":false,"imageQuality":"good","cells":[{"id":1,"type":"viable_cell","x":30.0,"y":50.0,"confidence":"high"}],"gridSquares":{"detected":[],"counts":{"TL":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"TR":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"C":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"BL":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"BR":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0}}},"summary":{"totalViable":0,"totalDead":0,"totalSquamous":0,"totalRBC":0,"totalDebris":0,"viabilityPercent":0.0,"squamousPercent":0.0,"adequacy":"adequate","adequacyNote":""},"fieldNarrative":"Describe the field here.","miscFindings":[],"notes":""}';
+CRITICAL — MUCUS PLUG IDENTIFICATION (most important task):
+Mucus plugs are identified by OPTICAL DENSITY and TEXTURE, NOT cellular detail:
+- mucus_plug: DENSE, OPAQUE, whitish-yellow or grey-white material that contrasts sharply against the background. Viscid, irregular surface. May appear rubbery or gelatinous. Looks CLEARLY DIFFERENT from surrounding watery material. These are the portions to SELECT for processing.
+- saliva: THIN, TRANSPARENT, uniform watery background. No structural variation. Clear/glassy appearance. AVOID selecting this.
+- blood_streak: Reddish-brown or pinkish areas or streaks — haemoptysis indicator.
+- squamous: Large flat irregular cells visible at this magnification — contamination marker.
+- refractile_cell: Bright shiny refractile particles WITHIN the field only.
+- mucin: Stringy thread-like translucent material between plugs.
+- debris: Amorphous non-specific material.
+- fungal_hyphae: Branching filamentous structures if visible.
+- food_matter: Plant cell fragments or food particles.
 
-var UPRIGHT_PROMPT = 'You are a sputum inflammometry expert. Analyse this Leishman-stained cytospin slide from an upright microscope for differential cell count.\n\nCRITICAL: Only annotate cells WITHIN the visible circular illuminated microscopic field. Do NOT annotate anything in the dark area surrounding the field. All x,y coordinates must fall within the illuminated circular area only.\n\nPRIMARY CELLS (Romanowsky/Leishman stain):\n- macrophage: Large cell, pale grey often-vacuolated cytoplasm, eccentric kidney/oval nucleus\n- neutrophil: 3-5 lobed dark purple nucleus, pale pink granular cytoplasm\n- eosinophil: Bilobed nucleus, BRIGHT orange-red coarse granules filling cytoplasm\n- lymphocyte: Small cell, large round dark purple nucleus, thin pale cytoplasm rim\n- basophil: Irregular nucleus, dark blue-purple coarse granules (rare)\n- mast_cell: Round nucleus, densely packed metachromatic dark purple granules\n- bronchial_epithelial: Columnar shaped, may be ciliated, pale cytoplasm\n- squamous: Large flat polygonal cell, small pyknotic nucleus (oral contamination)\n\nMISCELLANEOUS (WITHIN FIELD ONLY):\n- refractile_cell: Bright refractile structure WITHIN illuminated field only — not in dark borders\n- mucin: Pale pink/magenta amorphous background\n- cocci: Round small purple dots\n- bacilli: Rod-shaped purple bacteria\n- coccobacilli: Short oval rods\n- afb: Unstained rods/ghost bacilli\n- fungal_hyphae: Branching filaments\n- fungal_spores: Round purple/pink bodies\n- charcot_leyden: Elongated needle-shaped crystals\n- curschmann: Coiled mucus plugs\n- creola: Clusters of shed bronchial epithelial cells\n- pollen: Large round structured particles\n- vegetable_matter: Plant cell wall fragments\n\nFor EACH cell WITHIN THE FIELD, x,y as % (0-100) from top-left.\nIn fieldNarrative write 4-6 sentences in laboratory style: describe cellularity of this field, predominant cell types and their appearance, staining quality, background, any miscellaneous findings, and clinical significance of the pattern seen.\nIn nonSquamousCells give your count of non-squamous nucleated cells in this field.\n\nReturn ONLY valid JSON:\n{"mode":"upright","imageQuality":"good","stainQuality":"good","cells":[{"id":1,"type":"macrophage","x":30.0,"y":50.0,"confidence":"high"}],"summary":{"totalCellsIdentified":0,"macrophage":0,"neutrophil":0,"eosinophil":0,"lymphocyte":0,"basophil":0,"mast_cell":0,"bronchial_epithelial":0,"squamous":0,"nonSquamousCells":0,"macrophagePercent":0.0,"neutrophilPercent":0.0,"eosinophilPercent":0.0,"lymphocytePercent":0.0,"basophilPercent":0.0,"mast_cellPercent":0.0,"bronchial_epithelialPercent":0.0,"squamousPercent":0.0,"adequacy":"adequate","adequacyNote":"","inflammatoryPattern":"paucigranulocytic"},"fieldNarrative":"Detailed field description here.","miscFindings":[],"notes":""}';
+For EACH structure, x,y as % (0-100) from top-left, within illuminated field only.
+
+In fieldNarrative write 4-5 sentences in laboratory style describing: (1) overall sample appearance and volume impression, (2) location and characteristics of mucus plugs — their density, opacity, colour and distribution, (3) proportion and appearance of salivary vs lower airway-derived material, (4) any blood, squamous contamination or debris, (5) specific recommendation of which areas/quadrants to select for processing.
+
+Return ONLY valid JSON:
+{"mode":"petri","imageQuality":"good","cells":[{"id":1,"type":"mucus_plug","x":40.0,"y":50.0,"confidence":"high"}],"summary":{"mucus_plug_present":true,"saliva_dominant":false,"blood_present":false,"squamous_contamination":"low","overall_quality":"adequate","best_selection_area":"centre","adequacy":"adequate","adequacyNote":"","recommendation":"Select dense opaque plugs from centre-left quadrant"},"fieldNarrative":"Detailed field description here.","miscFindings":[],"notes":""}';
+
+var INVERTED_PROMPT = 'You are a sputum inflammometry expert. Analyse this hemocytometer image from an INVERTED microscope with trypan blue staining for total cell count and viability assessment.
+
+CRITICAL — FIELD BOUNDARY: Only annotate cells WITHIN the visible illuminated grid/field area. Do NOT annotate anything in dark surrounding borders. All x,y must be within the illuminated area.
+
+CELL IDENTIFICATION (trypan blue exclusion):
+- viable_cell: BRIGHT, REFRACTILE, TRANSLUCENT cells — membrane intact, trypan blue EXCLUDED. Appear shiny/glowing under inverted optics. Round, well-defined edges. These are live leukocytes.
+- dead_cell: BLUE-STAINED cells — trypan blue POSITIVE, membrane compromised. Appear distinctly blue/dark. May be shrunken or irregular.
+- squamous: Immediately obvious by ENORMOUS SIZE compared to leukocytes — large flat irregular epithelial cells, many times bigger than surrounding cells.
+- rbc: Small, anucleate, biconcave. Much smaller than leukocytes. Can appear refractile but no nucleus. May look similar to viable cells — distinguish by size (smaller) and absence of nucleus.
+- debris: Amorphous background material, mucus strands, cell fragments.
+
+MISCELLANEOUS (WITHIN FIELD ONLY — do not annotate outside circular/rectangular field boundary):
+- refractile_cell: Unusually bright shiny structures that are NOT typical leukocytes — may be crystals, spores, or lipid-laden cells.
+- mucin: Stringy background mucin threads.
+- charcot_leyden: Needle-shaped elongated crystals — indicator of eosinophilia.
+- fungal_spores: Round refractile particles, often in clusters.
+
+If Neubauer grid visible, count per square: TL=top-left, TR=top-right, C=centre, BL=bottom-left, BR=bottom-right.
+For EACH structure, x,y as % (0-100) from top-left.
+
+In fieldNarrative write 4-5 sentences describing: (1) cell density impression in the field, (2) proportion and appearance of viable vs dead cells, (3) any RBCs or squamous cells, (4) staining quality and background, (5) viability assessment and sample adequacy impression.
+
+Return ONLY valid JSON:
+{"mode":"inverted","gridDetected":false,"imageQuality":"good","cells":[{"id":1,"type":"viable_cell","x":30.0,"y":50.0,"confidence":"high"}],"gridSquares":{"detected":[],"counts":{"TL":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"TR":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"C":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"BL":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"BR":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0}}},"summary":{"totalViable":0,"totalDead":0,"totalSquamous":0,"totalRBC":0,"totalDebris":0,"viabilityPercent":0.0,"squamousPercent":0.0,"adequacy":"adequate","adequacyNote":""},"fieldNarrative":"Detailed field description here.","miscFindings":[],"notes":""}';
+
+var UPRIGHT_HEMO_PROMPT = 'You are a sputum inflammometry expert. Analyse this hemocytometer image from an UPRIGHT microscope with trypan blue staining for total cell count and viability assessment.
+
+CRITICAL — FIELD BOUNDARY: Only annotate cells WITHIN the visible illuminated grid area. Do NOT annotate anything outside the field boundary.
+
+CELL IDENTIFICATION (trypan blue exclusion):
+- viable_cell: BRIGHT, REFRACTILE, TRANSLUCENT cells — membrane intact, trypan blue EXCLUDED. Appear shiny, well-defined edges. Live leukocytes.
+- dead_cell: BLUE-STAINED cells — trypan blue POSITIVE. Appear distinctly blue/dark, membrane compromised.
+- squamous: Enormous size compared to leukocytes — large flat irregular epithelial cells.
+- rbc: Small, anucleate, smaller than leukocytes, no nucleus.
+- debris: Amorphous background material.
+- refractile_cell: Unusually bright structures — crystals, spores — WITHIN FIELD ONLY.
+- mucin: Stringy background threads WITHIN FIELD.
+- charcot_leyden: Needle-shaped elongated crystals WITHIN FIELD.
+
+If Neubauer grid visible, count per square: TL, TR, C, BL, BR.
+For EACH structure, x,y as % (0-100) from top-left.
+
+In fieldNarrative write 4-5 sentences on: cell density, viable vs dead proportion, staining quality, RBCs/squamous, viability and adequacy impression.
+
+Return ONLY valid JSON:
+{"mode":"upright_hemo","gridDetected":false,"imageQuality":"good","cells":[{"id":1,"type":"viable_cell","x":30.0,"y":50.0,"confidence":"high"}],"gridSquares":{"detected":[],"counts":{"TL":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"TR":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"C":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"BL":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"BR":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0}}},"summary":{"totalViable":0,"totalDead":0,"totalSquamous":0,"totalRBC":0,"totalDebris":0,"viabilityPercent":0.0,"squamousPercent":0.0,"adequacy":"adequate","adequacyNote":""},"fieldNarrative":"Detailed field description here.","miscFindings":[],"notes":""}';
+
+var UPRIGHT_PROMPT = 'You are a sputum inflammometry expert. Analyse this Leishman-stained cytospin slide from an upright microscope for differential cell count.
+
+CRITICAL — FIELD BOUNDARY: Only annotate cells WITHIN the visible circular illuminated microscopic field. Do NOT annotate anything in the dark area outside the circular field. All x,y must fall within the illuminated circular area.
+
+PRIMARY CELLS — Romanowsky/Leishman stain characteristics:
+
+- macrophage: LARGEST cell in the field (15-25 μm). Pale grey-blue cytoplasm, often heavily VACUOLATED (clear spaces within cytoplasm from phagocytic activity). Nucleus eccentric, kidney-shaped or oval, pale purple. May contain ingested debris or pigment. Most prevalent cell in healthy sputum. Key: SIZE (largest) + VACUOLATION.
+
+- neutrophil: 12-15 μm. Nucleus MULTI-LOBED (3-5 lobes joined by thin strands) — dark purple. Cytoplasm pale pink with fine granules not visible by light microscopy. Key: MULTILOBED NUCLEUS.
+
+- eosinophil: 10-15 μm. Bilobed nucleus (purple). Cytoplasm filled with BRIGHT ORANGE-RED COARSE GRANULES — this is the single most distinctive feature, unmistakable when present. Granules are large and uniform. NOTE: degranulated eosinophils may have sparse/absent granules with only bilobed nucleus remaining — still count as eosinophil. Key: BRIGHT ORANGE-RED GRANULES.
+
+- lymphocyte: SMALLEST cell (7-10 μm). Large round dark purple nucleus occupying most of cell. Very thin pale blue cytoplasm rim. Key: SMALL SIZE + DARK NUCLEUS.
+
+- basophil: 10-15 μm. Bilobed or irregular nucleus (often obscured). Dark BLUE-PURPLE coarse granules — less bright than eosinophil granules. Rare in sputum.
+
+- mast_cell: 10-15 μm. Round nucleus, densely packed METACHROMATIC dark purple granules filling the cell. Granules more numerous and uniform than basophil.
+
+- bronchial_epithelial: COLUMNAR shape — taller than wide. Nucleus at base. Pale cytoplasm. May show cilia at apex. Often in clusters or sheets. Distinguished from macrophages by columnar shape and grouped arrangement.
+
+- squamous: VERY LARGE flat polygonal cell — dwarfs all other cells. Small, dense pyknotic nucleus. Pale pink cytoplasm. Oral contamination marker.
+
+MISCELLANEOUS (WITHIN CIRCULAR FIELD ONLY — not in dark border):
+- refractile_cell: Bright refractile structure within illuminated field ONLY — never in dark border areas
+- mucin: Pale pink/magenta amorphous background material
+- cocci: Round small purple dots, single or clusters/pairs
+- bacilli: Rod-shaped purple bacteria
+- coccobacilli: Short oval rods between coccus and bacillus
+- afb: Ghost bacilli or unstained rods (Mycobacteria — poorly stained by Leishman)
+- fungal_hyphae: Branching filaments, pale purple
+- fungal_spores: Round purple/pink bodies, may show budding
+- charcot_leyden: Elongated needle-shaped eosinophilic crystals — indicator of eosinophil breakdown
+- curschmann: Coiled mucus plugs — associated with asthma
+- creola: Tight clusters of shed bronchial epithelial cells
+- pollen: Large round structured particles with wall pattern
+- vegetable_matter: Plant cell wall fragments — oral contamination
+
+For EACH cell WITHIN THE CIRCULAR FIELD, x,y as % (0-100) from top-left.
+In nonSquamousCells give count of non-squamous nucleated cells in this field.
+
+In fieldNarrative write 5-6 sentences in laboratory style: (1) overall cellularity and cell density of this field, (2) predominant cell type and its morphological appearance in this preparation, (3) each cell type present with specific morphological description and approximate proportion, (4) staining quality — is the orange-red of eosinophils well-preserved? Are nuclear lobes clearly distinguishable?, (5) background — mucin, debris, staining artefacts, (6) clinical significance of the pattern seen and inflammatory phenotype impression.
+
+Return ONLY valid JSON:
+{"mode":"upright","imageQuality":"good","stainQuality":"good","cells":[{"id":1,"type":"macrophage","x":30.0,"y":50.0,"confidence":"high"}],"summary":{"totalCellsIdentified":0,"macrophage":0,"neutrophil":0,"eosinophil":0,"lymphocyte":0,"basophil":0,"mast_cell":0,"bronchial_epithelial":0,"squamous":0,"nonSquamousCells":0,"macrophagePercent":0.0,"neutrophilPercent":0.0,"eosinophilPercent":0.0,"lymphocytePercent":0.0,"basophilPercent":0.0,"mast_cellPercent":0.0,"bronchial_epithelialPercent":0.0,"squamousPercent":0.0,"adequacy":"adequate","adequacyNote":"","inflammatoryPattern":"paucigranulocytic"},"fieldNarrative":"Detailed field description here.","miscFindings":[],"notes":""}';
 
 function getPrompt(m){
   if(m === 'petri') return PETRI_PROMPT;
@@ -631,6 +748,75 @@ async function analyse(){
 }
 
 // ── RENDER ───────────────────────────────────────────────────
+
+function renderFieldDesc(r){
+  var box = $('field-desc-box');
+  var txt = $('field-desc-text');
+  if(r.fieldNarrative){
+    txt.textContent = r.fieldNarrative;
+    show('field-desc-box');
+  } else {
+    hide('field-desc-box');
+  }
+}
+
+function renderInsights(r){
+  var panel = $('insights-panel');
+  var content = $('insights-content');
+  var s = r.summary;
+  var html = '';
+
+  if(r.mode === 'petri'){
+    var quality = s.overall_quality || '—';
+    var qualColor = quality === 'adequate' ? 'var(--green)' : quality === 'poor' ? 'var(--red)' : 'var(--amber)';
+    html += insightRow('Sample quality', quality.toUpperCase(), qualColor);
+    html += insightRow('Mucus plugs present', s.mucus_plug_present ? 'Yes — select for processing' : 'Not identified — reassess', s.mucus_plug_present ? 'var(--green)' : 'var(--red)');
+    html += insightRow('Salivary contamination', s.saliva_dominant ? 'HIGH — predominantly saliva' : 'LOW — lower airway derived', s.saliva_dominant ? 'var(--red)' : 'var(--green)');
+    html += insightRow('Blood in sample', s.blood_present ? 'Yes — haemoptysis suspected' : 'Not detected', s.blood_present ? 'var(--red)' : 'var(--text2)');
+    html += insightRow('Best selection area', s.best_selection_area || '—', 'var(--cyan)');
+    if(s.recommendation) html += insightRow('Action', s.recommendation, 'var(--gold)');
+  } else if(r.mode === 'inverted' || r.mode === 'upright_hemo'){
+    var vPct = s.viabilityPercent || 0;
+    var sqPct = s.squamousPercent || 0;
+    html += insightRow('Viability', vPct.toFixed(1) + '%', vPct >= 50 ? 'var(--green)' : 'var(--red)');
+    html += insightRow('Viability assessment', vPct >= 70 ? 'Excellent — proceed' : vPct >= 50 ? 'Acceptable — proceed with caution' : 'Poor — sample may be inadequate', vPct >= 70 ? 'var(--green)' : vPct >= 50 ? 'var(--amber)' : 'var(--red)');
+    html += insightRow('Squamous contamination', sqPct.toFixed(1) + '%', sqPct <= 20 ? 'var(--green)' : 'var(--red)');
+    html += insightRow('Sample adequacy', s.adequacy === 'adequate' ? '✓ Adequate for processing' : '⚠ Inadequate — ' + (s.adequacyNote || 'reassess'), s.adequacy === 'adequate' ? 'var(--green)' : 'var(--red)');
+    html += insightRow('Squares to count', 'Minimum 5 squares required for valid TCC', 'var(--text3)');
+    if(s.adequacy !== 'adequate' && sqPct > 20) html += insightRow('Recommendation', 'High squamous contamination — consider reselecting plugs more carefully', 'var(--gold)');
+  } else if(r.mode === 'upright'){
+    var pattern = s.inflammatoryPattern || 'paucigranulocytic';
+    var patColor = pattern === 'eosinophilic' ? 'var(--amber)' : pattern === 'neutrophilic' ? 'var(--blue)' : pattern === 'mixed' ? 'var(--purple)' : 'var(--text2)';
+    html += insightRow('Inflammatory pattern', pattern.toUpperCase(), patColor);
+    var clinical = '';
+    if(pattern === 'eosinophilic') clinical = 'Eosinophilic (≥3% Eo) — consider eosinophilic asthma, NAEB, corticosteroid responsive';
+    else if(pattern === 'neutrophilic') clinical = 'Neutrophilic (≥61% N) — consider neutrophilic asthma, infection, smoking, COPD';
+    else if(pattern === 'mixed') clinical = 'Mixed granulocytic (both Eo + N elevated) — severe refractory asthma, worst outcome';
+    else clinical = 'Paucigranulocytic — Eo <3%, N <61%, often non-atopic asthma';
+    if(clinical) html += insightRow('Clinical interpretation', clinical, 'var(--text2)');
+    html += insightRow('Macrophages', (s.macrophagePercent || 0).toFixed(1) + '%', (s.macrophagePercent||0) >= 60 ? 'var(--green)' : 'var(--amber)');
+    html += insightRow('Eosinophils', (s.eosinophilPercent || 0).toFixed(1) + '% (threshold ≥3%)', (s.eosinophilPercent||0) >= 3 ? 'var(--amber)' : 'var(--text2)');
+    html += insightRow('Neutrophils', (s.neutrophilPercent || 0).toFixed(1) + '% (threshold ≥61%)', (s.neutrophilPercent||0) >= 61 ? 'var(--blue)' : 'var(--text2)');
+    html += insightRow('Stain quality', r.stainQuality || '—', r.stainQuality === 'good' ? 'var(--green)' : 'var(--amber)');
+    html += insightRow('Sample adequacy', s.adequacy === 'adequate' ? '✓ Adequate' : '⚠ ' + (s.adequacyNote || 'Inadequate'), s.adequacy === 'adequate' ? 'var(--green)' : 'var(--red)');
+    html += insightRow('Cells in this field', (s.nonSquamousCells || s.totalCellsIdentified || 0) + ' non-squamous (target 400 total across fields)', 'var(--cyan)');
+  }
+
+  if(html){
+    content.innerHTML = html;
+    show('insights-panel');
+  } else {
+    hide('insights-panel');
+  }
+}
+
+function insightRow(label, value, color){
+  return '<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px;">' +
+    '<span style="color:var(--text3);flex-shrink:0;padding-right:12px">' + label + '</span>' +
+    '<span style="color:' + (color || 'var(--text)') + ';font-weight:500;text-align:right;font-size:11px;line-height:1.4">' + value + '</span>' +
+    '</div>';
+}
+
 function renderResults(r){
   show('results-section');
   $('canvas-ph').style.display = 'flex';
@@ -640,6 +826,8 @@ function renderResults(r){
   renderDetailTable(r);
   renderMiscTable(r);
   renderProgress(r);
+  renderFieldDesc(r);
+  renderInsights(r);
   if((r.mode === 'inverted' || r.mode === 'upright_hemo') && r.gridDetected && r.gridSquares && r.gridSquares.detected && r.gridSquares.detected.length){
     renderGridTable(r);
     show('grid-section');
@@ -967,6 +1155,8 @@ function downloadPDF(){
     (mt ? '<div class="sec"><div class="sec-title">Miscellaneous Findings</div>' + mt + '</div>' : '') +
     (gt ? '<div class="sec"><div class="sec-title">Grid Counts</div>' + gt + '</div>' : '') +
     (nt ? '<div class="sec"><div class="note">' + nt + '</div></div>' : '') +
+    (($('field-desc-box') && !$('field-desc-box').classList.contains('hidden')) ? '<div class="sec"><div class="sec-title">Field Assessment</div><div style="font-size:13px;line-height:1.7;color:#334155">' + ($('field-desc-text').textContent||'') + '</div></div>' : '') +
+    (($('insights-panel') && !$('insights-panel').classList.contains('hidden')) ? '<div class="sec"><div class="sec-title">Sample Insights</div>' + ($('insights-content').innerHTML||'') + '</div>' : '') +
     '</body></html>');
   pw.document.close();
   setTimeout(function(){ pw.print(); }, 800);
@@ -1141,7 +1331,7 @@ function resetAll(){
   ['sub-petri','sub-hemo','sub-diff','sub-upr-hemo'].forEach(function(id){
     var el = $(id); if(el){ el.style.opacity = '0.6'; el.style.filter = ''; }
   });
-  ['upload-section','analyse-section','results-section','misc-section','grid-section','notes-area','progress-panel'].forEach(hide);
+  ['upload-section','analyse-section','results-section','misc-section','grid-section','notes-area','progress-panel','field-desc-box','insights-panel'].forEach(hide);
   clearErr();
   $('sid-input').value = 'SINFL-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + Math.random().toString(36).substr(2,6).toUpperCase();
   setStep(1);
