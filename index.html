@@ -3,667 +3,416 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sputum Inflammometry — Vamsipedia</title>
+<title>Sputum Inflammometry - Vamsipedia</title>
 <style>
 :root{
-  --bg:#070b14;--surface:#0d1220;--surface2:#111827;
-  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
-  --cyan:#22d3ee;--cyan-dim:rgba(34,211,238,0.1);
-  --gold:#f0c060;--gold-dim:rgba(240,192,96,0.1);
-  --text:#e2e8f0;--text2:#94a3b8;--text3:#475569;
-  --green:#34d399;--red:#f87171;--blue:#60a5fa;
-  --purple:#a78bfa;--amber:#fbbf24;--teal:#2dd4bf;
-  --pink:#f472b6;--orange:#fb923c;
+  --bg:#070b14;--sf:#0d1220;--sf2:#111827;
+  --br:rgba(255,255,255,0.07);--br2:rgba(255,255,255,0.13);
+  --cy:#22d3ee;--cyd:rgba(34,211,238,0.1);
+  --go:#f0c060;--god:rgba(240,192,96,0.1);
+  --tx:#e2e8f0;--tx2:#94a3b8;--tx3:#475569;
+  --gn:#34d399;--rd:#f87171;--bl:#60a5fa;
+  --pu:#a78bfa;--am:#fbbf24;--tl:#2dd4bf;
+  --pk:#f472b6;--or:#fb923c;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;-webkit-font-smoothing:antialiased}
 
 /* LOCK */
-#lock-screen{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:var(--bg)}
-.lock-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 20% 40%,rgba(34,211,238,0.06),transparent 60%),radial-gradient(ellipse 60% 80% at 80% 70%,rgba(240,192,96,0.04),transparent 60%)}
-.lock-grid{position:absolute;inset:0;opacity:0.025;background-image:linear-gradient(rgba(255,255,255,0.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.5) 1px,transparent 1px);background-size:48px 48px}
-.lock-card{position:relative;z-index:1;width:100%;max-width:440px;margin:24px;background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:48px 42px 40px;text-align:center;box-shadow:0 0 80px rgba(34,211,238,0.05),0 32px 64px rgba(0,0,0,0.5)}
-.lock-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--cyan);background:var(--cyan-dim);border:1px solid rgba(34,211,238,0.2);padding:5px 12px;border-radius:20px;margin-bottom:24px}
-.lock-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:pulse 2s ease infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-.lock-title{font-size:26px;font-weight:700;color:#f8fafc;margin-bottom:5px;letter-spacing:-0.02em}
-.lock-title span{color:var(--cyan)}
-.lock-sub{font-size:12px;color:var(--text3);margin-bottom:32px}
-.lock-divider{width:40px;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);margin:0 auto 28px}
-.field-lbl{font-size:10px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;text-align:left;margin-bottom:7px}
-.field-wrap{position:relative;margin-bottom:14px}
-.field-input{width:100%;padding:13px 44px 13px 16px;background:var(--surface2);border:1px solid var(--border2);border-radius:9px;font-size:14px;font-family:monospace;color:var(--text);letter-spacing:0.1em;outline:none;transition:all 0.2s}
-.field-input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px var(--cyan-dim)}
-.field-input.err{border-color:var(--red);animation:shake 0.4s ease}
+#lock{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:var(--bg)}
+.lbg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 20% 40%,rgba(34,211,238,0.06),transparent 60%),radial-gradient(ellipse 60% 80% at 80% 70%,rgba(240,192,96,0.04),transparent 60%)}
+.lgr{position:absolute;inset:0;opacity:.025;background-image:linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);background-size:48px 48px}
+.lcard{position:relative;z-index:1;width:100%;max-width:440px;margin:24px;background:var(--sf);border:1px solid var(--br2);border-radius:20px;padding:48px 42px 40px;text-align:center;box-shadow:0 0 80px rgba(34,211,238,.05),0 32px 64px rgba(0,0,0,.5)}
+.leyebrow{display:inline-flex;align-items:center;gap:8px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--cy);background:var(--cyd);border:1px solid rgba(34,211,238,.2);padding:5px 12px;border-radius:20px;margin-bottom:24px}
+.leyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--cy);animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.ltitle{font-size:26px;font-weight:700;color:#f8fafc;margin-bottom:5px;letter-spacing:-.02em}
+.ltitle span{color:var(--cy)}
+.lsub{font-size:12px;color:var(--tx3);margin-bottom:32px}
+.ldiv{width:40px;height:1px;background:linear-gradient(90deg,transparent,var(--cy),transparent);margin:0 auto 28px}
+.flbl{font-size:10px;color:var(--tx3);letter-spacing:.08em;text-transform:uppercase;text-align:left;margin-bottom:7px}
+.fwrap{position:relative;margin-bottom:14px}
+.finput{width:100%;padding:13px 44px 13px 16px;background:var(--sf2);border:1px solid var(--br2);border-radius:9px;font-size:14px;font-family:monospace;color:var(--tx);letter-spacing:.1em;outline:none;transition:all .2s}
+.finput:focus{border-color:var(--cy);box-shadow:0 0 0 3px var(--cyd)}
+.finput.err{border-color:var(--rd);animation:shake .4s ease}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
-.eye-btn{position:absolute;right:13px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text3);font-size:14px;padding:4px}
-.api-note{font-size:11px;color:var(--text3);text-align:left;margin:-6px 0 16px}
-.api-note a{color:var(--cyan);text-decoration:none}
-.unlock-btn{width:100%;padding:14px;background:linear-gradient(135deg,#0891b2,#0e7490);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 24px rgba(8,145,178,0.3)}
-.unlock-btn:hover{transform:translateY(-1px);box-shadow:0 6px 32px rgba(8,145,178,0.4)}
-.pw-err{font-size:12px;color:var(--red);min-height:18px;margin-top:10px}
-.lock-footer{margin-top:24px;padding-top:18px;border-top:1px solid var(--border);font-size:11px;color:var(--text3)}
+.eyebtn{position:absolute;right:13px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--tx3);font-size:14px;padding:4px}
+.anote{font-size:11px;color:var(--tx3);text-align:left;margin:-6px 0 16px}
+.anote a{color:var(--cy);text-decoration:none}
+.ulbtn{width:100%;padding:14px;background:linear-gradient(135deg,#0891b2,#0e7490);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;box-shadow:0 4px 24px rgba(8,145,178,.3)}
+.ulbtn:hover{transform:translateY(-1px);box-shadow:0 6px 32px rgba(8,145,178,.4)}
+.pwerr{font-size:12px;color:var(--rd);min-height:18px;margin-top:10px}
+.lfooter{margin-top:24px;padding-top:18px;border-top:1px solid var(--br);font-size:11px;color:var(--tx3)}
 
 /* APP */
 #app{display:none}
-.accent-line{height:2px;background:linear-gradient(90deg,transparent,var(--cyan) 30%,var(--gold) 70%,transparent)}
-
-/* HEADER */
-.hdr{position:sticky;top:0;z-index:100;background:rgba(7,11,20,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:58px}
-.hdr-brand{font-size:16px;font-weight:700;color:var(--cyan)}
-.hdr-div{width:1px;height:18px;background:var(--border2);margin:0 16px}
-.hdr-title{font-size:13px;color:var(--text2)}
-.hdr-title b{color:var(--text);font-weight:500}
-.hdr-right{display:flex;align-items:center;gap:14px}
-
-/* EDITABLE SAMPLE ID */
-.sid-wrap{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:5px 12px}
-.sid-lbl{font-size:9px;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;white-space:nowrap}
-.sid-input{background:none;border:none;outline:none;font-size:12px;color:var(--cyan);font-family:monospace;font-weight:600;letter-spacing:0.05em;width:170px;cursor:text}
-.sid-input::placeholder{color:var(--text3)}
-.sid-edit-hint{font-size:9px;color:var(--text3);white-space:nowrap}
-.lock-btn{font-size:11px;color:var(--text3);background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:4px;transition:color 0.15s}
-.lock-btn:hover{color:var(--text2)}
-
+.aline{height:2px;background:linear-gradient(90deg,transparent,var(--cy) 30%,var(--go) 70%,transparent)}
+.hdr{position:sticky;top:0;z-index:100;background:rgba(7,11,20,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--br);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:58px}
+.hbrand{font-size:16px;font-weight:700;color:var(--cy)}
+.hdiv{width:1px;height:18px;background:var(--br2);margin:0 16px}
+.htitle{font-size:13px;color:var(--tx2)}
+.htitle b{color:var(--tx);font-weight:500}
+.sidwrap{display:flex;align-items:center;gap:8px;background:var(--sf);border:1px solid var(--br2);border-radius:8px;padding:5px 13px}
+.sidlbl{font-size:9px;color:var(--tx3);letter-spacing:.1em;text-transform:uppercase}
+.sidinput{background:none;border:none;outline:none;font-size:12px;color:var(--cy);font-family:monospace;font-weight:600;letter-spacing:.05em;width:175px;cursor:text}
+.sidhint{font-size:9px;color:var(--tx3)}
+.lkbtn{font-size:11px;color:var(--tx3);background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:4px}
+.lkbtn:hover{color:var(--tx2)}
 .main{padding:28px;max-width:1140px;margin:0 auto}
-.sep{width:100%;height:1px;background:var(--border);margin:24px 0}
-.slbl{font-size:10px;text-transform:uppercase;letter-spacing:0.13em;color:var(--text3);font-family:monospace;font-weight:500;margin-bottom:12px}
+.sep{width:100%;height:1px;background:var(--br);margin:24px 0}
+.slbl{font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:var(--tx3);font-family:monospace;font-weight:500;margin-bottom:12px}
 
-/* STEP BAR */
-.step-bar{display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:28px}
+/* STEPS */
+.sbar{display:flex;align-items:center;background:var(--sf);border:1px solid var(--br);border-radius:12px;padding:16px 20px;margin-bottom:28px}
 .si{display:flex;align-items:center;gap:8px}
 .sn{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:monospace;flex-shrink:0}
 .sl{font-size:12px;white-space:nowrap}
-.sline{flex:1;height:1px;background:var(--border);margin:0 10px;min-width:16px}
-.s-done .sn{background:rgba(52,211,153,0.15);color:var(--green);border:1px solid rgba(52,211,153,0.3)}
-.s-done .sl{color:var(--green)}
-.s-active .sn{background:var(--cyan-dim);color:var(--cyan);border:1px solid rgba(34,211,238,0.3)}
-.s-active .sl{color:var(--cyan);font-weight:600}
-.s-pending .sn{background:var(--surface2);color:var(--text3);border:1px solid var(--border)}
-.s-pending .sl{color:var(--text3)}
+.sline{flex:1;height:1px;background:var(--br);margin:0 10px;min-width:16px}
+.sdone .sn{background:rgba(52,211,153,.15);color:var(--gn);border:1px solid rgba(52,211,153,.3)}
+.sdone .sl{color:var(--gn)}
+.sact .sn{background:var(--cyd);color:var(--cy);border:1px solid rgba(34,211,238,.3)}
+.sact .sl{color:var(--cy);font-weight:600}
+.spend .sn{background:var(--sf2);color:var(--tx3);border:1px solid var(--br)}
+.spend .sl{color:var(--tx3)}
 
-/* MODE CARDS */
-.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.mode-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden;transition:all 0.2s}
-.mode-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity 0.2s}
-.mode-card.inv::before{background:linear-gradient(90deg,var(--amber),var(--orange))}
-.mode-card.upr::before{background:linear-gradient(90deg,var(--purple),var(--cyan))}
-.mode-card:hover{border-color:var(--border2)}
-.mode-card:hover::before{opacity:1}
-.mode-card.selected{border-color:var(--cyan);background:var(--surface2)}
-.mode-card.selected::before{opacity:1}
-.mode-icon-w{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px}
-.mode-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px}
-.mode-desc{font-size:11px;color:var(--text2);line-height:1.55;margin-bottom:12px}
-.sub-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.sub-btn{border-radius:8px;padding:10px;cursor:pointer;transition:all 0.15s;text-align:center}
-.sub-btn:hover{filter:brightness(1.15)}
-.sub-btn-icon{font-size:16px;margin-bottom:3px}
-.sub-btn-name{font-size:11px;font-weight:600;margin-bottom:2px}
-.sub-btn-desc{font-size:9px;color:var(--text3);line-height:1.4}
-.tag-row{display:flex;flex-wrap:wrap;gap:4px}
+/* MODES */
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mcard{background:var(--sf);border:1px solid var(--br);border-radius:12px;padding:20px;position:relative;overflow:hidden;transition:all .2s}
+.mcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .2s}
+.mcard.inv::before{background:linear-gradient(90deg,var(--am),var(--or))}
+.mcard.upr::before{background:linear-gradient(90deg,var(--pu),var(--cy))}
+.mcard:hover{border-color:var(--br2)}
+.mcard:hover::before{opacity:1}
+.mcard.sel{border-color:var(--cy);background:var(--sf2)}
+.mcard.sel::before{opacity:1}
+.micon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px}
+.mname{font-size:14px;font-weight:600;color:var(--tx);margin-bottom:4px}
+.mdesc{font-size:11px;color:var(--tx2);line-height:1.55;margin-bottom:12px}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.sbtn{border-radius:8px;padding:10px;cursor:pointer;transition:all .15s;text-align:center}
+.sbtn:hover{filter:brightness(1.15)}
+.sbicon{font-size:16px;margin-bottom:3px}
+.sbname{font-size:11px;font-weight:600;margin-bottom:2px}
+.sbdesc{font-size:9px;color:var(--tx3);line-height:1.4}
+.tags{display:flex;flex-wrap:wrap;gap:4px}
 .tag{font-size:9px;padding:2px 7px;border-radius:4px;font-weight:600;font-family:monospace;border:1px solid transparent}
 
-/* DROPZONE */
-.dropzone{border:1px dashed rgba(255,255,255,0.12);border-radius:12px;padding:44px 24px;text-align:center;cursor:pointer;background:var(--surface);transition:all 0.2s}
-.dropzone:hover,.dropzone.drag{border-color:var(--cyan);background:rgba(34,211,238,0.03)}
-.dz-icon{font-size:32px;margin-bottom:10px;opacity:0.6}
-.dz-main{font-size:14px;color:var(--text2);margin-bottom:4px}
-.dz-sub{font-size:12px;color:var(--text3)}
+/* UPLOAD */
+.dzone{border:1px dashed rgba(255,255,255,.12);border-radius:12px;padding:44px 24px;text-align:center;cursor:pointer;background:var(--sf);transition:all .2s}
+.dzone:hover,.dzone.drag{border-color:var(--cy);background:rgba(34,211,238,.03)}
+.dzicon{font-size:32px;margin-bottom:10px;opacity:.6}
+.dzm{font-size:14px;color:var(--tx2);margin-bottom:4px}
+.dzs{font-size:12px;color:var(--tx3)}
 
 /* PREVIEW */
-.preview-wrap{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:#000;margin-bottom:16px}
-.preview-img{width:100%;display:block;max-height:320px;object-fit:contain}
-.preview-badge{position:absolute;top:10px;right:10px;background:rgba(7,11,20,0.9);border:1px solid var(--border2);color:var(--cyan);font-size:11px;font-family:monospace;padding:4px 11px;border-radius:6px}
+.pwrap{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--br);background:#000;margin-bottom:16px}
+.pimg{width:100%;display:block;max-height:320px;object-fit:contain}
+.pbadge{position:absolute;top:10px;right:10px;background:rgba(7,11,20,.9);border:1px solid var(--br2);color:var(--cy);font-size:11px;font-family:monospace;padding:4px 11px;border-radius:6px}
 
 /* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:9px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all 0.15s}
-.btn:disabled{opacity:0.4;cursor:not-allowed}
-.btn-primary{background:linear-gradient(135deg,#0891b2,#0e7490);color:#fff;box-shadow:0 2px 16px rgba(8,145,178,0.25)}
-.btn-primary:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 4px 24px rgba(8,145,178,0.35)}
-.btn-outline{background:var(--surface);border:1px solid var(--border2);color:var(--text2)}
-.btn-outline:hover{background:var(--surface2);color:var(--text)}
-.btn-dark{background:var(--surface2);border:1px solid var(--border2);color:var(--cyan)}
-.btn-dark:hover{border-color:var(--cyan);background:var(--cyan-dim)}
-.btn-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.reset-btn{font-size:11px;color:var(--text3);background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:4px;transition:color 0.15s}
-.reset-btn:hover{color:var(--text2)}
-
-.loader{display:none;align-items:center;gap:10px;color:var(--text2);font-size:13px}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:9px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btnp{background:linear-gradient(135deg,#0891b2,#0e7490);color:#fff;box-shadow:0 2px 16px rgba(8,145,178,.25)}
+.btnp:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 4px 24px rgba(8,145,178,.35)}
+.btno{background:var(--sf);border:1px solid var(--br2);color:var(--tx2)}
+.btno:hover{background:var(--sf2);color:var(--tx)}
+.btnd{background:var(--sf2);border:1px solid var(--br2);color:var(--cy)}
+.btnd:hover{border-color:var(--cy);background:var(--cyd)}
+.brow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.rbtn{font-size:11px;color:var(--tx3);background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:4px}
+.rbtn:hover{color:var(--tx2)}
+.loader{display:none;align-items:center;gap:10px;color:var(--tx2);font-size:13px}
 .loader.show{display:flex}
-.spinner{width:18px;height:18px;border:2px solid var(--border2);border-top-color:var(--cyan);border-radius:50%;animation:spin 0.7s linear infinite}
+.spin{width:18px;height:18px;border:2px solid var(--br2);border-top-color:var(--cy);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.err-box{background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.25);border-radius:9px;padding:12px 16px;color:var(--red);font-size:13px;margin-top:12px;display:none}
+.ebox{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.25);border-radius:9px;padding:12px 16px;color:var(--rd);font-size:13px;margin-top:12px;display:none}
 
 /* RESULTS */
-.results-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.canvas-wrap{border-radius:12px;overflow:hidden;border:1px solid var(--border);background:#000;min-height:180px;display:flex;align-items:center;justify-content:center}
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.cwrap{border-radius:12px;overflow:hidden;border:1px solid var(--br);background:#000;min-height:180px;display:flex;align-items:center;justify-content:center}
 canvas{width:100%;display:block}
-
-.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
-.stat{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:12px 8px;text-align:center}
-.stat-val{font-size:20px;font-weight:700;font-family:monospace;font-variant-numeric:tabular-nums}
-.stat-lbl{font-size:9px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:0.04em}
-.adq-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 13px;border-radius:20px;font-size:11px;font-weight:600;margin-bottom:14px;font-family:monospace}
-.adq-ok{background:rgba(52,211,153,0.1);color:var(--green);border:1px solid rgba(52,211,153,0.25)}
-.adq-warn{background:rgba(248,113,113,0.1);color:var(--red);border:1px solid rgba(248,113,113,0.25)}
-.info-card{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:12px 14px}
-.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px}
-.ir:last-child{border-bottom:none}
-.ik{color:var(--text3)}
-.iv{color:var(--text);font-family:monospace;font-size:11px;font-weight:500}
-
-/* TABLES */
-.tbl-wrap{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.tbl-hdr{background:rgba(34,211,238,0.05);padding:8px 14px;font-size:9px;color:var(--cyan);font-family:monospace;letter-spacing:0.1em;text-transform:uppercase;border-bottom:1px solid var(--border)}
-.tbl-hdr.gold{background:rgba(240,192,96,0.05);color:var(--gold)}
+.stgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.stat{background:var(--sf2);border:1px solid var(--br);border-radius:9px;padding:12px 8px;text-align:center}
+.stval{font-size:20px;font-weight:700;font-family:monospace;font-variant-numeric:tabular-nums}
+.stlbl{font-size:9px;color:var(--tx3);margin-top:2px;text-transform:uppercase;letter-spacing:.04em}
+.adqb{display:inline-flex;align-items:center;gap:5px;padding:5px 13px;border-radius:20px;font-size:11px;font-weight:600;margin-bottom:14px;font-family:monospace}
+.adqok{background:rgba(52,211,153,.1);color:var(--gn);border:1px solid rgba(52,211,153,.25)}
+.adqwarn{background:rgba(248,113,113,.1);color:var(--rd);border:1px solid rgba(248,113,113,.25)}
+.icard{background:var(--sf2);border:1px solid var(--br);border-radius:9px;padding:12px 14px}
+.irow{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--br);font-size:12px}
+.irow:last-child{border-bottom:none}
+.ik{color:var(--tx3)}
+.iv{color:var(--tx);font-family:monospace;font-size:11px;font-weight:500}
+.twrap{background:var(--sf);border:1px solid var(--br);border-radius:12px;overflow:hidden}
+.thdr{background:rgba(34,211,238,.05);padding:8px 14px;font-size:9px;color:var(--cy);font-family:monospace;letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--br)}
+.thdr.go{background:rgba(240,192,96,.05);color:var(--go)}
 table{width:100%;border-collapse:collapse;font-size:12px}
-th{background:var(--surface2);color:var(--text3);text-align:left;padding:8px 14px;border-bottom:1px solid var(--border);font-size:9px;text-transform:uppercase;letter-spacing:0.07em;font-family:monospace;font-weight:500}
-td{padding:8px 14px;border-bottom:1px solid var(--border);color:var(--text2)}
+th{background:var(--sf2);color:var(--tx3);text-align:left;padding:8px 14px;border-bottom:1px solid var(--br);font-size:9px;text-transform:uppercase;letter-spacing:.07em;font-family:monospace;font-weight:500}
+td{padding:8px 14px;border-bottom:1px solid var(--br);color:var(--tx2)}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:rgba(255,255,255,0.015)}
+tr:hover td{background:rgba(255,255,255,.015)}
 .cdot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;vertical-align:middle}
 .mono{font-family:monospace;font-size:12px;font-variant-numeric:tabular-nums}
 .bold{font-weight:700}
-.tw{color:var(--text)}
-
-.note-box{background:rgba(240,192,96,0.06);border:1px solid rgba(240,192,96,0.2);border-radius:9px;padding:12px 16px;font-size:12px;color:#d4a843;margin-top:14px;line-height:1.6}
-.pattern-badge{background:rgba(96,165,250,0.12);color:var(--blue);border:1px solid rgba(96,165,250,0.25);padding:2px 9px;border-radius:4px;font-size:10px;font-weight:600;font-family:monospace}
+.tw{color:var(--tx)}
+.nbox{background:rgba(240,192,96,.06);border:1px solid rgba(240,192,96,.2);border-radius:9px;padding:12px 16px;font-size:12px;color:#d4a843;margin-top:14px;line-height:1.6}
+.pbadge2{background:rgba(96,165,250,.12);color:var(--bl);border:1px solid rgba(96,165,250,.25);padding:2px 9px;border-radius:4px;font-size:10px;font-weight:600;font-family:monospace}
+.fdbox{margin-top:12px;background:var(--sf);border:1px solid var(--br);border-radius:10px;padding:14px 16px}
+.fdlbl{font-size:9px;font-family:monospace;text-transform:uppercase;letter-spacing:.12em;color:var(--cy);margin-bottom:8px}
+.fdtxt{font-size:12px;color:var(--tx2);line-height:1.7}
+.insbox{margin-top:14px;background:var(--sf);border:1px solid var(--br);border-radius:10px;padding:16px 18px}
+.inslbl{font-size:9px;font-family:monospace;text-transform:uppercase;letter-spacing:.12em;color:var(--go);margin-bottom:12px}
+.insrow{display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--br);font-size:12px}
+.insrow:last-child{border-bottom:none}
+.insk{color:var(--tx3);flex-shrink:0;padding-right:12px}
+.insv{font-weight:500;text-align:right;font-size:11px;line-height:1.4}
 .hidden{display:none!important}
 </style>
 </head>
 <body>
 
-<!-- LOCK SCREEN -->
-<div id="lock-screen">
-  <div class="lock-bg"></div>
-  <div class="lock-grid"></div>
-  <div class="lock-card">
-    <div class="lock-eyebrow">Vamsipedia · Clinical AI</div>
-    <div class="lock-title">Sputum <span>Inflammometry</span></div>
-    <div class="lock-sub">Analysis Platform · Restricted Access</div>
-    <div class="lock-divider"></div>
-    <div class="field-lbl">Access Password</div>
-    <div class="field-wrap">
-      <input type="password" id="pw-input" class="field-input" placeholder="••••••••••"
-        onkeydown="if(event.key==='Enter')document.getElementById('api-input').focus()" autocomplete="off">
-      <button class="eye-btn" onclick="toggleEye('pw-input')">👁</button>
+<!-- LOCK -->
+<div id="lock">
+  <div class="lbg"></div>
+  <div class="lgr"></div>
+  <div class="lcard">
+    <div class="leyebrow">Vamsipedia &middot; Clinical AI</div>
+    <div class="ltitle">Sputum <span>Inflammometry</span></div>
+    <div class="lsub">Analysis Platform &middot; Restricted Access</div>
+    <div class="ldiv"></div>
+    <div class="flbl">Access Password</div>
+    <div class="fwrap">
+      <input type="password" id="pwin" class="finput" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" autocomplete="off">
+      <button class="eyebtn" id="eye1" onclick="toggleEye('pwin','eye1')">&#128065;</button>
     </div>
-    <div class="field-lbl">Anthropic API Key</div>
-    <div class="field-wrap">
-      <input type="password" id="api-input" class="field-input" placeholder="sk-ant-api03-…"
-        onkeydown="if(event.key==='Enter')unlock()" autocomplete="off">
-      <button class="eye-btn" onclick="toggleEye('api-input')">👁</button>
+    <div class="flbl">Anthropic API Key</div>
+    <div class="fwrap">
+      <input type="password" id="akin" class="finput" placeholder="sk-ant-api03-..." autocomplete="off">
+      <button class="eyebtn" id="eye2" onclick="toggleEye('akin','eye2')">&#128065;</button>
     </div>
-    <div class="api-note">Get free at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> → API Keys</div>
-    <button class="unlock-btn" onclick="unlock()">Unlock Platform →</button>
-    <div class="pw-err" id="pw-err"></div>
-    <div class="lock-footer">Authorised users only · Vamsipedia Clinical AI Suite</div>
+    <div class="anote">Get free at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> &rarr; API Keys</div>
+    <button class="ulbtn" id="ulbtn" onclick="doUnlock()">Unlock Platform &rarr;</button>
+    <div class="pwerr" id="pwerr"></div>
+    <div class="lfooter">Authorised users only &middot; Vamsipedia Clinical AI Suite</div>
   </div>
 </div>
 
-<!-- MAIN APP -->
+<!-- APP -->
 <div id="app">
-  <div class="accent-line"></div>
+  <div class="aline"></div>
   <div class="hdr">
     <div style="display:flex;align-items:center">
-      <span class="hdr-brand">Vamsipedia</span>
-      <span class="hdr-div"></span>
-      <span class="hdr-title"><b>Sputum Inflammometry</b> · Analysis Platform</span>
+      <span class="hbrand">Vamsipedia</span>
+      <span class="hdiv"></span>
+      <span class="htitle"><b>Sputum Inflammometry</b> &middot; Analysis Platform</span>
     </div>
-    <div class="hdr-right">
-      <div class="sid-wrap">
-        <span class="sid-lbl">Sample ID</span>
-        <input type="text" id="sid-input" class="sid-input" placeholder="Type your Sample ID…" spellcheck="false">
-        <span class="sid-edit-hint">✎ editable</span>
+    <div style="display:flex;align-items:center;gap:14px">
+      <div class="sidwrap">
+        <span class="sidlbl">Sample ID</span>
+        <input type="text" id="sidinput" class="sidinput" placeholder="Type your Sample ID..." spellcheck="false">
+        <span class="sidhint">&#9998; editable</span>
       </div>
-      <button class="lock-btn" onclick="lockApp()">⏻ Lock</button>
+      <button class="lkbtn" onclick="doLock()">&#9167; Lock</button>
     </div>
   </div>
 
   <div class="main">
-
-    <!-- STEP BAR -->
-    <div class="step-bar">
-      <div class="si s-active" id="si-1"><div class="sn">01</div><div class="sl">Select Mode</div></div>
+    <div class="sbar">
+      <div class="si sact" id="s1"><div class="sn">01</div><div class="sl">Select Mode</div></div>
       <div class="sline"></div>
-      <div class="si s-pending" id="si-2"><div class="sn">02</div><div class="sl">Upload Image</div></div>
+      <div class="si spend" id="s2"><div class="sn">02</div><div class="sl">Upload Image</div></div>
       <div class="sline"></div>
-      <div class="si s-pending" id="si-3"><div class="sn">03</div><div class="sl">Analyse</div></div>
+      <div class="si spend" id="s3"><div class="sn">03</div><div class="sl">Analyse</div></div>
       <div class="sline"></div>
-      <div class="si s-pending" id="si-4"><div class="sn">04</div><div class="sl">Results</div></div>
+      <div class="si spend" id="s4"><div class="sn">04</div><div class="sl">Results</div></div>
     </div>
 
-    <!-- MODE CARDS -->
     <div class="slbl">Microscope Mode</div>
-    <div class="mode-grid">
-      <div class="mode-card inv" id="mc-inv">
-        <div class="mode-icon-w" style="background:rgba(251,191,36,0.1)">🔬</div>
-        <div class="mode-name">Inverted Microscope</div>
-        <div class="mode-desc">Select imaging context:</div>
-        <div class="sub-grid">
-          <div class="sub-btn" id="sub-petri" onclick="setMode('petri')"
-            style="background:rgba(253,230,138,0.08);border:1px solid rgba(253,230,138,0.2)">
-            <div class="sub-btn-icon">🫙</div>
-            <div class="sub-btn-name" style="color:#fde68a">Petri dish</div>
-            <div class="sub-btn-desc">Sputum quality &amp; selection</div>
+    <div class="mgrid">
+      <div class="mcard inv" id="mc-inv">
+        <div class="micon" style="background:rgba(251,191,36,.1)">&#128300;</div>
+        <div class="mname">Inverted Microscope</div>
+        <div class="mdesc">Select imaging context:</div>
+        <div class="sgrid">
+          <div class="sbtn" id="sub-petri" onclick="setMode('petri')" style="background:rgba(253,230,138,.08);border:1px solid rgba(253,230,138,.2)">
+            <div class="sbicon">&#129645;</div>
+            <div class="sbname" style="color:#fde68a">Petri dish</div>
+            <div class="sbdesc">Sputum quality &amp; plug selection</div>
           </div>
-          <div class="sub-btn" id="sub-hemo" onclick="setMode('inverted')"
-            style="background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.2)">
-            <div class="sub-btn-icon">🔢</div>
-            <div class="sub-btn-name" style="color:#34d399">Hemocytometer</div>
-            <div class="sub-btn-desc">TCC + trypan blue viability</div>
+          <div class="sbtn" id="sub-hemo" onclick="setMode('inverted')" style="background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2)">
+            <div class="sbicon">&#128290;</div>
+            <div class="sbname" style="color:#34d399">Hemocytometer</div>
+            <div class="sbdesc">TCC + trypan blue viability</div>
           </div>
         </div>
-        <div class="tag-row">
-          <span class="tag" style="background:rgba(253,230,138,0.1);color:#fde68a;border-color:rgba(253,230,138,0.2)">MP</span>
-          <span class="tag" style="background:rgba(52,211,153,0.1);color:#34d399;border-color:rgba(52,211,153,0.2)">V</span>
-          <span class="tag" style="background:rgba(96,165,250,0.1);color:#60a5fa;border-color:rgba(96,165,250,0.2)">D</span>
-          <span class="tag" style="background:rgba(240,192,96,0.1);color:#f0c060;border-color:rgba(240,192,96,0.2)">+ Misc</span>
+        <div class="tags">
+          <span class="tag" style="background:rgba(253,230,138,.1);color:#fde68a;border-color:rgba(253,230,138,.2)">MP</span>
+          <span class="tag" style="background:rgba(52,211,153,.1);color:#34d399;border-color:rgba(52,211,153,.2)">V</span>
+          <span class="tag" style="background:rgba(96,165,250,.1);color:#60a5fa;border-color:rgba(96,165,250,.2)">D</span>
+          <span class="tag" style="background:rgba(248,113,113,.1);color:#f87171;border-color:rgba(248,113,113,.2)">Sq</span>
+          <span class="tag" style="background:rgba(240,192,96,.1);color:#f0c060;border-color:rgba(240,192,96,.2)">+Misc</span>
         </div>
       </div>
-
-      <div class="mode-card upr" id="mc-upr">
-        <div class="mode-icon-w" style="background:rgba(167,139,250,0.1)">🧫</div>
-        <div class="mode-name">Upright Microscope</div>
-        <div class="mode-desc">Select imaging context:</div>
-        <div class="sub-grid">
-          <div class="sub-btn" id="sub-diff" onclick="setMode('upright')"
-            style="background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2)">
-            <div class="sub-btn-icon">🧬</div>
-            <div class="sub-btn-name" style="color:#a78bfa">Leishman Cytospin</div>
-            <div class="sub-btn-desc">Differential cell count</div>
+      <div class="mcard upr" id="mc-upr">
+        <div class="micon" style="background:rgba(167,139,250,.1)">&#129516;</div>
+        <div class="mname">Upright Microscope</div>
+        <div class="mdesc">Select imaging context:</div>
+        <div class="sgrid">
+          <div class="sbtn" id="sub-diff" onclick="setMode('upright')" style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2)">
+            <div class="sbicon">&#129514;</div>
+            <div class="sbname" style="color:#a78bfa">Leishman Cytospin</div>
+            <div class="sbdesc">Differential cell count</div>
           </div>
-          <div class="sub-btn" id="sub-upr-hemo" onclick="setMode('upright_hemo')"
-            style="background:rgba(45,212,191,0.08);border:1px solid rgba(45,212,191,0.2)">
-            <div class="sub-btn-icon">🔢</div>
-            <div class="sub-btn-name" style="color:#2dd4bf">Hemocytometer</div>
-            <div class="sub-btn-desc">TCC + trypan blue viability</div>
+          <div class="sbtn" id="sub-uhemo" onclick="setMode('upright_hemo')" style="background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.2)">
+            <div class="sbicon">&#128290;</div>
+            <div class="sbname" style="color:#2dd4bf">Hemocytometer</div>
+            <div class="sbdesc">TCC + trypan blue viability</div>
           </div>
         </div>
-        <div class="tag-row">
-          <span class="tag" style="background:rgba(167,139,250,0.1);color:#a78bfa;border-color:rgba(167,139,250,0.2)">Ma</span>
-          <span class="tag" style="background:rgba(96,165,250,0.1);color:#60a5fa;border-color:rgba(96,165,250,0.2)">N</span>
-          <span class="tag" style="background:rgba(251,191,36,0.1);color:#fbbf24;border-color:rgba(251,191,36,0.2)">Eo</span>
-          <span class="tag" style="background:rgba(52,211,153,0.1);color:#34d399;border-color:rgba(52,211,153,0.2)">Ly</span>
-          <span class="tag" style="background:rgba(240,192,96,0.1);color:#f0c060;border-color:rgba(240,192,96,0.2)">+ Misc</span>
+        <div class="tags">
+          <span class="tag" style="background:rgba(167,139,250,.1);color:#a78bfa;border-color:rgba(167,139,250,.2)">Ma</span>
+          <span class="tag" style="background:rgba(96,165,250,.1);color:#60a5fa;border-color:rgba(96,165,250,.2)">N</span>
+          <span class="tag" style="background:rgba(251,191,36,.1);color:#fbbf24;border-color:rgba(251,191,36,.2)">Eo</span>
+          <span class="tag" style="background:rgba(52,211,153,.1);color:#34d399;border-color:rgba(52,211,153,.2)">Ly</span>
+          <span class="tag" style="background:rgba(240,192,96,.1);color:#f0c060;border-color:rgba(240,192,96,.2)">+Misc</span>
         </div>
       </div>
     </div>
 
-    <!-- UPLOAD -->
-    <div id="upload-section" class="hidden">
+    <div id="upsec" class="hidden">
       <div class="sep"></div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
         <div class="slbl" style="margin-bottom:0">Upload Image</div>
-        <button class="reset-btn" onclick="resetAll()">✕ Reset session</button>
+        <button class="rbtn" onclick="resetAll()">&#10005; Reset session</button>
       </div>
-      <div class="dropzone" id="dropzone"
-        onclick="document.getElementById('file-in').click()"
+      <div class="dzone" id="dzone" onclick="document.getElementById('fin').click()"
         ondragover="event.preventDefault();this.classList.add('drag')"
         ondragleave="this.classList.remove('drag')"
-        ondrop="handleDrop(event)">
-        <div class="dz-icon">📂</div>
-        <div class="dz-main">Drop microscopy image here, or click to browse</div>
-        <div class="dz-sub" id="dz-sub">JPEG or PNG</div>
+        ondrop="onDrop(event)">
+        <div class="dzicon">&#128194;</div>
+        <div class="dzm">Drop microscopy image here, or click to browse</div>
+        <div class="dzs" id="dzs">JPEG or PNG</div>
       </div>
-      <input type="file" id="file-in" style="display:none" accept="image/*" onchange="loadFile(this.files[0])">
+      <input type="file" id="fin" style="display:none" accept="image/*" onchange="loadFile(this.files[0])">
     </div>
 
-    <!-- ANALYSE -->
-    <div id="analyse-section" class="hidden">
+    <div id="ansec" class="hidden">
       <div class="sep"></div>
-      <div class="preview-wrap">
-        <img id="preview-img" class="preview-img" alt="Preview">
-        <div class="preview-badge" id="preview-badge">—</div>
+      <div class="pwrap">
+        <img id="pimg" class="pimg" alt="Preview">
+        <div class="pbadge" id="pbadge">--</div>
       </div>
-      <div class="btn-row">
-        <button class="btn btn-primary" id="analyse-btn" onclick="analyse()">⟡ Analyse image</button>
-        <button class="btn btn-outline" onclick="document.getElementById('file-in').click()">Change image</button>
-        <div class="loader" id="loader"><div class="spinner"></div>Analysing with Claude Vision…</div>
+      <div class="brow">
+        <button class="btn btnp" id="anbtn" onclick="doAnalyse()">&#10017; Analyse image</button>
+        <button class="btn btno" onclick="document.getElementById('fin').click()">Change image</button>
+        <div class="loader" id="ldr"><div class="spin"></div>Analysing with Claude Vision...</div>
       </div>
-      <div class="err-box" id="err-box"></div>
+      <div class="ebox" id="ebox"></div>
     </div>
 
-    <!-- RESULTS -->
-    <div id="results-section" class="hidden">
+    <div id="ressec" class="hidden">
       <div class="sep"></div>
-
-      <!-- SESSION PROGRESS -->
-      <div id="progress-panel" class="hidden" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:20px"></div>
-
+      <div id="progpanel" class="hidden" style="background:var(--sf);border:1px solid var(--br);border-radius:12px;padding:18px 20px;margin-bottom:20px"></div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
         <div class="slbl" style="margin-bottom:0">Analysis Results</div>
-        <div class="btn-row">
-          <button class="btn btn-dark" onclick="downloadPNG()">⬇ Annotated image (.png)</button>
-          <button class="btn btn-dark" onclick="downloadReport()">⬇ Clean report (.pdf)</button>
-          <button class="btn btn-outline" onclick="downloadPDF()" style="font-size:11px;padding:7px 14px">Full debug PDF</button>
-          <button class="reset-btn" onclick="resetAll()">✕ New session</button>
+        <div class="brow">
+          <button class="btn btnd" onclick="dlPNG()">&#11015; Annotated image (.png)</button>
+          <button class="btn btnd" onclick="dlPDF()">&#11015; PDF report</button>
+          <button class="rbtn" onclick="resetAll()">&#10005; New session</button>
         </div>
       </div>
-
-      <div class="results-grid">
+      <div class="rgrid">
         <div>
           <div class="slbl">Annotated Image</div>
-          <div class="canvas-wrap">
-            <div id="canvas-ph" style="color:var(--text3);font-size:13px;padding:32px;text-align:center">Rendering…</div>
-            <canvas id="ann-canvas" style="display:none"></canvas>
+          <div class="cwrap">
+            <div id="cph" style="color:var(--tx3);font-size:13px;padding:32px;text-align:center">Rendering...</div>
+            <canvas id="cv" style="display:none"></canvas>
           </div>
-          <div id="field-desc-box" class="hidden" style="margin-top:12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;">
-            <div style="font-size:9px;font-family:monospace;text-transform:uppercase;letter-spacing:0.12em;color:var(--cyan);margin-bottom:8px">Field Assessment</div>
-            <div id="field-desc-text" style="font-size:12px;color:var(--text2);line-height:1.7"></div>
+          <div id="fdbox" class="fdbox hidden">
+            <div class="fdlbl">Field Assessment</div>
+            <div class="fdtxt" id="fdtxt"></div>
           </div>
         </div>
         <div>
-          <div id="summary-panel"></div>
-          <div id="insights-panel" class="hidden" style="margin-top:14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px;">
-            <div style="font-size:9px;font-family:monospace;text-transform:uppercase;letter-spacing:0.12em;color:var(--gold);margin-bottom:12px">Sample Insights</div>
-            <div id="insights-content"></div>
+          <div id="sumpanel"></div>
+          <div id="insbox" class="insbox hidden">
+            <div class="inslbl">Sample Insights</div>
+            <div id="inscontent"></div>
           </div>
         </div>
       </div>
-
       <div class="sep"></div>
       <div class="slbl">Cell Data</div>
-      <div class="tbl-wrap" id="detail-table"></div>
-
-      <div id="misc-section" class="hidden">
+      <div class="twrap" id="dtbl"></div>
+      <div id="miscsec" class="hidden">
         <div class="sep"></div>
         <div class="slbl">Miscellaneous &amp; Incidental Findings</div>
-        <div class="tbl-wrap" id="misc-table"></div>
+        <div class="twrap" id="misctbl"></div>
       </div>
-
-      <div id="grid-section" class="hidden">
+      <div id="gridsec" class="hidden">
         <div class="sep"></div>
-        <div class="slbl">Neubauer Grid — Square-by-Square Counts</div>
-        <div class="tbl-wrap" id="grid-table"></div>
+        <div class="slbl">Neubauer Grid - Square-by-Square Counts</div>
+        <div class="twrap" id="gridtbl"></div>
       </div>
-
-      <div id="notes-area" class="hidden">
-        <div class="note-box" id="notes-content"></div>
+      <div id="notesarea" class="hidden">
+        <div class="nbox" id="notescontent"></div>
       </div>
     </div>
-
   </div>
 </div>
 
 <script>
-// ── CONFIG ──────────────────────────────────────────────────
-const PASSWORD = 'SQAVAMSI';
+var PW = 'SQAVAMSI';
+var SK = '';
+var CM = null;
+var CDU = null;
+var CB64 = null;
+var CMIME = 'image/jpeg';
+var CPNG = null;
+var SESS = {imgs:0,dcNS:0,tccV:0,tccD:0,tccSq:0};
 
-// ── STATE ───────────────────────────────────────────────────
-let sessionKey = '';
-let currentMode = null;
-let currentDataUrl = null;
-let currentBase64 = null;
-let currentMime = 'image/jpeg';
-let canvasPng = null;
-
-let sess = {
-  images: 0,
-  dcNonSquamous: 0,
-  tccViable: 0,
-  tccDead: 0,
-  tccSquares: 0
+var MCFG = {
+  petri:       {badge:'Inverted - Petri Dish',          dz:'JPEG or PNG - Petri dish or well plate',          par:'inv'},
+  inverted:    {badge:'Inverted - Hemocytometer (TB)',  dz:'JPEG or PNG - Hemocytometer with trypan blue',    par:'inv'},
+  upright:     {badge:'Upright - Leishman Cytospin',    dz:'JPEG or PNG - Leishman-stained cytospin slide',   par:'upr'},
+  upright_hemo:{badge:'Upright - Hemocytometer (TB)',   dz:'JPEG or PNG - Hemocytometer with trypan blue',    par:'upr'}
 };
 
-// ── UTILS ────────────────────────────────────────────────────
-function $(id){ return document.getElementById(id); }
-function show(id){ $(id).classList.remove('hidden'); }
-function hide(id){ $(id).classList.add('hidden'); }
-function setStep(n){
-  [1,2,3,4].forEach(function(i){
-    $(('si-')+i).className = 'si ' + (i < n ? 's-done' : i === n ? 's-active' : 's-pending');
-  });
-}
-function toggleEye(id){
-  var el = $(id);
-  el.type = el.type === 'password' ? 'text' : 'password';
-}
-function getSampleId(){
-  return $('sid-input').value.trim() || 'SINFL-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + Math.random().toString(36).substr(2,6).toUpperCase();
-}
-
-// ── AUTH ─────────────────────────────────────────────────────
-function unlock(){
-  var pw = $('pw-input').value.trim();
-  var ak = $('api-input').value.trim();
-  var err = $('pw-err');
-  if(pw !== PASSWORD){
-    $('pw-input').classList.add('err');
-    err.textContent = 'Incorrect password.';
-    setTimeout(function(){ $('pw-input').classList.remove('err'); }, 400);
-    return;
-  }
-  if(!ak.startsWith('sk-')){
-    err.textContent = 'Please enter a valid Anthropic API key (starts with sk-).';
-    return;
-  }
-  sessionKey = ak;
-  $('lock-screen').style.display = 'none';
-  $('app').style.display = 'block';
-  $('sid-input').value = 'SINFL-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + Math.random().toString(36).substr(2,6).toUpperCase();
-}
-
-function lockApp(){
-  $('lock-screen').style.display = 'flex';
-  $('app').style.display = 'none';
-  sessionKey = '';
-  $('pw-input').value = '';
-  $('api-input').value = '';
-  $('pw-err').textContent = '';
-  resetAll();
-}
-
-// ── MODE ─────────────────────────────────────────────────────
-var MODE_CFG = {
-  petri:        { badge:'🫙 Inverted — Petri Dish',          dz:'JPEG or PNG — Petri dish / well plate',            parent:'inv' },
-  inverted:     { badge:'🔢 Inverted — Hemocytometer (TB)',  dz:'JPEG or PNG — Hemocytometer with trypan blue',     parent:'inv' },
-  upright:      { badge:'🧬 Upright — Leishman Cytospin',   dz:'JPEG or PNG — Leishman-stained cytospin slide',    parent:'upr' },
-  upright_hemo: { badge:'🔢 Upright — Hemocytometer (TB)',  dz:'JPEG or PNG — Hemocytometer with trypan blue',     parent:'upr' }
+var CMETA = {
+  viable_cell:         {label:'Viable cell',           code:'V',  color:'#34d399',g:'p'},
+  dead_cell:           {label:'Dead cell (TB+)',        code:'D',  color:'#60a5fa',g:'p'},
+  squamous:            {label:'Squamous epithelial',    code:'Sq', color:'#f87171',g:'p'},
+  rbc:                 {label:'Red blood cell',         code:'RBC',color:'#fb923c',g:'p'},
+  debris:              {label:'Debris / mucus',         code:'Db', color:'#64748b',g:'p'},
+  mucus_plug:          {label:'Mucus plug',             code:'MP', color:'#fde68a',g:'p'},
+  saliva:              {label:'Saliva / watery',        code:'Sa', color:'#7dd3fc',g:'p'},
+  blood_streak:        {label:'Blood streak',           code:'Bl', color:'#f87171',g:'p'},
+  macrophage:          {label:'Macrophage',             code:'Ma', color:'#a78bfa',g:'p'},
+  neutrophil:          {label:'Neutrophil',             code:'N',  color:'#60a5fa',g:'p'},
+  eosinophil:          {label:'Eosinophil',             code:'Eo', color:'#fbbf24',g:'p'},
+  lymphocyte:          {label:'Lymphocyte',             code:'Ly', color:'#34d399',g:'p'},
+  basophil:            {label:'Basophil',               code:'Ba', color:'#818cf8',g:'p'},
+  mast_cell:           {label:'Mast cell',              code:'Mc', color:'#f472b6',g:'p'},
+  bronchial_epithelial:{label:'Bronchial epithelial',   code:'BE', color:'#2dd4bf',g:'p'},
+  refractile_cell:     {label:'Refractile structure',   code:'Rf', color:'#e2e8f0',g:'m'},
+  mucin:               {label:'Mucin',                  code:'Mu', color:'#93c5fd',g:'m'},
+  cocci:               {label:'Cocci',                  code:'Co', color:'#fde68a',g:'m'},
+  bacilli:             {label:'Bacilli',                code:'Bc', color:'#86efac',g:'m'},
+  coccobacilli:        {label:'Coccobacilli',           code:'Cb', color:'#bbf7d0',g:'m'},
+  afb:                 {label:'AFB / Mycobacteria',     code:'AFB',color:'#fca5a5',g:'m'},
+  fungal_hyphae:       {label:'Fungal hyphae',          code:'FH', color:'#c4b5fd',g:'m'},
+  fungal_spores:       {label:'Fungal spores',          code:'FS', color:'#ddd6fe',g:'m'},
+  charcot_leyden:      {label:'Charcot-Leyden crystals',code:'CL', color:'#fcd34d',g:'m'},
+  curschmann:          {label:'Curschmann spirals',     code:'CS', color:'#6ee7b7',g:'m'},
+  creola:              {label:'Creola bodies',          code:'Cr', color:'#7dd3fc',g:'m'},
+  pollen:              {label:'Pollen grains',          code:'Po', color:'#fde047',g:'m'},
+  vegetable_matter:    {label:'Vegetable/food matter',  code:'VM', color:'#86efac',g:'m'},
+  food_matter:         {label:'Food/vegetable matter',  code:'FM', color:'#86efac',g:'m'}
 };
 
-function setMode(m){
-  currentMode = m;
-  var cfg = MODE_CFG[m];
-  ['sub-petri','sub-hemo','sub-diff','sub-upr-hemo'].forEach(function(id){
-    var el = $(id);
-    if(el){ el.style.opacity = '0.5'; el.style.filter = ''; }
-  });
-  var selMap = { petri:'sub-petri', inverted:'sub-hemo', upright:'sub-diff', upright_hemo:'sub-upr-hemo' };
-  var sel = $(selMap[m]);
-  if(sel){ sel.style.opacity = '1'; sel.style.filter = 'brightness(1.25)'; }
-  $('mc-inv').classList.toggle('selected', cfg.parent === 'inv');
-  $('mc-upr').classList.toggle('selected', cfg.parent === 'upr');
-  $('dz-sub').textContent = cfg.dz;
-  show('upload-section');
-  setStep(2);
-}
-
-// ── FILE LOAD ────────────────────────────────────────────────
-function handleDrop(e){
-  e.preventDefault();
-  $('dropzone').classList.remove('drag');
-  loadFile(e.dataTransfer.files[0]);
-}
-
-function loadFile(file){
-  if(!file || !file.type.startsWith('image/')){ alert('Please upload a JPEG or PNG image.'); return; }
-  if(!currentMode){ alert('Please select a microscope mode first.'); return; }
-  currentMime = file.type;
-  clearErr();
-  var reader = new FileReader();
-  reader.onload = function(e){
-    currentDataUrl = e.target.result;
-    currentBase64 = e.target.result.split(',')[1];
-    $('preview-img').src = currentDataUrl;
-    $('preview-badge').textContent = MODE_CFG[currentMode].badge;
-    show('analyse-section');
-    hide('results-section');
-    setStep(3);
-  };
-  reader.readAsDataURL(file);
-}
-
-// ── PROMPTS ──────────────────────────────────────────────────
-var PETRI_PROMPT = 'You are a sputum inflammometry expert performing pre-processing quality assessment. This image shows sputum in a Petri dish or well plate viewed under an INVERTED microscope at low power.
-
-CRITICAL — FIELD BOUNDARY: Only identify structures WITHIN the visible illuminated field. Do NOT annotate anything in dark surrounding areas.
-
-CRITICAL — MUCUS PLUG IDENTIFICATION (most important task):
-Mucus plugs are identified by OPTICAL DENSITY and TEXTURE, NOT cellular detail:
-- mucus_plug: DENSE, OPAQUE, whitish-yellow or grey-white material that contrasts sharply against the background. Viscid, irregular surface. May appear rubbery or gelatinous. Looks CLEARLY DIFFERENT from surrounding watery material. These are the portions to SELECT for processing.
-- saliva: THIN, TRANSPARENT, uniform watery background. No structural variation. Clear/glassy appearance. AVOID selecting this.
-- blood_streak: Reddish-brown or pinkish areas or streaks — haemoptysis indicator.
-- squamous: Large flat irregular cells visible at this magnification — contamination marker.
-- refractile_cell: Bright shiny refractile particles WITHIN the field only.
-- mucin: Stringy thread-like translucent material between plugs.
-- debris: Amorphous non-specific material.
-- fungal_hyphae: Branching filamentous structures if visible.
-- food_matter: Plant cell fragments or food particles.
-
-For EACH structure, x,y as % (0-100) from top-left, within illuminated field only.
-
-In fieldNarrative write 4-5 sentences in laboratory style describing: (1) overall sample appearance and volume impression, (2) location and characteristics of mucus plugs — their density, opacity, colour and distribution, (3) proportion and appearance of salivary vs lower airway-derived material, (4) any blood, squamous contamination or debris, (5) specific recommendation of which areas/quadrants to select for processing.
-
-Return ONLY valid JSON:
-{"mode":"petri","imageQuality":"good","cells":[{"id":1,"type":"mucus_plug","x":40.0,"y":50.0,"confidence":"high"}],"summary":{"mucus_plug_present":true,"saliva_dominant":false,"blood_present":false,"squamous_contamination":"low","overall_quality":"adequate","best_selection_area":"centre","adequacy":"adequate","adequacyNote":"","recommendation":"Select dense opaque plugs from centre-left quadrant"},"fieldNarrative":"Detailed field description here.","miscFindings":[],"notes":""}';
-
-var INVERTED_PROMPT = 'You are a sputum inflammometry expert. Analyse this hemocytometer image from an INVERTED microscope with trypan blue staining for total cell count and viability assessment.
-
-CRITICAL — FIELD BOUNDARY: Only annotate cells WITHIN the visible illuminated grid/field area. Do NOT annotate anything in dark surrounding borders. All x,y must be within the illuminated area.
-
-CELL IDENTIFICATION (trypan blue exclusion):
-- viable_cell: BRIGHT, REFRACTILE, TRANSLUCENT cells — membrane intact, trypan blue EXCLUDED. Appear shiny/glowing under inverted optics. Round, well-defined edges. These are live leukocytes.
-- dead_cell: BLUE-STAINED cells — trypan blue POSITIVE, membrane compromised. Appear distinctly blue/dark. May be shrunken or irregular.
-- squamous: Immediately obvious by ENORMOUS SIZE compared to leukocytes — large flat irregular epithelial cells, many times bigger than surrounding cells.
-- rbc: Small, anucleate, biconcave. Much smaller than leukocytes. Can appear refractile but no nucleus. May look similar to viable cells — distinguish by size (smaller) and absence of nucleus.
-- debris: Amorphous background material, mucus strands, cell fragments.
-
-MISCELLANEOUS (WITHIN FIELD ONLY — do not annotate outside circular/rectangular field boundary):
-- refractile_cell: Unusually bright shiny structures that are NOT typical leukocytes — may be crystals, spores, or lipid-laden cells.
-- mucin: Stringy background mucin threads.
-- charcot_leyden: Needle-shaped elongated crystals — indicator of eosinophilia.
-- fungal_spores: Round refractile particles, often in clusters.
-
-If Neubauer grid visible, count per square: TL=top-left, TR=top-right, C=centre, BL=bottom-left, BR=bottom-right.
-For EACH structure, x,y as % (0-100) from top-left.
-
-In fieldNarrative write 4-5 sentences describing: (1) cell density impression in the field, (2) proportion and appearance of viable vs dead cells, (3) any RBCs or squamous cells, (4) staining quality and background, (5) viability assessment and sample adequacy impression.
-
-Return ONLY valid JSON:
-{"mode":"inverted","gridDetected":false,"imageQuality":"good","cells":[{"id":1,"type":"viable_cell","x":30.0,"y":50.0,"confidence":"high"}],"gridSquares":{"detected":[],"counts":{"TL":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"TR":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"C":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"BL":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"BR":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0}}},"summary":{"totalViable":0,"totalDead":0,"totalSquamous":0,"totalRBC":0,"totalDebris":0,"viabilityPercent":0.0,"squamousPercent":0.0,"adequacy":"adequate","adequacyNote":""},"fieldNarrative":"Detailed field description here.","miscFindings":[],"notes":""}';
-
-var UPRIGHT_HEMO_PROMPT = 'You are a sputum inflammometry expert. Analyse this hemocytometer image from an UPRIGHT microscope with trypan blue staining for total cell count and viability assessment.
-
-CRITICAL — FIELD BOUNDARY: Only annotate cells WITHIN the visible illuminated grid area. Do NOT annotate anything outside the field boundary.
-
-CELL IDENTIFICATION (trypan blue exclusion):
-- viable_cell: BRIGHT, REFRACTILE, TRANSLUCENT cells — membrane intact, trypan blue EXCLUDED. Appear shiny, well-defined edges. Live leukocytes.
-- dead_cell: BLUE-STAINED cells — trypan blue POSITIVE. Appear distinctly blue/dark, membrane compromised.
-- squamous: Enormous size compared to leukocytes — large flat irregular epithelial cells.
-- rbc: Small, anucleate, smaller than leukocytes, no nucleus.
-- debris: Amorphous background material.
-- refractile_cell: Unusually bright structures — crystals, spores — WITHIN FIELD ONLY.
-- mucin: Stringy background threads WITHIN FIELD.
-- charcot_leyden: Needle-shaped elongated crystals WITHIN FIELD.
-
-If Neubauer grid visible, count per square: TL, TR, C, BL, BR.
-For EACH structure, x,y as % (0-100) from top-left.
-
-In fieldNarrative write 4-5 sentences on: cell density, viable vs dead proportion, staining quality, RBCs/squamous, viability and adequacy impression.
-
-Return ONLY valid JSON:
-{"mode":"upright_hemo","gridDetected":false,"imageQuality":"good","cells":[{"id":1,"type":"viable_cell","x":30.0,"y":50.0,"confidence":"high"}],"gridSquares":{"detected":[],"counts":{"TL":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"TR":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"C":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"BL":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"BR":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0}}},"summary":{"totalViable":0,"totalDead":0,"totalSquamous":0,"totalRBC":0,"totalDebris":0,"viabilityPercent":0.0,"squamousPercent":0.0,"adequacy":"adequate","adequacyNote":""},"fieldNarrative":"Detailed field description here.","miscFindings":[],"notes":""}';
-
-var UPRIGHT_PROMPT = 'You are a sputum inflammometry expert. Analyse this Leishman-stained cytospin slide from an upright microscope for differential cell count.
-
-CRITICAL — FIELD BOUNDARY: Only annotate cells WITHIN the visible circular illuminated microscopic field. Do NOT annotate anything in the dark area outside the circular field. All x,y must fall within the illuminated circular area.
-
-PRIMARY CELLS — Romanowsky/Leishman stain characteristics:
-
-- macrophage: LARGEST cell in the field (15-25 μm). Pale grey-blue cytoplasm, often heavily VACUOLATED (clear spaces within cytoplasm from phagocytic activity). Nucleus eccentric, kidney-shaped or oval, pale purple. May contain ingested debris or pigment. Most prevalent cell in healthy sputum. Key: SIZE (largest) + VACUOLATION.
-
-- neutrophil: 12-15 μm. Nucleus MULTI-LOBED (3-5 lobes joined by thin strands) — dark purple. Cytoplasm pale pink with fine granules not visible by light microscopy. Key: MULTILOBED NUCLEUS.
-
-- eosinophil: 10-15 μm. Bilobed nucleus (purple). Cytoplasm filled with BRIGHT ORANGE-RED COARSE GRANULES — this is the single most distinctive feature, unmistakable when present. Granules are large and uniform. NOTE: degranulated eosinophils may have sparse/absent granules with only bilobed nucleus remaining — still count as eosinophil. Key: BRIGHT ORANGE-RED GRANULES.
-
-- lymphocyte: SMALLEST cell (7-10 μm). Large round dark purple nucleus occupying most of cell. Very thin pale blue cytoplasm rim. Key: SMALL SIZE + DARK NUCLEUS.
-
-- basophil: 10-15 μm. Bilobed or irregular nucleus (often obscured). Dark BLUE-PURPLE coarse granules — less bright than eosinophil granules. Rare in sputum.
-
-- mast_cell: 10-15 μm. Round nucleus, densely packed METACHROMATIC dark purple granules filling the cell. Granules more numerous and uniform than basophil.
-
-- bronchial_epithelial: COLUMNAR shape — taller than wide. Nucleus at base. Pale cytoplasm. May show cilia at apex. Often in clusters or sheets. Distinguished from macrophages by columnar shape and grouped arrangement.
-
-- squamous: VERY LARGE flat polygonal cell — dwarfs all other cells. Small, dense pyknotic nucleus. Pale pink cytoplasm. Oral contamination marker.
-
-MISCELLANEOUS (WITHIN CIRCULAR FIELD ONLY — not in dark border):
-- refractile_cell: Bright refractile structure within illuminated field ONLY — never in dark border areas
-- mucin: Pale pink/magenta amorphous background material
-- cocci: Round small purple dots, single or clusters/pairs
-- bacilli: Rod-shaped purple bacteria
-- coccobacilli: Short oval rods between coccus and bacillus
-- afb: Ghost bacilli or unstained rods (Mycobacteria — poorly stained by Leishman)
-- fungal_hyphae: Branching filaments, pale purple
-- fungal_spores: Round purple/pink bodies, may show budding
-- charcot_leyden: Elongated needle-shaped eosinophilic crystals — indicator of eosinophil breakdown
-- curschmann: Coiled mucus plugs — associated with asthma
-- creola: Tight clusters of shed bronchial epithelial cells
-- pollen: Large round structured particles with wall pattern
-- vegetable_matter: Plant cell wall fragments — oral contamination
-
-For EACH cell WITHIN THE CIRCULAR FIELD, x,y as % (0-100) from top-left.
-In nonSquamousCells give count of non-squamous nucleated cells in this field.
-
-In fieldNarrative write 5-6 sentences in laboratory style: (1) overall cellularity and cell density of this field, (2) predominant cell type and its morphological appearance in this preparation, (3) each cell type present with specific morphological description and approximate proportion, (4) staining quality — is the orange-red of eosinophils well-preserved? Are nuclear lobes clearly distinguishable?, (5) background — mucin, debris, staining artefacts, (6) clinical significance of the pattern seen and inflammatory phenotype impression.
-
-Return ONLY valid JSON:
-{"mode":"upright","imageQuality":"good","stainQuality":"good","cells":[{"id":1,"type":"macrophage","x":30.0,"y":50.0,"confidence":"high"}],"summary":{"totalCellsIdentified":0,"macrophage":0,"neutrophil":0,"eosinophil":0,"lymphocyte":0,"basophil":0,"mast_cell":0,"bronchial_epithelial":0,"squamous":0,"nonSquamousCells":0,"macrophagePercent":0.0,"neutrophilPercent":0.0,"eosinophilPercent":0.0,"lymphocytePercent":0.0,"basophilPercent":0.0,"mast_cellPercent":0.0,"bronchial_epithelialPercent":0.0,"squamousPercent":0.0,"adequacy":"adequate","adequacyNote":"","inflammatoryPattern":"paucigranulocytic"},"fieldNarrative":"Detailed field description here.","miscFindings":[],"notes":""}';
-
-function getPrompt(m){
-  if(m === 'petri') return PETRI_PROMPT;
-  if(m === 'inverted') return INVERTED_PROMPT;
-  if(m === 'upright_hemo') return UPRIGHT_HEMO_PROMPT;
-  return UPRIGHT_PROMPT;
-}
-
-// ── CELL META ────────────────────────────────────────────────
-var CM = {
-  viable_cell:          { label:'Viable cell',            code:'V',   color:'#34d399', g:'p' },
-  dead_cell:            { label:'Dead cell (TB+)',         code:'D',   color:'#60a5fa', g:'p' },
-  squamous:             { label:'Squamous epithelial',     code:'Sq',  color:'#f87171', g:'p' },
-  rbc:                  { label:'Red blood cell',          code:'RBC', color:'#fb923c', g:'p' },
-  debris:               { label:'Debris / mucus',          code:'Db',  color:'#64748b', g:'p' },
-  mucus_plug:           { label:'Mucus plug',              code:'MP',  color:'#fde68a', g:'p' },
-  saliva:               { label:'Saliva / watery',         code:'Sa',  color:'#7dd3fc', g:'p' },
-  blood_streak:         { label:'Blood streak',            code:'Bl',  color:'#f87171', g:'p' },
-  macrophage:           { label:'Macrophage',              code:'Ma',  color:'#a78bfa', g:'p' },
-  neutrophil:           { label:'Neutrophil',              code:'N',   color:'#60a5fa', g:'p' },
-  eosinophil:           { label:'Eosinophil',              code:'Eo',  color:'#fbbf24', g:'p' },
-  lymphocyte:           { label:'Lymphocyte',              code:'Ly',  color:'#34d399', g:'p' },
-  basophil:             { label:'Basophil',                code:'Ba',  color:'#818cf8', g:'p' },
-  mast_cell:            { label:'Mast cell',               code:'Mc',  color:'#f472b6', g:'p' },
-  bronchial_epithelial: { label:'Bronchial epithelial',    code:'BE',  color:'#2dd4bf', g:'p' },
-  refractile_cell:      { label:'Refractile structure',    code:'Rf',  color:'#e2e8f0', g:'m' },
-  mucin:                { label:'Mucin',                   code:'Mu',  color:'#93c5fd', g:'m' },
-  cocci:                { label:'Cocci',                   code:'Co',  color:'#fde68a', g:'m' },
-  bacilli:              { label:'Bacilli',                 code:'Bc',  color:'#86efac', g:'m' },
-  coccobacilli:         { label:'Coccobacilli',            code:'Cb',  color:'#bbf7d0', g:'m' },
-  afb:                  { label:'AFB / Mycobacteria',      code:'AFB', color:'#fca5a5', g:'m' },
-  fungal_hyphae:        { label:'Fungal hyphae',           code:'FH',  color:'#c4b5fd', g:'m' },
-  fungal_spores:        { label:'Fungal spores',           code:'FS',  color:'#ddd6fe', g:'m' },
-  charcot_leyden:       { label:'Charcot-Leyden crystals', code:'CL',  color:'#fcd34d', g:'m' },
-  curschmann:           { label:'Curschmann spirals',      code:'CS',  color:'#6ee7b7', g:'m' },
-  creola:               { label:'Creola bodies',           code:'Cr',  color:'#7dd3fc', g:'m' },
-  pollen:               { label:'Pollen grains',           code:'Po',  color:'#fde047', g:'m' },
-  vegetable_matter:     { label:'Vegetable / food matter', code:'VM',  color:'#86efac', g:'m' },
-  food_matter:          { label:'Food / vegetable matter', code:'FM',  color:'#86efac', g:'m' }
-};
-
-var MISC_NOTES = {
+var MNOTES = {
   refractile_cell:'May indicate lipid-laden macrophages, crystals or spores',
-  mucin:'Note quantity — heavy mucin may affect processing',
+  mucin:'Note quantity - heavy mucin may affect processing',
   cocci:'Gram stain / culture recommended',
   bacilli:'Gram stain / culture recommended',
   coccobacilli:'Gram stain / culture recommended',
@@ -672,668 +421,406 @@ var MISC_NOTES = {
   fungal_spores:'KOH / fungal culture recommended',
   charcot_leyden:'Indicator of eosinophilic inflammation',
   curschmann:'Associated with asthma / mucus plugging',
-  creola:'Shed bronchial epithelium — airway inflammation',
+  creola:'Shed bronchial epithelium - airway inflammation',
   pollen:'Environmental contaminant',
-  vegetable_matter:'Oral contamination — note sample quality',
-  food_matter:'Oral contamination — note sample quality'
+  vegetable_matter:'Oral contamination - note sample quality',
+  food_matter:'Oral contamination - note sample quality'
 };
 
-// ── ANALYSE ──────────────────────────────────────────────────
-async function analyse(){
-  if(!currentBase64 || !currentMode || !sessionKey) return;
-  setLoading(true);
+function G(id){return document.getElementById(id);}
+function show(id){G(id).classList.remove('hidden');}
+function hide(id){G(id).classList.add('hidden');}
+function setStep(n){
+  [1,2,3,4].forEach(function(i){
+    var cl='si '+(i<n?'sdone':i===n?'sact':'spend');
+    G('s'+i).className=cl;
+  });
+}
+function toggleEye(inp,btn){
+  var el=G(inp);
+  el.type=(el.type==='password'?'text':'password');
+}
+function getSID(){
+  return G('sidinput').value.trim()||newSID();
+}
+function newSID(){
+  var d=new Date(),p=function(n){return String(n).padStart(2,'0');};
+  return 'SINFL-'+d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+'-'+Math.random().toString(36).substr(2,6).toUpperCase();
+}
+
+function doUnlock(){
+  var pw=G('pwin').value.trim();
+  var ak=G('akin').value.trim();
+  var err=G('pwerr');
+  err.textContent='';
+  if(pw!==PW){
+    G('pwin').classList.add('err');
+    err.textContent='Incorrect password.';
+    setTimeout(function(){G('pwin').classList.remove('err');},400);
+    return;
+  }
+  if(!ak.startsWith('sk-')){
+    err.textContent='Please enter a valid Anthropic API key (starts with sk-).';
+    return;
+  }
+  SK=ak;
+  G('lock').style.display='none';
+  G('app').style.display='block';
+  G('sidinput').value=newSID();
+}
+
+function doLock(){
+  G('lock').style.display='flex';
+  G('app').style.display='none';
+  SK='';
+  G('pwin').value='';
+  G('akin').value='';
+  G('pwerr').textContent='';
+  resetAll();
+}
+
+function setMode(m){
+  CM=m;
+  var cfg=MCFG[m];
+  ['sub-petri','sub-hemo','sub-diff','sub-uhemo'].forEach(function(id){
+    var el=G(id);if(el){el.style.opacity='0.5';el.style.filter='';}
+  });
+  var map={petri:'sub-petri',inverted:'sub-hemo',upright:'sub-diff',upright_hemo:'sub-uhemo'};
+  var sel=G(map[m]);
+  if(sel){sel.style.opacity='1';sel.style.filter='brightness(1.25)';}
+  G('mc-inv').classList.toggle('sel',cfg.par==='inv');
+  G('mc-upr').classList.toggle('sel',cfg.par==='upr');
+  G('dzs').textContent=cfg.dz;
+  show('upsec');
+  setStep(2);
+}
+
+function onDrop(e){
+  e.preventDefault();
+  G('dzone').classList.remove('drag');
+  loadFile(e.dataTransfer.files[0]);
+}
+
+function loadFile(file){
+  if(!file||!file.type.startsWith('image/')){alert('Please upload a JPEG or PNG image.');return;}
+  if(!CM){alert('Please select a microscope mode first.');return;}
+  CMIME=file.type;
   clearErr();
-  ['results-section','misc-section','grid-section','notes-area'].forEach(hide);
-  canvasPng = null;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    CDU=e.target.result;
+    CB64=e.target.result.split(',')[1];
+    G('pimg').src=CDU;
+    G('pbadge').textContent=MCFG[CM].badge;
+    show('ansec');
+    hide('ressec');
+    setStep(3);
+  };
+  reader.readAsDataURL(file);
+}
+
+function getPrompt(m){
+  if(m==='petri'){
+    return 'You are a sputum inflammometry expert performing pre-processing quality assessment. This shows sputum in a Petri dish or well plate under an INVERTED microscope at low power.\n\nIMPORTANT: Only identify structures WITHIN the visible illuminated field. Do NOT annotate anything in dark surrounding areas.\n\nMUCUS PLUG IDENTIFICATION - identify by OPTICAL DENSITY and TEXTURE:\n- mucus_plug: DENSE, OPAQUE, whitish-yellow or grey-white material contrasting sharply against transparent background. Viscid, irregular surface. Looks clearly different from surrounding watery material. SELECT these for processing.\n- saliva: THIN, TRANSPARENT, uniform watery background. No structural variation. Clear or glassy. AVOID selecting.\n- blood_streak: Reddish-brown or pinkish areas. Haemoptysis indicator.\n- squamous: Large flat irregular epithelial cells visible at low power.\n- refractile_cell: Bright shiny particles WITHIN the field only.\n- mucin: Stringy thread-like translucent material.\n- debris: Amorphous non-specific material.\n- fungal_hyphae: Branching filamentous structures.\n- food_matter: Plant cell fragments or food particles.\n\nFor EACH structure found, give x and y as percentage 0-100 from top-left corner.\n\nIn fieldNarrative write 4-5 sentences describing: overall sample appearance, mucus plug characteristics (density, opacity, colour, distribution), proportion of salivary vs lower-airway material, any blood or contamination, and specific recommendation of which areas to select for processing.\n\nReturn ONLY valid JSON with no other text:\n{"mode":"petri","imageQuality":"good","cells":[{"id":1,"type":"mucus_plug","x":40.0,"y":50.0,"confidence":"high"}],"summary":{"mucus_plug_present":true,"saliva_dominant":false,"blood_present":false,"squamous_contamination":"low","overall_quality":"adequate","best_selection_area":"centre","adequacy":"adequate","adequacyNote":"","recommendation":"Select dense opaque plugs from centre"},"fieldNarrative":"Description here.","miscFindings":[],"notes":""}';
+  }
+  if(m==='inverted'){
+    return 'You are a sputum inflammometry expert. Analyse this hemocytometer image from an INVERTED microscope with trypan blue staining for total cell count and viability.\n\nIMPORTANT: Only annotate cells WITHIN the visible illuminated grid area. Do NOT annotate anything in the dark surrounding borders. All x,y must be within the illuminated area.\n\nCELL TYPES:\n- viable_cell: BRIGHT, REFRACTILE, TRANSLUCENT cells. Membrane intact, trypan blue excluded. Appear shiny with well-defined edges. Live leukocytes.\n- dead_cell: BLUE-STAINED cells. Trypan blue positive, membrane compromised. Appear distinctly blue or dark.\n- squamous: VERY LARGE flat irregular cells - many times bigger than leukocytes. Immediately obvious by enormous size.\n- rbc: Small anucleate biconcave cells. Smaller than leukocytes, no nucleus.\n- debris: Amorphous background material, mucus strands, cell fragments.\n- refractile_cell: Unusually bright structures that are NOT typical leukocytes - crystals, spores, lipid-laden cells. WITHIN FIELD ONLY.\n- mucin: Stringy background threads WITHIN FIELD.\n- charcot_leyden: Needle-shaped elongated crystals. Indicator of eosinophilia.\n- fungal_spores: Round refractile particles in clusters.\n\nIf Neubauer grid is visible, count per square: TL=top-left, TR=top-right, C=centre, BL=bottom-left, BR=bottom-right.\nFor EACH structure, give x and y as percentage 0-100 from top-left.\n\nIn fieldNarrative write 4-5 sentences on: cell density, proportion of viable vs dead cells, staining quality, any RBCs or squamous cells, and viability and adequacy impression.\n\nReturn ONLY valid JSON:\n{"mode":"inverted","gridDetected":false,"imageQuality":"good","cells":[{"id":1,"type":"viable_cell","x":30.0,"y":50.0,"confidence":"high"}],"gridSquares":{"detected":[],"counts":{"TL":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"TR":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"C":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"BL":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"BR":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0}}},"summary":{"totalViable":0,"totalDead":0,"totalSquamous":0,"totalRBC":0,"totalDebris":0,"viabilityPercent":0.0,"squamousPercent":0.0,"adequacy":"adequate","adequacyNote":""},"fieldNarrative":"Description here.","miscFindings":[],"notes":""}';
+  }
+  if(m==='upright_hemo'){
+    return 'You are a sputum inflammometry expert. Analyse this hemocytometer image from an UPRIGHT microscope with trypan blue staining for total cell count and viability.\n\nIMPORTANT: Only annotate cells WITHIN the visible illuminated grid area. All x,y must be within the illuminated area.\n\nCELL TYPES:\n- viable_cell: BRIGHT, REFRACTILE, TRANSLUCENT cells. Membrane intact, trypan blue excluded. Live leukocytes.\n- dead_cell: BLUE-STAINED cells. Trypan blue positive, membrane compromised.\n- squamous: Very large flat irregular epithelial cells.\n- rbc: Small anucleate cells, smaller than leukocytes.\n- debris: Amorphous background material.\n- refractile_cell: Unusually bright structures. WITHIN FIELD ONLY.\n- mucin: Stringy background threads WITHIN FIELD.\n- charcot_leyden: Needle-shaped elongated crystals.\n\nIf Neubauer grid visible, count per square: TL, TR, C, BL, BR.\nFor EACH structure, give x and y as percentage 0-100 from top-left.\n\nIn fieldNarrative write 4-5 sentences on cell density, viable vs dead proportion, staining quality, and adequacy.\n\nReturn ONLY valid JSON:\n{"mode":"upright_hemo","gridDetected":false,"imageQuality":"good","cells":[{"id":1,"type":"viable_cell","x":30.0,"y":50.0,"confidence":"high"}],"gridSquares":{"detected":[],"counts":{"TL":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"TR":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"C":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"BL":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"BR":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0}}},"summary":{"totalViable":0,"totalDead":0,"totalSquamous":0,"totalRBC":0,"totalDebris":0,"viabilityPercent":0.0,"squamousPercent":0.0,"adequacy":"adequate","adequacyNote":""},"fieldNarrative":"Description here.","miscFindings":[],"notes":""}';
+  }
+  return 'You are a sputum inflammometry expert. Analyse this Leishman-stained cytospin slide from an upright microscope for differential cell count.\n\nIMPORTANT: Only annotate cells WITHIN the visible circular illuminated microscopic field. Do NOT annotate anything in the dark area outside the circular field. All x,y must fall within the illuminated circular area.\n\nPRIMARY CELLS - Romanowsky/Leishman stain:\n- macrophage: LARGEST cell in the field (15-25 um). Pale grey-blue cytoplasm, often heavily VACUOLATED (clear spaces). Nucleus eccentric, kidney-shaped or oval, pale purple. Key: SIZE (largest) and VACUOLATION.\n- neutrophil: 12-15 um. Nucleus MULTI-LOBED (3-5 lobes joined by thin strands), dark purple. Cytoplasm pale pink with fine granules. Key: MULTILOBED NUCLEUS.\n- eosinophil: 10-15 um. Bilobed nucleus (purple). Cytoplasm filled with BRIGHT ORANGE-RED COARSE GRANULES - most distinctive feature. Note: degranulated eosinophils may have sparse granules with only bilobed nucleus - still count as eosinophil. Key: BRIGHT ORANGE-RED GRANULES.\n- lymphocyte: SMALLEST cell (7-10 um). Large round dark purple nucleus. Very thin pale blue cytoplasm rim. Key: SMALL SIZE and DARK NUCLEUS.\n- basophil: 10-15 um. Bilobed or irregular nucleus. Dark BLUE-PURPLE coarse granules. Rare in sputum.\n- mast_cell: 10-15 um. Round nucleus. Densely packed metachromatic dark purple granules filling the cell.\n- bronchial_epithelial: COLUMNAR shape - taller than wide. Nucleus at base. Pale cytoplasm. May have cilia. Often in clusters.\n- squamous: VERY LARGE flat polygonal cell - dwarfs all other cells. Small dense pyknotic nucleus. Oral contamination.\n\nMISCELLANEOUS - WITHIN CIRCULAR FIELD ONLY:\n- refractile_cell: Bright refractile structures WITHIN illuminated circular field. Never in dark border areas.\n- mucin: Pale pink or magenta amorphous background.\n- cocci: Round small purple dots, single or in clusters.\n- bacilli: Rod-shaped purple bacteria.\n- coccobacilli: Short oval rods.\n- afb: Ghost bacilli or unstained rods (Mycobacteria).\n- fungal_hyphae: Branching filaments, pale purple.\n- fungal_spores: Round purple or pink bodies, may show budding.\n- charcot_leyden: Elongated needle-shaped crystals indicating eosinophil breakdown.\n- curschmann: Coiled mucus plugs, associated with asthma.\n- creola: Tight clusters of shed bronchial epithelial cells.\n- pollen: Large round structured particles with wall pattern.\n- vegetable_matter: Plant cell wall fragments, oral contamination.\n\nFor EACH cell WITHIN THE CIRCULAR FIELD, give x and y as percentage 0-100 from top-left.\nIn nonSquamousCells give the count of non-squamous nucleated cells in this field.\n\nIn fieldNarrative write 5-6 sentences in laboratory style: (1) overall cellularity and cell density, (2) predominant cell type and morphological appearance in this preparation, (3) each cell type present with specific morphological description and approximate proportion, (4) staining quality - are eosinophil orange-red granules well-preserved? Are neutrophil nuclear lobes clearly distinguishable?, (5) background mucin debris or artefacts, (6) clinical significance and inflammatory phenotype impression.\n\nReturn ONLY valid JSON:\n{"mode":"upright","imageQuality":"good","stainQuality":"good","cells":[{"id":1,"type":"macrophage","x":30.0,"y":50.0,"confidence":"high"}],"summary":{"totalCellsIdentified":0,"macrophage":0,"neutrophil":0,"eosinophil":0,"lymphocyte":0,"basophil":0,"mast_cell":0,"bronchial_epithelial":0,"squamous":0,"nonSquamousCells":0,"macrophagePercent":0.0,"neutrophilPercent":0.0,"eosinophilPercent":0.0,"lymphocytePercent":0.0,"basophilPercent":0.0,"mast_cellPercent":0.0,"bronchial_epithelialPercent":0.0,"squamousPercent":0.0,"adequacy":"adequate","adequacyNote":"","inflammatoryPattern":"paucigranulocytic"},"fieldNarrative":"Description here.","miscFindings":[],"notes":""}';
+}
+
+async function doAnalyse(){
+  if(!CB64||!CM||!SK)return;
+  setLoad(true);clearErr();
+  ['ressec','miscsec','gridsec','notesarea'].forEach(hide);
+  CPNG=null;
   try{
-    var resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': sessionKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 4000,
-        messages: [{
-          role: 'user',
-          content: [
-            { type: 'image', source: { type: 'base64', media_type: currentMime, data: currentBase64 } },
-            { type: 'text', text: getPrompt(currentMode) }
-          ]
-        }]
-      })
+    var resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':SK,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,messages:[{role:'user',content:[
+        {type:'image',source:{type:'base64',media_type:CMIME,data:CB64}},
+        {type:'text',text:getPrompt(CM)}
+      ]}]})
     });
-    if(!resp.ok){
-      var errData = await resp.json();
-      throw new Error(errData.error ? errData.error.message : 'API error ' + resp.status);
+    if(!resp.ok){var ed=await resp.json();throw new Error(ed.error?ed.error.message:'API error '+resp.status);}
+    var data=await resp.json();
+    var txt='';
+    if(data.content){for(var i=0;i<data.content.length;i++){if(data.content[i].type==='text'){txt=data.content[i].text;break;}}}
+    var clean=txt.replace(/```json/g,'').replace(/```/g,'').trim();
+    var si=clean.indexOf('{'),ei=clean.lastIndexOf('}');
+    if(si!==-1&&ei!==-1)clean=clean.substring(si,ei+1);
+    try{JSON.parse(clean);}catch(je){
+      var opens=(clean.match(/\[/g)||[]).length-(clean.match(/\]/g)||[]).length;
+      var openO=(clean.match(/\{/g)||[]).length-(clean.match(/\}/g)||[]).length;
+      for(var x=0;x<opens;x++)clean+=']';
+      for(var y=0;y<openO;y++)clean+='}';
     }
-    var data = await resp.json();
-    var text = '';
-    if(data.content){
-      for(var i = 0; i < data.content.length; i++){
-        if(data.content[i].type === 'text'){ text = data.content[i].text; break; }
-      }
+    var result=JSON.parse(clean);
+    SESS.imgs++;
+    if(result.mode==='upright'){
+      SESS.dcNS+=(result.summary.nonSquamousCells||result.summary.totalCellsIdentified||0);
+    } else if(result.mode==='inverted'||result.mode==='upright_hemo'){
+      SESS.tccV+=(result.summary.totalViable||0);
+      SESS.tccD+=(result.summary.totalDead||0);
+      if(result.gridSquares&&result.gridSquares.detected)SESS.tccSq+=result.gridSquares.detected.length;
     }
-    var clean = text.replace(/```json/g,'').replace(/```/g,'').trim();
-    var si = clean.indexOf('{');
-    var ei = clean.lastIndexOf('}');
-    if(si !== -1 && ei !== -1) clean = clean.substring(si, ei + 1);
-    // Auto-repair truncated JSON
-    try{ JSON.parse(clean); } catch(je){
-      var opens = (clean.match(/\[/g) || []).length - (clean.match(/\]/g) || []).length;
-      var openO = (clean.match(/\{/g) || []).length - (clean.match(/\}/g) || []).length;
-      for(var x = 0; x < opens; x++) clean += ']';
-      for(var y = 0; y < openO; y++) clean += '}';
-    }
-    var result = JSON.parse(clean);
-    // Update session accumulator
-    sess.images++;
-    if(result.mode === 'upright'){
-      sess.dcNonSquamous += (result.summary.nonSquamousCells || result.summary.totalCellsIdentified || 0);
-    } else if(result.mode === 'inverted' || result.mode === 'upright_hemo'){
-      sess.tccViable += (result.summary.totalViable || 0);
-      sess.tccDead += (result.summary.totalDead || 0);
-      if(result.gridSquares && result.gridSquares.detected) sess.tccSquares += result.gridSquares.detected.length;
-    }
-    renderResults(result);
+    showResults(result);
     setStep(4);
-  } catch(e){
-    showErr('Analysis failed: ' + e.message);
-  } finally{
-    setLoading(false);
-  }
+  }catch(e){showErr('Analysis failed: '+e.message);}
+  finally{setLoad(false);}
 }
 
-// ── RENDER ───────────────────────────────────────────────────
-
-function renderFieldDesc(r){
-  var box = $('field-desc-box');
-  var txt = $('field-desc-text');
-  if(r.fieldNarrative){
-    txt.textContent = r.fieldNarrative;
-    show('field-desc-box');
-  } else {
-    hide('field-desc-box');
-  }
+function showResults(r){
+  show('ressec');
+  G('cph').style.display='flex';
+  G('cv').style.display='none';
+  drawCanvas(r);
+  renderSum(r);
+  renderDtbl(r);
+  renderMisc(r);
+  renderProg(r);
+  renderField(r);
+  renderIns(r);
+  if((r.mode==='inverted'||r.mode==='upright_hemo')&&r.gridDetected&&r.gridSquares&&r.gridSquares.detected&&r.gridSquares.detected.length){renderGrid(r);show('gridsec');}
+  var narr='';
+  if(r.notes)narr='<strong>Additional notes:</strong> '+r.notes;
+  if(narr){G('notescontent').innerHTML=narr;show('notesarea');}
 }
 
-function renderInsights(r){
-  var panel = $('insights-panel');
-  var content = $('insights-content');
-  var s = r.summary;
-  var html = '';
-
-  if(r.mode === 'petri'){
-    var quality = s.overall_quality || '—';
-    var qualColor = quality === 'adequate' ? 'var(--green)' : quality === 'poor' ? 'var(--red)' : 'var(--amber)';
-    html += insightRow('Sample quality', quality.toUpperCase(), qualColor);
-    html += insightRow('Mucus plugs present', s.mucus_plug_present ? 'Yes — select for processing' : 'Not identified — reassess', s.mucus_plug_present ? 'var(--green)' : 'var(--red)');
-    html += insightRow('Salivary contamination', s.saliva_dominant ? 'HIGH — predominantly saliva' : 'LOW — lower airway derived', s.saliva_dominant ? 'var(--red)' : 'var(--green)');
-    html += insightRow('Blood in sample', s.blood_present ? 'Yes — haemoptysis suspected' : 'Not detected', s.blood_present ? 'var(--red)' : 'var(--text2)');
-    html += insightRow('Best selection area', s.best_selection_area || '—', 'var(--cyan)');
-    if(s.recommendation) html += insightRow('Action', s.recommendation, 'var(--gold)');
-  } else if(r.mode === 'inverted' || r.mode === 'upright_hemo'){
-    var vPct = s.viabilityPercent || 0;
-    var sqPct = s.squamousPercent || 0;
-    html += insightRow('Viability', vPct.toFixed(1) + '%', vPct >= 50 ? 'var(--green)' : 'var(--red)');
-    html += insightRow('Viability assessment', vPct >= 70 ? 'Excellent — proceed' : vPct >= 50 ? 'Acceptable — proceed with caution' : 'Poor — sample may be inadequate', vPct >= 70 ? 'var(--green)' : vPct >= 50 ? 'var(--amber)' : 'var(--red)');
-    html += insightRow('Squamous contamination', sqPct.toFixed(1) + '%', sqPct <= 20 ? 'var(--green)' : 'var(--red)');
-    html += insightRow('Sample adequacy', s.adequacy === 'adequate' ? '✓ Adequate for processing' : '⚠ Inadequate — ' + (s.adequacyNote || 'reassess'), s.adequacy === 'adequate' ? 'var(--green)' : 'var(--red)');
-    html += insightRow('Squares to count', 'Minimum 5 squares required for valid TCC', 'var(--text3)');
-    if(s.adequacy !== 'adequate' && sqPct > 20) html += insightRow('Recommendation', 'High squamous contamination — consider reselecting plugs more carefully', 'var(--gold)');
-  } else if(r.mode === 'upright'){
-    var pattern = s.inflammatoryPattern || 'paucigranulocytic';
-    var patColor = pattern === 'eosinophilic' ? 'var(--amber)' : pattern === 'neutrophilic' ? 'var(--blue)' : pattern === 'mixed' ? 'var(--purple)' : 'var(--text2)';
-    html += insightRow('Inflammatory pattern', pattern.toUpperCase(), patColor);
-    var clinical = '';
-    if(pattern === 'eosinophilic') clinical = 'Eosinophilic (≥3% Eo) — consider eosinophilic asthma, NAEB, corticosteroid responsive';
-    else if(pattern === 'neutrophilic') clinical = 'Neutrophilic (≥61% N) — consider neutrophilic asthma, infection, smoking, COPD';
-    else if(pattern === 'mixed') clinical = 'Mixed granulocytic (both Eo + N elevated) — severe refractory asthma, worst outcome';
-    else clinical = 'Paucigranulocytic — Eo <3%, N <61%, often non-atopic asthma';
-    if(clinical) html += insightRow('Clinical interpretation', clinical, 'var(--text2)');
-    html += insightRow('Macrophages', (s.macrophagePercent || 0).toFixed(1) + '%', (s.macrophagePercent||0) >= 60 ? 'var(--green)' : 'var(--amber)');
-    html += insightRow('Eosinophils', (s.eosinophilPercent || 0).toFixed(1) + '% (threshold ≥3%)', (s.eosinophilPercent||0) >= 3 ? 'var(--amber)' : 'var(--text2)');
-    html += insightRow('Neutrophils', (s.neutrophilPercent || 0).toFixed(1) + '% (threshold ≥61%)', (s.neutrophilPercent||0) >= 61 ? 'var(--blue)' : 'var(--text2)');
-    html += insightRow('Stain quality', r.stainQuality || '—', r.stainQuality === 'good' ? 'var(--green)' : 'var(--amber)');
-    html += insightRow('Sample adequacy', s.adequacy === 'adequate' ? '✓ Adequate' : '⚠ ' + (s.adequacyNote || 'Inadequate'), s.adequacy === 'adequate' ? 'var(--green)' : 'var(--red)');
-    html += insightRow('Cells in this field', (s.nonSquamousCells || s.totalCellsIdentified || 0) + ' non-squamous (target 400 total across fields)', 'var(--cyan)');
-  }
-
-  if(html){
-    content.innerHTML = html;
-    show('insights-panel');
-  } else {
-    hide('insights-panel');
-  }
-}
-
-function insightRow(label, value, color){
-  return '<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px;">' +
-    '<span style="color:var(--text3);flex-shrink:0;padding-right:12px">' + label + '</span>' +
-    '<span style="color:' + (color || 'var(--text)') + ';font-weight:500;text-align:right;font-size:11px;line-height:1.4">' + value + '</span>' +
-    '</div>';
-}
-
-function renderResults(r){
-  show('results-section');
-  $('canvas-ph').style.display = 'flex';
-  $('ann-canvas').style.display = 'none';
-  drawAnnotations(r);
-  renderSummary(r);
-  renderDetailTable(r);
-  renderMiscTable(r);
-  renderProgress(r);
-  renderFieldDesc(r);
-  renderInsights(r);
-  if((r.mode === 'inverted' || r.mode === 'upright_hemo') && r.gridDetected && r.gridSquares && r.gridSquares.detected && r.gridSquares.detected.length){
-    renderGridTable(r);
-    show('grid-section');
-  }
-  var narr = '';
-  if(r.fieldNarrative) narr += '<strong>Field assessment (Image ' + sess.images + '):</strong> ' + r.fieldNarrative;
-  if(r.notes) narr += (narr ? '<br><br>' : '') + '<strong>Additional notes:</strong> ' + r.notes;
-  if(narr){ $('notes-content').innerHTML = narr; show('notes-area'); }
-}
-
-function renderProgress(r){
-  var pp = $('progress-panel');
-  if(r.mode === 'upright'){
-    var ns = sess.dcNonSquamous;
-    var pct = Math.min(100, Math.round((ns / 400) * 100));
-    var rem = Math.max(0, 400 - ns);
-    var avg = sess.images > 0 ? Math.round(ns / sess.images) : 50;
-    var needed = avg > 0 ? Math.ceil(rem / avg) : '?';
-    show('progress-panel');
-    pp.innerHTML =
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">' +
-        '<div style="font-size:10px;font-family:monospace;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3)">Differential Count Progress</div>' +
-        '<div style="font-size:11px;font-family:monospace;color:var(--cyan)">Image ' + sess.images + ' &nbsp;·&nbsp; ' + ns + ' / 400 non-squamous cells</div>' +
-      '</div>' +
-      '<div style="background:var(--surface2);border-radius:20px;height:8px;overflow:hidden;border:1px solid var(--border)">' +
-        '<div style="height:100%;width:' + pct + '%;background:' + (pct >= 100 ? 'var(--green)' : 'linear-gradient(90deg,#0891b2,#22d3ee)') + ';border-radius:20px;transition:width 0.5s ease"></div>' +
-      '</div>' +
-      '<div style="display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--text3)">' +
-        '<span>' + (pct >= 100 ? '✓ 400 cells reached — DC complete' : '~' + rem + ' more cells needed') + '</span>' +
-        '<span>' + (pct < 100 ? '~' + needed + ' more image' + (needed !== 1 ? 's' : '') + ' at current density' : '') + '</span>' +
-      '</div>' +
-      (pct >= 100 ? '<div style="margin-top:10px;padding:8px 12px;background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.25);border-radius:8px;font-size:11px;color:var(--green);font-family:monospace">✓ Sufficient cells for a valid differential count.</div>' : '');
-  } else if(r.mode === 'inverted' || r.mode === 'upright_hemo'){
-    var totalTCC = sess.tccViable + sess.tccDead;
-    var viabPct = totalTCC > 0 ? (sess.tccViable / totalTCC * 100).toFixed(1) : '—';
-    show('progress-panel');
-    pp.innerHTML =
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">' +
-        '<div style="font-size:10px;font-family:monospace;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3)">TCC Session Accumulator</div>' +
-        '<div style="font-size:11px;font-family:monospace;color:var(--cyan)">Image ' + sess.images + '</div>' +
-      '</div>' +
-      '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px">' +
-        '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center"><div style="font-size:18px;font-weight:700;color:var(--green);font-family:monospace">' + sess.tccViable + '</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase;margin-top:2px">Viable</div></div>' +
-        '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center"><div style="font-size:18px;font-weight:700;color:var(--blue);font-family:monospace">' + sess.tccDead + '</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase;margin-top:2px">Dead</div></div>' +
-        '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center"><div style="font-size:18px;font-weight:700;color:var(--text);font-family:monospace">' + totalTCC + '</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase;margin-top:2px">Total</div></div>' +
-        '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center"><div style="font-size:18px;font-weight:700;color:' + (totalTCC > 0 ? (parseFloat(viabPct) >= 50 ? 'var(--green)' : 'var(--red)') : 'var(--text3)') + ';font-family:monospace">' + viabPct + (totalTCC > 0 ? '%' : '') + '</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase;margin-top:2px">Viability</div></div>' +
-      '</div>' +
-      '<div style="font-size:11px;color:var(--text3)">Squares counted: ' + sess.tccSquares + ' &nbsp;·&nbsp; Valid TCC requires minimum 5 squares counted (both sides of haemocytometer)</div>';
-  } else {
-    hide('progress-panel');
-  }
-}
-
-function drawAnnotations(r){
-  var canvas = $('ann-canvas');
-  var ctx = canvas.getContext('2d');
-  var img = new Image();
-  img.onload = function(){
-    var MAX = 900;
-    var sc = img.width > MAX ? MAX / img.width : 1;
-    canvas.width = Math.round(img.width * sc);
-    canvas.height = Math.round(img.height * sc);
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    var cells = r.cells || [];
-    var rad = Math.min(canvas.width, canvas.height) * 0.022;
-    var fs = Math.max(9, rad * 0.75);
+function drawCanvas(r){
+  var cv=G('cv'),ctx=cv.getContext('2d'),img=new Image();
+  img.onload=function(){
+    var MAX=900,sc=img.width>MAX?MAX/img.width:1;
+    cv.width=Math.round(img.width*sc);cv.height=Math.round(img.height*sc);
+    ctx.drawImage(img,0,0,cv.width,cv.height);
+    var cells=r.cells||[],rad=Math.min(cv.width,cv.height)*0.022,fs=Math.max(9,rad*0.75);
     cells.forEach(function(cell){
-      var m = CM[cell.type];
-      if(!m) return;
-      var cx = (cell.x / 100) * canvas.width;
-      var cy = (cell.y / 100) * canvas.height;
-      ctx.beginPath();
-      ctx.arc(cx, cy, rad, 0, Math.PI * 2);
-      ctx.strokeStyle = m.color;
-      ctx.lineWidth = Math.max(1.5, rad * 0.18);
-      if(m.g === 'm'){ ctx.setLineDash([4,3]); } else { ctx.setLineDash([]); }
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.beginPath();
-      ctx.arc(cx, cy, rad * 0.16, 0, Math.PI * 2);
-      ctx.fillStyle = m.color;
-      ctx.fill();
-      ctx.font = 'bold ' + fs + 'px monospace';
-      var tw = ctx.measureText(m.code).width;
-      var lx = cx + rad + 3;
-      var ly = cy - fs * 0.6;
-      ctx.fillStyle = 'rgba(0,0,0,0.8)';
-      ctx.fillRect(lx - 2, ly, tw + 6, fs + 4);
-      ctx.fillStyle = m.color;
-      ctx.fillText(m.code, lx + 1, ly + fs + 1);
+      var m=CMETA[cell.type];if(!m)return;
+      var cx=(cell.x/100)*cv.width,cy=(cell.y/100)*cv.height;
+      ctx.beginPath();ctx.arc(cx,cy,rad,0,Math.PI*2);
+      ctx.strokeStyle=m.color;ctx.lineWidth=Math.max(1.5,rad*0.18);
+      if(m.g==='m'){ctx.setLineDash([4,3]);}else{ctx.setLineDash([]);}
+      ctx.stroke();ctx.setLineDash([]);
+      ctx.beginPath();ctx.arc(cx,cy,rad*0.16,0,Math.PI*2);ctx.fillStyle=m.color;ctx.fill();
+      ctx.font='bold '+fs+'px monospace';
+      var tw=ctx.measureText(m.code).width,lx=cx+rad+3,ly=cy-fs*0.6;
+      ctx.fillStyle='rgba(0,0,0,0.8)';ctx.fillRect(lx-2,ly,tw+6,fs+4);
+      ctx.fillStyle=m.color;ctx.fillText(m.code,lx+1,ly+fs+1);
     });
-    // Legend
-    var types = [];
-    var seen = {};
-    cells.forEach(function(c){ if(CM[c.type] && !seen[c.type]){ types.push(c.type); seen[c.type] = true; } });
+    var types=[],seen={};
+    cells.forEach(function(c){if(CMETA[c.type]&&!seen[c.type]){types.push(c.type);seen[c.type]=true;}});
     if(types.length){
-      var lfs = 10, lh = 16, lpad = 8, lw = 190;
-      var lht = types.length * lh + lpad * 2;
-      var lx = lpad, ly = canvas.height - lht - lpad;
-      ctx.fillStyle = 'rgba(7,11,20,0.92)';
-      ctx.fillRect(lx, ly, lw, lht);
-      ctx.strokeStyle = 'rgba(255,255,255,0.08)';
-      ctx.lineWidth = 0.5;
-      ctx.strokeRect(lx, ly, lw, lht);
-      types.forEach(function(type, i){
-        var m = CM[type];
-        var y = ly + lpad + i * lh + lh * 0.6;
-        ctx.fillStyle = m.color;
-        ctx.fillRect(lx + lpad, y - 4, 8, 8);
-        ctx.font = 'bold ' + lfs + 'px monospace';
-        ctx.fillStyle = m.color;
-        ctx.fillText(m.code, lx + lpad + 12, y + 3);
-        ctx.font = lfs + 'px sans-serif';
-        ctx.fillStyle = '#cbd5e1';
-        var cw = ctx.measureText(m.code + '  ').width;
-        ctx.fillText(m.label, lx + lpad + 12 + cw, y + 3);
+      var lfs=10,lh=16,lpad=8,lw=190,lht=types.length*lh+lpad*2,lx=lpad,ly=cv.height-lht-lpad;
+      ctx.fillStyle='rgba(7,11,20,0.92)';ctx.fillRect(lx,ly,lw,lht);
+      ctx.strokeStyle='rgba(255,255,255,0.08)';ctx.lineWidth=0.5;ctx.strokeRect(lx,ly,lw,lht);
+      types.forEach(function(type,i){
+        var m=CMETA[type],y=ly+lpad+i*lh+lh*0.6;
+        ctx.fillStyle=m.color;ctx.fillRect(lx+lpad,y-4,8,8);
+        ctx.font='bold '+lfs+'px monospace';ctx.fillStyle=m.color;ctx.fillText(m.code,lx+lpad+12,y+3);
+        ctx.font=lfs+'px sans-serif';ctx.fillStyle='#cbd5e1';
+        var cw=ctx.measureText(m.code+'  ').width;ctx.fillText(m.label,lx+lpad+12+cw,y+3);
       });
     }
-    // Watermark
-    ctx.font = 'bold 9px monospace';
-    ctx.fillStyle = 'rgba(255,255,255,0.3)';
-    var sid = getSampleId();
-    var idw = ctx.measureText(sid).width;
-    ctx.fillText(sid, canvas.width - idw - 8, canvas.height - 8);
-    $('canvas-ph').style.display = 'none';
-    canvas.style.display = 'block';
-    canvasPng = canvas.toDataURL('image/png');
+    ctx.font='bold 9px monospace';ctx.fillStyle='rgba(255,255,255,0.3)';
+    var sid=getSID(),idw=ctx.measureText(sid).width;
+    ctx.fillText(sid,cv.width-idw-8,cv.height-8);
+    G('cph').style.display='none';cv.style.display='block';
+    CPNG=cv.toDataURL('image/png');
   };
-  img.onerror = function(){
-    $('canvas-ph').textContent = 'Could not render annotation.';
-  };
-  img.src = currentDataUrl;
+  img.onerror=function(){G('cph').textContent='Could not render annotation.';};
+  img.src=CDU;
 }
 
-function st(val, label, color){ return '<div class="stat"><div class="stat-val" style="color:' + (color || 'var(--text)') + '">' + val + '</div><div class="stat-lbl">' + label + '</div></div>'; }
-function irRow(k, v){ return '<div class="ir"><span class="ik">' + k + '</span><span class="iv">' + v + '</span></div>'; }
-function dot(c){ return '<span class="cdot" style="background:' + c + '"></span>'; }
+function renderField(r){
+  if(r.fieldNarrative){G('fdtxt').textContent=r.fieldNarrative;show('fdbox');}
+  else hide('fdbox');
+}
 
-function renderSummary(r){
-  var s = r.summary;
-  var isOk = s.adequacy === 'adequate';
-  var adq = '<div class="adq-badge ' + (isOk ? 'adq-ok' : 'adq-warn') + '">' + (isOk ? '✓ Sample adequate' : '⚠ Sample inadequate') + (s.adequacyNote ? ' — ' + s.adequacyNote : '') + '</div>';
-  var html = '<div class="slbl">Summary</div>';
-  if(r.mode === 'petri'){
-    html += '<div class="stats-grid">' +
-      st(s.mucus_plug_present ? 'Yes' : 'No', 'Mucus plug', s.mucus_plug_present ? 'var(--green)' : 'var(--red)') +
-      st(s.blood_present ? 'Yes' : 'No', 'Blood', s.blood_present ? 'var(--red)' : 'var(--green)') +
-      st(s.saliva_dominant ? 'High' : 'Low', 'Saliva', s.saliva_dominant ? 'var(--red)' : 'var(--green)') +
-      '</div>' + adq +
-      '<div class="info-card">' +
-        irRow('Image quality', r.imageQuality || '—') +
-        irRow('Squamous contamination', s.squamous_contamination || '—') +
-        irRow('Overall quality', s.overall_quality || '—') +
-        irRow('Best selection area', s.best_selection_area || '—') +
-        (s.recommendation ? irRow('Recommendation', s.recommendation) : '') +
-      '</div>';
-  } else if(r.mode === 'inverted' || r.mode === 'upright_hemo'){
-    var total = (s.totalViable || 0) + (s.totalDead || 0);
-    html += '<div class="stats-grid">' +
-      st(s.totalViable || 0, 'Viable', 'var(--green)') +
-      st(s.totalDead || 0, 'Dead (TB+)', 'var(--blue)') +
-      st(total, 'Total counted') +
-      st((s.viabilityPercent || 0).toFixed(1) + '%', 'Viability', (s.viabilityPercent || 0) >= 50 ? 'var(--green)' : 'var(--red)') +
-      st(s.totalSquamous || 0, 'Squamous') +
-      st((s.squamousPercent || 0).toFixed(1) + '%', 'Sq. contamination') +
-      '</div>' + adq +
-      '<div class="info-card">' +
-        irRow('Image quality', r.imageQuality || '—') +
-        irRow('Grid detected', r.gridDetected ? 'Yes' : 'No') +
-        irRow('Total RBC', s.totalRBC || 0) +
-        irRow('Total debris', s.totalDebris || 0) +
-        irRow('Viability threshold', '≥ 50%') +
-        irRow('Sq. threshold', '≤ 20%') +
-      '</div>';
+function irw(k,v,c){
+  return '<div class="insrow"><span class="insk">'+k+'</span><span class="insv" style="color:'+(c||'var(--tx)')+'">'+v+'</span></div>';
+}
+
+function renderIns(r){
+  var s=r.summary,html='';
+  if(r.mode==='petri'){
+    var qc=s.overall_quality==='adequate'?'var(--gn)':s.overall_quality==='poor'?'var(--rd)':'var(--am)';
+    html+=irw('Sample quality',(s.overall_quality||'--').toUpperCase(),qc);
+    html+=irw('Mucus plugs',s.mucus_plug_present?'Yes - select for processing':'Not identified',s.mucus_plug_present?'var(--gn)':'var(--rd)');
+    html+=irw('Salivary contamination',s.saliva_dominant?'HIGH - predominantly saliva':'LOW - lower airway derived',s.saliva_dominant?'var(--rd)':'var(--gn)');
+    html+=irw('Blood',s.blood_present?'Yes - haemoptysis suspected':'Not detected',s.blood_present?'var(--rd)':'var(--tx2)');
+    html+=irw('Best selection area',s.best_selection_area||'--','var(--cy)');
+    if(s.recommendation)html+=irw('Action',s.recommendation,'var(--go)');
+  } else if(r.mode==='inverted'||r.mode==='upright_hemo'){
+    var vp=s.viabilityPercent||0,sq=s.squamousPercent||0;
+    html+=irw('Viability',vp.toFixed(1)+'%',vp>=50?'var(--gn)':'var(--rd)');
+    html+=irw('Assessment',vp>=70?'Excellent - proceed':vp>=50?'Acceptable - proceed with caution':'Poor - sample may be inadequate',vp>=70?'var(--gn)':vp>=50?'var(--am)':'var(--rd)');
+    html+=irw('Squamous contamination',sq.toFixed(1)+'%',sq<=20?'var(--gn)':'var(--rd)');
+    html+=irw('Sample adequacy',s.adequacy==='adequate'?'Adequate for processing':'Inadequate - '+(s.adequacyNote||'reassess'),s.adequacy==='adequate'?'var(--gn)':'var(--rd)');
+    html+=irw('TCC note','Minimum 5 squares required for valid TCC','var(--tx3)');
   } else {
-    html += '<div class="stats-grid">' +
-      st(s.totalCellsIdentified || 0, 'Identified') +
-      st((s.macrophagePercent || 0).toFixed(1) + '%', 'Macrophages', 'var(--purple)') +
-      st((s.neutrophilPercent || 0).toFixed(1) + '%', 'Neutrophils', 'var(--blue)') +
-      st((s.eosinophilPercent || 0).toFixed(1) + '%', 'Eosinophils', 'var(--amber)') +
-      st((s.lymphocytePercent || 0).toFixed(1) + '%', 'Lymphocytes', 'var(--green)') +
-      st((s.squamousPercent || 0).toFixed(1) + '%', 'Squamous') +
-      '</div>' + adq +
-      '<div class="info-card">' +
-        irRow('Image quality', r.imageQuality || '—') +
-        irRow('Stain quality', r.stainQuality || '—') +
-        irRow('Inflammatory pattern', '<span class="pattern-badge">' + (s.inflammatoryPattern || '—') + '</span>') +
-        irRow('Sq. threshold', '≤ 20% of 400') +
-      '</div>';
+    var pat=s.inflammatoryPattern||'paucigranulocytic';
+    var pc=pat==='eosinophilic'?'var(--am)':pat==='neutrophilic'?'var(--bl)':pat==='mixed'?'var(--pu)':'var(--tx2)';
+    html+=irw('Inflammatory pattern',pat.toUpperCase(),pc);
+    var clin='';
+    if(pat==='eosinophilic')clin='Eosinophilic (>=3% Eo) - consider eosinophilic asthma, NAEB, steroid responsive';
+    else if(pat==='neutrophilic')clin='Neutrophilic (>=61% N) - consider neutrophilic asthma, infection, smoking, COPD';
+    else if(pat==='mixed')clin='Mixed granulocytic (both Eo + N elevated) - severe refractory asthma';
+    else clin='Paucigranulocytic - Eo <3%, N <61%, often non-atopic asthma';
+    html+=irw('Clinical interpretation',clin,'var(--tx2)');
+    html+=irw('Macrophages',(s.macrophagePercent||0).toFixed(1)+'%',(s.macrophagePercent||0)>=60?'var(--gn)':'var(--am)');
+    html+=irw('Eosinophils',(s.eosinophilPercent||0).toFixed(1)+'% (threshold >=3%)',(s.eosinophilPercent||0)>=3?'var(--am)':'var(--tx2)');
+    html+=irw('Neutrophils',(s.neutrophilPercent||0).toFixed(1)+'% (threshold >=61%)',(s.neutrophilPercent||0)>=61?'var(--bl)':'var(--tx2)');
+    html+=irw('Stain quality',r.stainQuality||'--',r.stainQuality==='good'?'var(--gn)':'var(--am)');
+    html+=irw('Sample adequacy',s.adequacy==='adequate'?'Adequate':'Inadequate - '+(s.adequacyNote||''),s.adequacy==='adequate'?'var(--gn)':'var(--rd)');
+    html+=irw('Cells this field',(s.nonSquamousCells||s.totalCellsIdentified||0)+' non-squamous (target 400 total)','var(--cy)');
   }
-  $('summary-panel').innerHTML = html;
+  if(html){G('inscontent').innerHTML=html;show('insbox');}else hide('insbox');
 }
 
-function renderDetailTable(r){
-  var cells = r.cells || [];
-  var s = r.summary;
-  var primary = cells.filter(function(c){ return CM[c.type] && CM[c.type].g === 'p'; });
-  var html = '<div class="tbl-hdr">Primary Cell Identification</div>';
-  var types, total;
-  if(r.mode === 'petri'){
-    types = ['mucus_plug','saliva','squamous','blood_streak','debris'];
-    total = primary.length;
-    html += '<table><thead><tr><th>Structure</th><th>Code</th><th>Count</th><th>% of frame</th></tr></thead><tbody>';
-    types.forEach(function(t){
-      var m = CM[t]; if(!m) return;
-      var n = cells.filter(function(c){ return c.type === t; }).length;
-      html += '<tr style="opacity:' + (n === 0 ? '0.35' : '1') + '"><td>' + dot(m.color) + '<span class="tw">' + m.label + '</span></td><td class="mono bold" style="color:' + m.color + '">' + m.code + '</td><td class="mono">' + n + '</td><td class="mono">' + (total ? ((n/total)*100).toFixed(1) : 0) + '%</td></tr>';
-    });
-  } else if(r.mode === 'inverted' || r.mode === 'upright_hemo'){
-    types = ['viable_cell','dead_cell','squamous','rbc','debris'];
-    total = primary.length;
-    html += '<table><thead><tr><th>Cell type</th><th>Code</th><th>Count</th><th>% of frame</th></tr></thead><tbody>';
-    types.forEach(function(t){
-      var m = CM[t]; if(!m) return;
-      var n = cells.filter(function(c){ return c.type === t; }).length;
-      html += '<tr style="opacity:' + (n === 0 ? '0.35' : '1') + '"><td>' + dot(m.color) + '<span class="tw">' + m.label + '</span></td><td class="mono bold" style="color:' + m.color + '">' + m.code + '</td><td class="mono">' + n + '</td><td class="mono">' + (total ? ((n/total)*100).toFixed(1) : 0) + '%</td></tr>';
-    });
+function st(v,l,c){return '<div class="stat"><div class="stval" style="color:'+(c||'var(--tx)')+'">'+v+'</div><div class="stlbl">'+l+'</div></div>';}
+function ir(k,v){return '<div class="irow"><span class="ik">'+k+'</span><span class="iv">'+v+'</span></div>';}
+function dot(c){return '<span class="cdot" style="background:'+c+'"></span>';}
+
+function renderSum(r){
+  var s=r.summary,ok=s.adequacy==='adequate';
+  var adq='<div class="adqb '+(ok?'adqok':'adqwarn')+'">'+(ok?'&#10003; Sample adequate':'&#9888; Sample inadequate')+(s.adequacyNote?' - '+s.adequacyNote:'')+'</div>';
+  var html='<div class="slbl">Summary</div>';
+  if(r.mode==='petri'){
+    html+='<div class="stgrid">'+st(s.mucus_plug_present?'Yes':'No','Mucus plug',s.mucus_plug_present?'var(--gn)':'var(--rd)')+st(s.blood_present?'Yes':'No','Blood',s.blood_present?'var(--rd)':'var(--gn)')+st(s.saliva_dominant?'High':'Low','Saliva',s.saliva_dominant?'var(--rd)':'var(--gn)')+'</div>'+adq+'<div class="icard">'+ir('Image quality',r.imageQuality||'--')+ir('Squamous contamination',s.squamous_contamination||'--')+ir('Overall quality',s.overall_quality||'--')+ir('Best selection area',s.best_selection_area||'--')+(s.recommendation?ir('Recommendation',s.recommendation):'')+'</div>';
+  } else if(r.mode==='inverted'||r.mode==='upright_hemo'){
+    var tot=(s.totalViable||0)+(s.totalDead||0);
+    html+='<div class="stgrid">'+st(s.totalViable||0,'Viable','var(--gn)')+st(s.totalDead||0,'Dead (TB+)','var(--bl)')+st(tot,'Total counted')+st((s.viabilityPercent||0).toFixed(1)+'%','Viability',(s.viabilityPercent||0)>=50?'var(--gn)':'var(--rd)')+st(s.totalSquamous||0,'Squamous')+st((s.squamousPercent||0).toFixed(1)+'%','Sq. contamination')+'</div>'+adq+'<div class="icard">'+ir('Image quality',r.imageQuality||'--')+ir('Grid detected',r.gridDetected?'Yes':'No')+ir('Total RBC',s.totalRBC||0)+ir('Total debris',s.totalDebris||0)+ir('Viability threshold','>=50%')+ir('Sq. threshold','<=20%')+'</div>';
   } else {
-    types = ['macrophage','neutrophil','eosinophil','lymphocyte','basophil','mast_cell','bronchial_epithelial','squamous'];
-    html += '<table><thead><tr><th>Cell type</th><th>Code</th><th>Count</th><th>% differential</th></tr></thead><tbody>';
-    types.forEach(function(t){
-      var m = CM[t]; if(!m) return;
-      var n = s[t] || 0;
-      var pct = s[t + 'Percent'] || 0;
-      html += '<tr style="opacity:' + (n === 0 ? '0.35' : '1') + '"><td>' + dot(m.color) + '<span class="tw">' + m.label + '</span></td><td class="mono bold" style="color:' + m.color + '">' + m.code + '</td><td class="mono">' + n + '</td><td class="mono bold">' + pct.toFixed(1) + '%</td></tr>';
-    });
+    html+='<div class="stgrid">'+st(s.totalCellsIdentified||0,'Identified')+st((s.macrophagePercent||0).toFixed(1)+'%','Macrophages','var(--pu)')+st((s.neutrophilPercent||0).toFixed(1)+'%','Neutrophils','var(--bl)')+st((s.eosinophilPercent||0).toFixed(1)+'%','Eosinophils','var(--am)')+st((s.lymphocytePercent||0).toFixed(1)+'%','Lymphocytes','var(--gn)')+st((s.squamousPercent||0).toFixed(1)+'%','Squamous')+'</div>'+adq+'<div class="icard">'+ir('Image quality',r.imageQuality||'--')+ir('Stain quality',r.stainQuality||'--')+ir('Inflammatory pattern','<span class="pbadge2">'+(s.inflammatoryPattern||'--')+'</span>')+ir('Sq. threshold','<=20% of 400')+'</div>';
   }
-  html += '</tbody></table>';
-  $('detail-table').innerHTML = html;
+  G('sumpanel').innerHTML=html;
 }
 
-function renderMiscTable(r){
-  var cells = r.cells || [];
-  var misc = cells.filter(function(c){ return CM[c.type] && CM[c.type].g === 'm'; });
-  if(!misc.length && (!r.miscFindings || !r.miscFindings.length)){ hide('misc-section'); return; }
-  show('misc-section');
-  var types = [];
-  var seen = {};
-  misc.forEach(function(c){ if(!seen[c.type]){ types.push(c.type); seen[c.type] = true; } });
-  var html = '<div class="tbl-hdr gold">Miscellaneous &amp; Incidental Findings</div>';
-  html += '<table><thead><tr><th>Finding</th><th>Code</th><th>Count</th><th>Clinical note</th></tr></thead><tbody>';
-  types.forEach(function(t){
-    var m = CM[t];
-    var n = misc.filter(function(c){ return c.type === t; }).length;
-    html += '<tr><td>' + dot(m.color) + '<span class="tw">' + m.label + '</span></td><td class="mono bold" style="color:' + m.color + '">' + m.code + '</td><td class="mono">' + n + '</td><td style="font-size:11px;color:var(--text3)">' + (MISC_NOTES[t] || '—') + '</td></tr>';
-  });
-  if(r.miscFindings && r.miscFindings.length){
-    r.miscFindings.forEach(function(f){ html += '<tr><td colspan="4" style="color:var(--gold);font-size:12px">⟡ ' + f + '</td></tr>'; });
+function renderDtbl(r){
+  var cells=r.cells||[],s=r.summary,primary=cells.filter(function(c){return CMETA[c.type]&&CMETA[c.type].g==='p';});
+  var html='<div class="thdr">Primary Cell Identification</div>';
+  var types,total;
+  if(r.mode==='petri'){
+    types=['mucus_plug','saliva','squamous','blood_streak','debris'];total=primary.length;
+    html+='<table><thead><tr><th>Structure</th><th>Code</th><th>Count</th><th>% of frame</th></tr></thead><tbody>';
+    types.forEach(function(t){var m=CMETA[t];if(!m)return;var n=cells.filter(function(c){return c.type===t;}).length;html+='<tr style="opacity:'+(n===0?'0.35':'1')+'"><td>'+dot(m.color)+'<span class="tw">'+m.label+'</span></td><td class="mono bold" style="color:'+m.color+'">'+m.code+'</td><td class="mono">'+n+'</td><td class="mono">'+(total?((n/total)*100).toFixed(1):0)+'%</td></tr>';});
+  } else if(r.mode==='inverted'||r.mode==='upright_hemo'){
+    types=['viable_cell','dead_cell','squamous','rbc','debris'];total=primary.length;
+    html+='<table><thead><tr><th>Cell type</th><th>Code</th><th>Count</th><th>% of frame</th></tr></thead><tbody>';
+    types.forEach(function(t){var m=CMETA[t];if(!m)return;var n=cells.filter(function(c){return c.type===t;}).length;html+='<tr style="opacity:'+(n===0?'0.35':'1')+'"><td>'+dot(m.color)+'<span class="tw">'+m.label+'</span></td><td class="mono bold" style="color:'+m.color+'">'+m.code+'</td><td class="mono">'+n+'</td><td class="mono">'+(total?((n/total)*100).toFixed(1):0)+'%</td></tr>';});
+  } else {
+    types=['macrophage','neutrophil','eosinophil','lymphocyte','basophil','mast_cell','bronchial_epithelial','squamous'];
+    html+='<table><thead><tr><th>Cell type</th><th>Code</th><th>Count</th><th>% differential</th></tr></thead><tbody>';
+    types.forEach(function(t){var m=CMETA[t];if(!m)return;var n=s[t]||0,pct=s[t+'Percent']||0;html+='<tr style="opacity:'+(n===0?'0.35':'1')+'"><td>'+dot(m.color)+'<span class="tw">'+m.label+'</span></td><td class="mono bold" style="color:'+m.color+'">'+m.code+'</td><td class="mono">'+n+'</td><td class="mono bold">'+pct.toFixed(1)+'%</td></tr>';});
   }
-  html += '</tbody></table>';
-  $('misc-table').innerHTML = html;
+  html+='</tbody></table>';
+  G('dtbl').innerHTML=html;
 }
 
-function renderGridTable(r){
-  var gs = r.gridSquares;
-  var types = ['viable_cell','dead_cell','squamous','rbc','debris'];
-  var squares = (gs.detected && gs.detected.length) ? gs.detected : ['TL','TR','C','BL','BR'];
-  var sqL = { TL:'Top-left', TR:'Top-right', C:'Centre', BL:'Bottom-left', BR:'Bottom-right' };
-  var html = '<div class="tbl-hdr">Neubauer Grid Square Counts</div><table><thead><tr><th>Square</th>';
-  types.forEach(function(t){ html += '<th>' + dot(CM[t].color) + CM[t].code + '</th>'; });
-  html += '<th>Total</th></tr></thead><tbody>';
+function renderMisc(r){
+  var cells=r.cells||[],misc=cells.filter(function(c){return CMETA[c.type]&&CMETA[c.type].g==='m';});
+  if(!misc.length&&(!r.miscFindings||!r.miscFindings.length)){hide('miscsec');return;}
+  show('miscsec');
+  var types=[],seen={};
+  misc.forEach(function(c){if(!seen[c.type]){types.push(c.type);seen[c.type]=true;}});
+  var html='<div class="thdr go">Miscellaneous &amp; Incidental Findings</div><table><thead><tr><th>Finding</th><th>Code</th><th>Count</th><th>Clinical note</th></tr></thead><tbody>';
+  types.forEach(function(t){var m=CMETA[t],n=misc.filter(function(c){return c.type===t;}).length;html+='<tr><td>'+dot(m.color)+'<span class="tw">'+m.label+'</span></td><td class="mono bold" style="color:'+m.color+'">'+m.code+'</td><td class="mono">'+n+'</td><td style="font-size:11px;color:var(--tx3)">'+(MNOTES[t]||'--')+'</td></tr>';});
+  if(r.miscFindings&&r.miscFindings.length){r.miscFindings.forEach(function(f){html+='<tr><td colspan="4" style="color:var(--go);font-size:12px">'+f+'</td></tr>';});}
+  html+='</tbody></table>';
+  G('misctbl').innerHTML=html;
+}
+
+function renderGrid(r){
+  var gs=r.gridSquares,types=['viable_cell','dead_cell','squamous','rbc','debris'];
+  var squares=(gs.detected&&gs.detected.length)?gs.detected:['TL','TR','C','BL','BR'];
+  var sqL={TL:'Top-left',TR:'Top-right',C:'Centre',BL:'Bottom-left',BR:'Bottom-right'};
+  var html='<div class="thdr">Neubauer Grid Square Counts</div><table><thead><tr><th>Square</th>';
+  types.forEach(function(t){html+='<th>'+dot(CMETA[t].color)+CMETA[t].code+'</th>';});
+  html+='<th>Total</th></tr></thead><tbody>';
   squares.forEach(function(sq){
-    var row = (gs.counts && gs.counts[sq]) ? gs.counts[sq] : {};
-    var tot = types.reduce(function(a,t){ return a + (row[t] || 0); }, 0);
-    html += '<tr><td><span class="tw bold">' + (sqL[sq] || sq) + '</span> <span style="color:var(--text3);font-size:10px;font-family:monospace">' + sq + '</span></td>';
-    types.forEach(function(t){ html += '<td class="mono">' + (row[t] || 0) + '</td>'; });
-    html += '<td class="mono bold tw">' + tot + '</td></tr>';
+    var row=(gs.counts&&gs.counts[sq])?gs.counts[sq]:{},tot=types.reduce(function(a,t){return a+(row[t]||0);},0);
+    html+='<tr><td><span class="tw bold">'+(sqL[sq]||sq)+'</span> <span style="color:var(--tx3);font-size:10px;font-family:monospace">'+sq+'</span></td>';
+    types.forEach(function(t){html+='<td class="mono">'+(row[t]||0)+'</td>';});
+    html+='<td class="mono bold tw">'+tot+'</td></tr>';
   });
-  $('grid-table').innerHTML = html + '</tbody></table>';
+  G('gridtbl').innerHTML=html+'</tbody></table>';
 }
 
-// ── DOWNLOADS ────────────────────────────────────────────────
-function downloadPNG(){
-  if(!canvasPng){ alert('Annotated image not ready. Please wait for analysis to complete.'); return; }
-  try{
-    fetch(canvasPng)
-      .then(function(res){ return res.blob(); })
-      .then(function(blob){
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = getSampleId() + '_annotated.png';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
-      })
-      .catch(function(){
-        var w = window.open('','_blank');
-        w.document.write('<img src="' + canvasPng + '" style="max-width:100%"><br><p style="font-family:monospace;font-size:13px;padding:16px">Right-click the image → Save image as → ' + getSampleId() + '_annotated.png</p>');
-        w.document.close();
-      });
-  } catch(e){
-    window.open(canvasPng, '_blank');
+function renderProg(r){
+  var pp=G('progpanel');
+  if(r.mode==='upright'){
+    var ns=SESS.dcNS,pct=Math.min(100,Math.round((ns/400)*100)),rem=Math.max(0,400-ns);
+    var avg=SESS.imgs>0?Math.round(ns/SESS.imgs):50,needed=avg>0?Math.ceil(rem/avg):'?';
+    show('progpanel');
+    pp.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><div style="font-size:10px;font-family:monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--tx3)">Differential Count Progress</div><div style="font-size:11px;font-family:monospace;color:var(--cy)">Image '+SESS.imgs+' &middot; '+ns+' / 400 non-squamous cells</div></div><div style="background:var(--sf2);border-radius:20px;height:8px;overflow:hidden;border:1px solid var(--br)"><div style="height:100%;width:'+pct+'%;background:'+(pct>=100?'var(--gn)':'linear-gradient(90deg,#0891b2,#22d3ee)')+';border-radius:20px;transition:width .5s ease"></div></div><div style="display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--tx3)"><span>'+(pct>=100?'400 cells reached - DC complete':'~'+rem+' more cells needed')+'</span><span>'+(pct<100?'~'+needed+' more image'+(needed!==1?'s':'')+' at current density':'')+'</span></div>'+(pct>=100?'<div style="margin-top:10px;padding:8px 12px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);border-radius:8px;font-size:11px;color:var(--gn);font-family:monospace">Sufficient cells for a valid differential count.</div>':'');
+  } else if(r.mode==='inverted'||r.mode==='upright_hemo'){
+    var tot=SESS.tccV+SESS.tccD,vp2=tot>0?(SESS.tccV/tot*100).toFixed(1):'--';
+    show('progpanel');
+    pp.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="font-size:10px;font-family:monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--tx3)">TCC Session Accumulator</div><div style="font-size:11px;font-family:monospace;color:var(--cy)">Image '+SESS.imgs+'</div></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px"><div style="background:var(--sf2);border:1px solid var(--br);border-radius:8px;padding:10px;text-align:center"><div style="font-size:18px;font-weight:700;color:var(--gn);font-family:monospace">'+SESS.tccV+'</div><div style="font-size:9px;color:var(--tx3);text-transform:uppercase;margin-top:2px">Viable</div></div><div style="background:var(--sf2);border:1px solid var(--br);border-radius:8px;padding:10px;text-align:center"><div style="font-size:18px;font-weight:700;color:var(--bl);font-family:monospace">'+SESS.tccD+'</div><div style="font-size:9px;color:var(--tx3);text-transform:uppercase;margin-top:2px">Dead</div></div><div style="background:var(--sf2);border:1px solid var(--br);border-radius:8px;padding:10px;text-align:center"><div style="font-size:18px;font-weight:700;color:var(--tx);font-family:monospace">'+tot+'</div><div style="font-size:9px;color:var(--tx3);text-transform:uppercase;margin-top:2px">Total</div></div><div style="background:var(--sf2);border:1px solid var(--br);border-radius:8px;padding:10px;text-align:center"><div style="font-size:18px;font-weight:700;font-family:monospace;color:'+(tot>0?(parseFloat(vp2)>=50?'var(--gn)':'var(--rd)'):'var(--tx3)')+'">'+vp2+(tot>0?'%':'')+'</div><div style="font-size:9px;color:var(--tx3);text-transform:uppercase;margin-top:2px">Viability</div></div></div><div style="font-size:11px;color:var(--tx3)">Squares counted: '+SESS.tccSq+' &middot; Valid TCC requires minimum 5 squares (both sides of haemocytometer)</div>';
+  } else {
+    hide('progpanel');
   }
 }
 
-function downloadPDF(){
-  var sid = getSampleId();
-  var sp = $('summary-panel') ? $('summary-panel').innerHTML : '';
-  var dt = $('detail-table') ? $('detail-table').innerHTML : '';
-  var mt = ($('misc-table') && !$('misc-section').classList.contains('hidden')) ? $('misc-table').innerHTML : '';
-  var gt = ($('grid-table') && !$('grid-section').classList.contains('hidden')) ? $('grid-table').innerHTML : '';
-  var nt = ($('notes-content') && !$('notes-area').classList.contains('hidden')) ? $('notes-content').innerHTML : '';
-  var pw = window.open('', '_blank');
-  if(!pw){ alert('Please allow popups to generate PDF.'); return; }
-  pw.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Sputum Inflammometry Report — ' + sid + '</title>' +
-    '<style>body{font-family:system-ui,sans-serif;padding:32px;color:#1e293b;max-width:960px;margin:0 auto}' +
-    'h1{font-size:20px;margin-bottom:4px}' +
-    '.meta{font-size:13px;color:#64748b;margin-bottom:24px}' +
-    '.sid{font-family:monospace;font-weight:700;color:#0891b2}' +
-    'img{max-width:100%;border-radius:8px;margin-bottom:24px;border:1px solid #e2e8f0}' +
-    'table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:16px}' +
-    'th{background:#f8fafc;padding:7px 10px;border:1px solid #e2e8f0;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:0.05em;color:#64748b}' +
-    'td{padding:7px 10px;border:1px solid #f1f5f9;color:#334155}' +
-    '.sec{margin-bottom:24px}' +
-    '.sec-title{font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#64748b;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid #e2e8f0}' +
-    '.note{background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:10px 14px;font-size:12px;color:#92400e;line-height:1.6}' +
-    '@media print{body{padding:16px}}</style></head><body>' +
-    '<h1>Sputum Inflammometry Analysis Report</h1>' +
-    '<div class="meta">Sample ID: <span class="sid">' + sid + '</span> &nbsp;·&nbsp; ' + new Date().toLocaleString() + ' &nbsp;·&nbsp; Vamsipedia Clinical AI · Image ' + sess.images + '</div>' +
-    (canvasPng ? '<img src="' + canvasPng + '" alt="Annotated image">' : '') +
-    '<div class="sec"><div class="sec-title">Summary</div>' + sp + '</div>' +
-    '<div class="sec"><div class="sec-title">Cell Data</div>' + dt + '</div>' +
-    (mt ? '<div class="sec"><div class="sec-title">Miscellaneous Findings</div>' + mt + '</div>' : '') +
-    (gt ? '<div class="sec"><div class="sec-title">Grid Counts</div>' + gt + '</div>' : '') +
-    (nt ? '<div class="sec"><div class="note">' + nt + '</div></div>' : '') +
-    (($('field-desc-box') && !$('field-desc-box').classList.contains('hidden')) ? '<div class="sec"><div class="sec-title">Field Assessment</div><div style="font-size:13px;line-height:1.7;color:#334155">' + ($('field-desc-text').textContent||'') + '</div></div>' : '') +
-    (($('insights-panel') && !$('insights-panel').classList.contains('hidden')) ? '<div class="sec"><div class="sec-title">Sample Insights</div>' + ($('insights-content').innerHTML||'') + '</div>' : '') +
+function dlPNG(){
+  if(!CPNG){alert('Annotated image not ready. Please wait for analysis to complete.');return;}
+  try{
+    fetch(CPNG).then(function(res){return res.blob();}).then(function(blob){
+      var url=URL.createObjectURL(blob),a=document.createElement('a');
+      a.href=url;a.download=getSID()+'_annotated.png';
+      document.body.appendChild(a);a.click();document.body.removeChild(a);
+      setTimeout(function(){URL.revokeObjectURL(url);},1000);
+    }).catch(function(){
+      var w=window.open('','_blank');
+      w.document.write('<img src="'+CPNG+'" style="max-width:100%"><br><p style="font-family:monospace;font-size:13px;padding:16px">Right-click the image and Save image as '+getSID()+'_annotated.png</p>');
+      w.document.close();
+    });
+  }catch(e){window.open(CPNG,'_blank');}
+}
+
+function dlPDF(){
+  var sid=getSID();
+  var sp=G('sumpanel')?G('sumpanel').innerHTML:'';
+  var dt=G('dtbl')?G('dtbl').innerHTML:'';
+  var mt=(G('misctbl')&&!G('miscsec').classList.contains('hidden'))?G('misctbl').innerHTML:'';
+  var gt=(G('gridtbl')&&!G('gridsec').classList.contains('hidden'))?G('gridtbl').innerHTML:'';
+  var fd=(G('fdbox')&&!G('fdbox').classList.contains('hidden'))?G('fdtxt').textContent:'';
+  var ins=(G('insbox')&&!G('insbox').classList.contains('hidden'))?G('inscontent').innerHTML:'';
+  var nt=(G('notescontent')&&!G('notesarea').classList.contains('hidden'))?G('notescontent').innerHTML:'';
+  var pw=window.open('','_blank');
+  if(!pw){alert('Please allow popups to generate PDF.');return;}
+  pw.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Sputum Inflammometry Report - '+sid+'</title><style>body{font-family:system-ui,sans-serif;padding:32px;color:#1e293b;max-width:960px;margin:0 auto}h1{font-size:20px;margin-bottom:4px}.meta{font-size:13px;color:#64748b;margin-bottom:24px}.sid{font-family:monospace;font-weight:700;color:#0891b2}img{max-width:100%;border-radius:8px;margin-bottom:24px;border:1px solid #e2e8f0}table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:16px}th{background:#f8fafc;padding:7px 10px;border:1px solid #e2e8f0;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#64748b}td{padding:7px 10px;border:1px solid #f1f5f9;color:#334155}.sec{margin-bottom:24px}.st{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:#64748b;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid #e2e8f0}.note{background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:10px 14px;font-size:12px;color:#92400e;line-height:1.6}.fd{background:#f0f9ff;border:1px solid #bae6fd;border-radius:6px;padding:10px 14px;font-size:12px;color:#0c4a6e;line-height:1.7}@media print{body{padding:16px}}</style></head><body>'+
+    '<h1>Sputum Inflammometry Analysis Report</h1>'+
+    '<div class="meta">Sample ID: <span class="sid">'+sid+'</span> &nbsp;&middot;&nbsp; '+(new Date().toLocaleString())+' &nbsp;&middot;&nbsp; Vamsipedia Clinical AI &nbsp;&middot;&nbsp; Image '+SESS.imgs+'</div>'+
+    (CPNG?'<img src="'+CPNG+'" alt="Annotated image">':'')+
+    (fd?'<div class="sec"><div class="st">Field Assessment</div><div class="fd">'+fd+'</div></div>':'')+
+    '<div class="sec"><div class="st">Summary</div>'+sp+'</div>'+
+    (ins?'<div class="sec"><div class="st">Sample Insights</div>'+ins+'</div>':'')+
+    '<div class="sec"><div class="st">Cell Data</div>'+dt+'</div>'+
+    (mt?'<div class="sec"><div class="st">Miscellaneous Findings</div>'+mt+'</div>':'')+
+    (gt?'<div class="sec"><div class="st">Grid Counts</div>'+gt+'</div>':'')+
+    (nt?'<div class="sec"><div class="note">'+nt+'</div></div>':'')+
     '</body></html>');
   pw.document.close();
-  setTimeout(function(){ pw.print(); }, 800);
+  setTimeout(function(){pw.print();},800);
 }
 
-// ── CLEAN REPORT (no suggestions) ───────────────────────────
-function downloadReport(){
-  var sid = getSampleId();
-  var modeLabel = { petri:'Inverted — Petri Dish (Pre-processing)', inverted:'Inverted — Hemocytometer (Trypan Blue)', upright:'Upright — Leishman Cytospin (Differential)', upright_hemo:'Upright — Hemocytometer (Trypan Blue)' };
-  var sp = $('summary-panel') ? $('summary-panel').innerHTML : '';
-  var dt = $('detail-table') ? $('detail-table').innerHTML : '';
-  var mt = ($('misc-table') && !$('misc-section').classList.contains('hidden')) ? $('misc-table').innerHTML : '';
-  var gt = ($('grid-table') && !$('grid-section').classList.contains('hidden')) ? $('grid-table').innerHTML : '';
-  var narr = ($('notes-content') && !$('notes-area').classList.contains('hidden')) ? $('notes-content').innerHTML : '';
-  // Strip recommendation rows from petri summary
-  sp = sp.replace(/<div class="ir">[^<]*<span class="ik">Recommendation<\/span>.*?<\/div>/gs, '');
-  // Strip clinical notes column from misc table (4th column)
-  mt = mt.replace(/<th>Clinical note<\/th>/g,'').replace(/<td style="font-size:11px;color:var\(--text3\)">[^<]*<\/td>/g,'');
-  // Strip best selection area from petri
-  sp = sp.replace(/<div class="ir">[^<]*<span class="ik">Best selection area<\/span>.*?<\/div>/gs, '');
-  var pw = window.open('', '_blank');
-  if(!pw){ alert('Please allow popups to generate report.'); return; }
-  pw.document.write(
-    '<!DOCTYPE html><html><head><meta charset="UTF-8">' +
-    '<title>Sputum Inflammometry Report — ' + sid + '</title>' +
-    '<style>' +
-      'body{font-family:"Segoe UI",system-ui,sans-serif;margin:0;padding:0;color:#1e293b;font-size:13px}' +
-      '.page{max-width:900px;margin:0 auto;padding:40px 48px}' +
-      /* Header */
-      '.rpt-header{border-bottom:3px solid #0891b2;padding-bottom:16px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:flex-end}' +
-      '.rpt-brand{font-size:22px;font-weight:700;color:#0891b2;letter-spacing:0.02em}' +
-      '.rpt-brand-sub{font-size:11px;color:#64748b;letter-spacing:0.08em;text-transform:uppercase;margin-top:2px}' +
-      '.rpt-meta-right{text-align:right;font-size:11px;color:#64748b;line-height:1.8}' +
-      '.rpt-meta-right .sid{font-size:14px;font-family:monospace;font-weight:700;color:#0f172a}' +
-      /* Disclaimer */
-      '.disclaimer{background:#f8fafc;border-left:3px solid #94a3b8;padding:8px 14px;font-size:11px;color:#64748b;margin-bottom:24px;line-height:1.5}' +
-      /* Section */
-      '.section{margin-bottom:24px}' +
-      '.section-title{font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:#64748b;font-weight:600;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #e2e8f0}' +
-      /* Image */
-      '.img-wrap{border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;margin-bottom:6px;background:#000;text-align:center}' +
-      '.img-wrap img{max-width:100%;display:block;margin:0 auto}' +
-      '.img-caption{font-size:10px;color:#94a3b8;text-align:right;margin-top:4px;font-family:monospace}' +
-      /* Stats row */
-      '.stats-row{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}' +
-      '.stat-box{flex:1;min-width:80px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;text-align:center}' +
-      '.stat-box-val{font-size:20px;font-weight:700;font-family:monospace;color:#0f172a}' +
-      '.stat-box-lbl{font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;margin-top:2px}' +
-      /* Adequacy */
-      '.adq-ok{display:inline-block;background:#dcfce7;color:#15803d;border:1px solid #86efac;padding:4px 14px;border-radius:20px;font-size:11px;font-weight:600;margin-bottom:14px;font-family:monospace}' +
-      '.adq-warn{display:inline-block;background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;padding:4px 14px;border-radius:20px;font-size:11px;font-weight:600;margin-bottom:14px;font-family:monospace}' +
-      /* Table */
-      'table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:4px}' +
-      'th{background:#f1f5f9;padding:7px 12px;border:1px solid #e2e8f0;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:#475569;font-weight:600}' +
-      'td{padding:7px 12px;border:1px solid #f1f5f9;color:#334155;vertical-align:middle}' +
-      'tr:nth-child(even) td{background:#fafafa}' +
-      '.cdot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}' +
-      /* Narrative */
-      '.narrative{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px 16px;font-size:12px;color:#334155;line-height:1.7;font-style:italic}' +
-      /* Footer */
-      '.rpt-footer{margin-top:40px;padding-top:12px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:10px;color:#94a3b8}' +
-      /* Signature block */
-      '.sig-block{margin-top:32px;display:grid;grid-template-columns:1fr 1fr;gap:32px}' +
-      '.sig-line{border-bottom:1px solid #334155;height:32px;margin-bottom:6px}' +
-      '.sig-lbl{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.06em}' +
-      '@media print{' +
-        'body{-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
-        '.page{padding:24px 32px}' +
-      '}' +
-    '</style></head><body>' +
-    '<div class="page">' +
-
-    /* HEADER */
-    '<div class="rpt-header">' +
-      '<div>' +
-        '<div class="rpt-brand">Vamsipedia</div>' +
-        '<div class="rpt-brand-sub">Sputum Inflammometry · Analysis Report</div>' +
-      '</div>' +
-      '<div class="rpt-meta-right">' +
-        '<div class="sid">' + sid + '</div>' +
-        '<div>Date: ' + new Date().toLocaleDateString('en-GB', {day:'2-digit',month:'long',year:'numeric'}) + '</div>' +
-        '<div>Time: ' + new Date().toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'}) + '</div>' +
-        '<div>Mode: ' + (modeLabel[currentMode] || currentMode) + '</div>' +
-        '<div>Image: ' + sess.images + ' of session</div>' +
-      '</div>' +
-    '</div>' +
-
-    /* DISCLAIMER */
-    '<div class="disclaimer">This report is generated by an AI-assisted image analysis tool. All findings require verification by a qualified clinical scientist. Not for standalone clinical decision-making.</div>' +
-
-    /* ANNOTATED IMAGE */
-    (canvasPng ?
-      '<div class="section"><div class="section-title">Annotated Microscopy Image</div>' +
-      '<div class="img-wrap"><img src="' + canvasPng + '" alt="Annotated image"></div>' +
-      '<div class="img-caption">Solid circles = primary cells &nbsp;|&nbsp; Dashed circles = miscellaneous findings &nbsp;|&nbsp; ' + sid + '</div>' +
-      '</div>'
-    : '') +
-
-    /* FIELD NARRATIVE */
-    (narr ?
-      '<div class="section"><div class="section-title">Field Description</div>' +
-      '<div class="narrative">' + narr.replace(/<strong>[^<]*<\/strong>\s*/g,'') + '</div>' +
-      '</div>'
-    : '') +
-
-    /* CELL DATA */
-    '<div class="section"><div class="section-title">Cell Identification</div>' +
-    dt +
-    '</div>' +
-
-    /* MISC FINDINGS */
-    (mt ?
-      '<div class="section"><div class="section-title">Miscellaneous Findings</div>' + mt + '</div>'
-    : '') +
-
-    /* GRID */
-    (gt ?
-      '<div class="section"><div class="section-title">Neubauer Grid Counts</div>' + gt + '</div>'
-    : '') +
-
-    /* SESSION PROGRESS */
-    (currentMode === 'upright' ?
-      '<div class="section"><div class="section-title">Session DC Progress</div>' +
-      '<table><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody>' +
-      '<tr><td>Non-squamous cells counted (session)</td><td style="font-family:monospace;font-weight:700">' + sess.dcNonSquamous + ' / 400</td></tr>' +
-      '<tr><td>Images analysed (session)</td><td style="font-family:monospace">' + sess.images + '</td></tr>' +
-      '<tr><td>DC complete</td><td style="font-family:monospace">' + (sess.dcNonSquamous >= 400 ? 'Yes' : 'No — ' + Math.max(0, 400 - sess.dcNonSquamous) + ' cells remaining') + '</td></tr>' +
-      '</tbody></table></div>'
-    : '') +
-    (currentMode === 'inverted' || currentMode === 'upright_hemo' ?
-      '<div class="section"><div class="section-title">Session TCC Accumulator</div>' +
-      '<table><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody>' +
-      '<tr><td>Total viable cells (session)</td><td style="font-family:monospace;font-weight:700">' + sess.tccViable + '</td></tr>' +
-      '<tr><td>Total dead cells (session)</td><td style="font-family:monospace">' + sess.tccDead + '</td></tr>' +
-      '<tr><td>Total cells counted (session)</td><td style="font-family:monospace">' + (sess.tccViable + sess.tccDead) + '</td></tr>' +
-      '<tr><td>Viability (session)</td><td style="font-family:monospace">' + ((sess.tccViable + sess.tccDead) > 0 ? (sess.tccViable / (sess.tccViable + sess.tccDead) * 100).toFixed(1) + '%' : '—') + '</td></tr>' +
-      '<tr><td>Squares counted (session)</td><td style="font-family:monospace">' + sess.tccSquares + '</td></tr>' +
-      '</tbody></table></div>'
-    : '') +
-
-    /* SIGNATURE */
-    '<div class="sig-block">' +
-      '<div><div class="sig-line"></div><div class="sig-lbl">Reported by</div></div>' +
-      '<div><div class="sig-line"></div><div class="sig-lbl">Verified by</div></div>' +
-    '</div>' +
-
-    /* FOOTER */
-    '<div class="rpt-footer">' +
-      '<span>Vamsipedia · Sputum Inflammometry Analysis Platform</span>' +
-      '<span>Sample ID: ' + sid + ' · AI-assisted, expert-verified</span>' +
-    '</div>' +
-
-    '</div>' +
-    '</body></html>'
-  );
-  pw.document.close();
-  setTimeout(function(){ pw.print(); }, 900);
-}
-
-// ── HELPERS ──────────────────────────────────────────────────
-function setLoading(on){
-  $('loader').classList.toggle('show', on);
-  $('analyse-btn').disabled = on;
-}
-function showErr(msg){ var e = $('err-box'); e.textContent = msg; e.style.display = 'block'; }
-function clearErr(){ $('err-box').style.display = 'none'; }
+function setLoad(on){G('ldr').classList.toggle('show',on);G('anbtn').disabled=on;}
+function showErr(msg){var e=G('ebox');e.textContent=msg;e.style.display='block';}
+function clearErr(){G('ebox').style.display='none';}
 
 function resetAll(){
-  currentMode = null; currentDataUrl = null; currentBase64 = null; canvasPng = null;
-  sess = { images:0, dcNonSquamous:0, tccViable:0, tccDead:0, tccSquares:0 };
-  ['mc-inv','mc-upr'].forEach(function(id){ $(id).classList.remove('selected'); });
-  ['sub-petri','sub-hemo','sub-diff','sub-upr-hemo'].forEach(function(id){
-    var el = $(id); if(el){ el.style.opacity = '0.6'; el.style.filter = ''; }
-  });
-  ['upload-section','analyse-section','results-section','misc-section','grid-section','notes-area','progress-panel','field-desc-box','insights-panel'].forEach(hide);
+  CM=null;CDU=null;CB64=null;CPNG=null;
+  SESS={imgs:0,dcNS:0,tccV:0,tccD:0,tccSq:0};
+  ['mc-inv','mc-upr'].forEach(function(id){G(id).classList.remove('sel');});
+  ['sub-petri','sub-hemo','sub-diff','sub-uhemo'].forEach(function(id){var el=G(id);if(el){el.style.opacity='0.6';el.style.filter='';}});
+  ['upsec','ansec','ressec','miscsec','gridsec','notesarea','progpanel','fdbox','insbox'].forEach(hide);
   clearErr();
-  $('sid-input').value = 'SINFL-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + Math.random().toString(36).substr(2,6).toUpperCase();
+  G('sidinput').value=newSID();
   setStep(1);
 }
 </script>
