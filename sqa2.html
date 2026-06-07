@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sputum Inflammometry — Vamsipedia</title>
+<style>
+:root{
+  --bg:#070b14;--sf:#0d1220;--sf2:#111827;
+  --br:rgba(255,255,255,0.07);--br2:rgba(255,255,255,0.13);
+  --cy:#22d3ee;--cyd:rgba(34,211,238,0.1);
+  --go:#f0c060;--god:rgba(240,192,96,0.1);
+  --tx:#e2e8f0;--tx2:#94a3b8;--tx3:#475569;
+  --gn:#34d399;--rd:#f87171;--bl:#60a5fa;
+  --pu:#a78bfa;--am:#fbbf24;--tl:#2dd4bf;
+  --pk:#f472b6;--or:#fb923c;
+  --val:#d97706;--vald:rgba(217,119,6,0.1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* LOCK */
+#lock{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:var(--bg)}
+.lbg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 20% 40%,rgba(34,211,238,0.06),transparent 60%),radial-gradient(ellipse 60% 80% at 80% 70%,rgba(240,192,96,0.04),transparent 60%)}
+.lgr{position:absolute;inset:0;opacity:.025;background-image:linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);background-size:48px 48px}
+.lcard{position:relative;z-index:1;width:100%;max-width:440px;margin:24px;background:var(--sf);border:1px solid var(--br2);border-radius:20px;padding:48px 42px 40px;text-align:center;box-shadow:0 0 80px rgba(34,211,238,.05),0 32px 64px rgba(0,0,0,.5)}
+.leyebrow{display:inline-flex;align-items:center;gap:8px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--cy);background:var(--cyd);border:1px solid rgba(34,211,238,.2);padding:5px 12px;border-radius:20px;margin-bottom:24px}
+.leyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--cy);animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.ltitle{font-size:26px;font-weight:700;color:#f8fafc;margin-bottom:5px;letter-spacing:-.02em}
+.ltitle span{color:var(--cy)}
+.lsub{font-size:12px;color:var(--tx3);margin-bottom:32px}
+.ldiv{width:40px;height:1px;background:linear-gradient(90deg,transparent,var(--cy),transparent);margin:0 auto 28px}
+.flbl{font-size:10px;color:var(--tx3);letter-spacing:.08em;text-transform:uppercase;text-align:left;margin-bottom:7px}
+.fwrap{position:relative;margin-bottom:14px}
+.finput{width:100%;padding:13px 44px 13px 16px;background:var(--sf2);border:1px solid var(--br2);border-radius:9px;font-size:14px;font-family:monospace;color:var(--tx);letter-spacing:.1em;outline:none;transition:all .2s}
+.finput:focus{border-color:var(--cy);box-shadow:0 0 0 3px var(--cyd)}
+.finput.err{border-color:var(--rd);animation:shake .4s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.eyebtn{position:absolute;right:13px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--tx3);font-size:14px;padding:4px}
+.anote{font-size:11px;color:var(--tx3);text-align:left;margin:-6px 0 16px}
+.anote a{color:var(--cy);text-decoration:none}
+.ulbtn{width:100%;padding:14px;background:linear-gradient(135deg,#0891b2,#0e7490);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;box-shadow:0 4px 24px rgba(8,145,178,.3)}
+.ulbtn:hover{transform:translateY(-1px);box-shadow:0 6px 32px rgba(8,145,178,.4)}
+.pwerr{font-size:12px;color:var(--rd);min-height:18px;margin-top:10px}
+.lfooter{margin-top:24px;padding-top:18px;border-top:1px solid var(--br);font-size:11px;color:var(--tx3)}
+
+/* APP */
+#app{display:none}
+.aline{height:2px;background:linear-gradient(90deg,transparent,var(--cy) 30%,var(--go) 70%,transparent)}
+.hdr{position:sticky;top:0;z-index:100;background:rgba(7,11,20,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--br);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:58px}
+.hbrand{font-size:16px;font-weight:700;color:var(--cy)}
+.hdiv{width:1px;height:18px;background:var(--br2);margin:0 16px}
+.htitle{font-size:13px;color:var(--tx2)}
+.htitle b{color:var(--tx);font-weight:500}
+.sidwrap{display:flex;align-items:center;gap:8px;background:var(--sf);border:1px solid var(--br2);border-radius:8px;padding:5px 13px}
+.sidlbl{font-size:9px;color:var(--tx3);letter-spacing:.1em;text-transform:uppercase}
+.sidinput{background:none;border:none;outline:none;font-size:12px;color:var(--cy);font-family:monospace;font-weight:600;letter-spacing:.05em;width:175px;cursor:text}
+.sidhint{font-size:9px;color:var(--tx3)}
+.lkbtn{font-size:11px;color:var(--tx3);background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:4px}
+.lkbtn:hover{color:var(--tx2)}
+.main{padding:28px;max-width:1180px;margin:0 auto}
+.sep{width:100%;height:1px;background:var(--br);margin:24px 0}
+.slbl{font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:var(--tx3);font-family:monospace;font-weight:500;margin-bottom:12px}
+
+/* STEPS */
+.sbar{display:flex;align-items:center;background:var(--sf);border:1px solid var(--br);border-radius:12px;padding:16px 20px;margin-bottom:28px}
+.si{display:flex;align-items:center;gap:8px}
+.sn{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:monospace;flex-shrink:0}
+.sl{font-size:12px;white-space:nowrap}
+.sline{flex:1;height:1px;background:var(--br);margin:0 10px;min-width:16px}
+.sdone .sn{background:rgba(52,211,153,.15);color:var(--gn);border:1px solid rgba(52,211,153,.3)}
+.sdone .sl{color:var(--gn)}
+.sact .sn{background:var(--cyd);color:var(--cy);border:1px solid rgba(34,211,238,.3)}
+.sact .sl{color:var(--cy);font-weight:600}
+.spend .sn{background:var(--sf2);color:var(--tx3);border:1px solid var(--br)}
+.spend .sl{color:var(--tx3)}
+
+/* MODES */
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mcard{background:var(--sf);border:1px solid var(--br);border-radius:12px;padding:20px;position:relative;overflow:hidden;transition:all .2s}
+.mcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .2s}
+.mcard.inv::before{background:linear-gradient(90deg,var(--am),var(--or))}
+.mcard.upr::before{background:linear-gradient(90deg,var(--pu),var(--cy))}
+.mcard:hover{border-color:var(--br2)}
+.mcard:hover::before{opacity:1}
+.mcard.sel{border-color:var(--cy);background:var(--sf2)}
+.mcard.sel::before{opacity:1}
+.micon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px}
+.mname{font-size:14px;font-weight:600;color:var(--tx);margin-bottom:4px}
+.mdesc{font-size:11px;color:var(--tx2);line-height:1.55;margin-bottom:12px}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.sbtn{border-radius:8px;padding:10px;cursor:pointer;transition:all .15s;text-align:center}
+.sbtn:hover{filter:brightness(1.15)}
+.sbicon{font-size:16px;margin-bottom:3px}
+.sbname{font-size:11px;font-weight:600;margin-bottom:2px}
+.sbdesc{font-size:9px;color:var(--tx3);line-height:1.4}
+.tags{display:flex;flex-wrap:wrap;gap:4px}
+.tag{font-size:9px;padding:2px 7px;border-radius:4px;font-weight:600;font-family:monospace;border:1px solid transparent}
+
+/* UPLOAD */
+.dzone{border:1px dashed rgba(255,255,255,.12);border-radius:12px;padding:44px 24px;text-align:center;cursor:pointer;background:var(--sf);transition:all .2s}
+.dzone:hover,.dzone.drag{border-color:var(--cy);background:rgba(34,211,238,.03)}
+.dzicon{font-size:32px;margin-bottom:10px;opacity:.6}
+.dzm{font-size:14px;color:var(--tx2);margin-bottom:4px}
+.dzs{font-size:12px;color:var(--tx3)}
+
+/* PREVIEW */
+.pwrap{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--br);background:#000;margin-bottom:16px}
+.pimg{width:100%;display:block;max-height:320px;object-fit:contain}
+.pbadge{position:absolute;top:10px;right:10px;background:rgba(7,11,20,.9);border:1px solid var(--br2);color:var(--cy);font-size:11px;font-family:monospace;padding:4px 11px;border-radius:6px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:9px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btnp{background:linear-gradient(135deg,#0891b2,#0e7490);color:#fff;box-shadow:0 2px 16px rgba(8,145,178,.25)}
+.btnp:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 4px 24px rgba(8,145,178,.35)}
+.btno{background:var(--sf);border:1px solid var(--br2);color:var(--tx2)}
+.btno:hover{background:var(--sf2);color:var(--tx)}
+.btnd{background:var(--sf2);border:1px solid var(--br2);color:var(--cy)}
+.btnd:hover{border-color:var(--cy);background:var(--cyd)}
+.btnv{background:linear-gradient(135deg,#d97706,#b45309);color:#fff;box-shadow:0 2px 16px rgba(217,119,6,.25)}
+.btnv:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 4px 24px rgba(217,119,6,.35)}
+.brow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.rbtn{font-size:11px;color:var(--tx3);background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:4px}
+.rbtn:hover{color:var(--tx2)}
+.loader{display:none;align-items:center;gap:10px;color:var(--tx2);font-size:13px}
+.loader.show{display:flex}
+.spin{width:18px;height:18px;border:2px solid var(--br2);border-top-color:var(--cy);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ebox{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.25);border-radius:9px;padding:12px 16px;color:var(--rd);font-size:13px;margin-top:12px;display:none}
+
+/* RESULTS */
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.cwrap{border-radius:12px;overflow:hidden;border:1px solid var(--br);background:#000;min-height:180px;display:flex;align-items:center;justify-content:center}
+canvas{width:100%;display:block}
+.stgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.stat{background:var(--sf2);border:1px solid var(--br);border-radius:9px;padding:12px 8px;text-align:center}
+.stval{font-size:20px;font-weight:700;font-family:monospace;font-variant-numeric:tabular-nums}
+.stlbl{font-size:9px;color:var(--tx3);margin-top:2px;text-transform:uppercase;letter-spacing:.04em}
+.adqb{display:inline-flex;align-items:center;gap:5px;padding:5px 13px;border-radius:20px;font-size:11px;font-weight:600;margin-bottom:14px;font-family:monospace}
+.adqok{background:rgba(52,211,153,.1);color:var(--gn);border:1px solid rgba(52,211,153,.25)}
+.adqwarn{background:rgba(248,113,113,.1);color:var(--rd);border:1px solid rgba(248,113,113,.25)}
+.icard{background:var(--sf2);border:1px solid var(--br);border-radius:9px;padding:12px 14px}
+.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--br);font-size:12px}
+.ir:last-child{border-bottom:none}
+.ik{color:var(--tx3)}
+.iv{color:var(--tx);font-family:monospace;font-size:11px;font-weight:500}
+.twrap{background:var(--sf);border:1px solid var(--br);border-radius:12px;overflow:hidden}
+.thdr{background:rgba(34,211,238,.05);padding:8px 14px;font-size:9px;color:var(--cy);font-family:monospace;letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--br)}
+.thdr.go{background:rgba(240,192,96,.05);color:var(--go)}
+.thdr.val{background:rgba(217,119,6,.08);color:var(--val)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--sf2);color:var(--tx3);text-align:left;padding:8px 14px;border-bottom:1px solid var(--br);font-size:9px;text-transform:uppercase;letter-spacing:.07em;font-family:monospace;font-weight:500}
+td{padding:8px 14px;border-bottom:1px solid var(--br);color:var(--tx2)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.015)}
+.cdot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;vertical-align:middle}
+.mono{font-family:monospace;font-size:12px;font-variant-numeric:tabular-nums}
+.bold{font-weight:700}
+.tw{color:var(--tx)}
+.nbox{background:rgba(240,192,96,.06);border:1px solid rgba(240,192,96,.2);border-radius:9px;padding:12px 16px;font-size:12px;color:#d4a843;margin-top:14px;line-height:1.6}
+.pbadge2{background:rgba(96,165,250,.12);color:var(--bl);border:1px solid rgba(96,165,250,.25);padding:2px 9px;border-radius:4px;font-size:10px;font-weight:600;font-family:monospace}
+.fdbox{margin-top:12px;background:var(--sf);border:1px solid var(--br);border-radius:10px;padding:14px 16px}
+.fdlbl{font-size:9px;font-family:monospace;text-transform:uppercase;letter-spacing:.12em;color:var(--cy);margin-bottom:8px}
+.fdtxt{font-size:12px;color:var(--tx2);line-height:1.7}
+.insbox{margin-top:14px;background:var(--sf);border:1px solid var(--br);border-radius:10px;padding:16px 18px}
+.inslbl{font-size:9px;font-family:monospace;text-transform:uppercase;letter-spacing:.12em;color:var(--go);margin-bottom:12px}
+.insrow{display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--br);font-size:12px}
+.insrow:last-child{border-bottom:none}
+.insk{color:var(--tx3);flex-shrink:0;padding-right:12px}
+.insv{font-weight:500;text-align:right;font-size:11px;line-height:1.4}
+
+/* VALIDATION PANEL */
+.valpanel{margin-top:24px;background:var(--sf);border:1px solid rgba(217,119,6,.3);border-radius:14px;overflow:hidden}
+.valhdr{background:rgba(217,119,6,.08);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(217,119,6,.2);cursor:pointer}
+.valtitle{font-size:12px;font-family:monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--val);font-weight:600}
+.valtitle::before{content:'✎ ';font-size:14px}
+.valbody{padding:20px;display:none}
+.valbody.open{display:block}
+.valgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.valinp-wrap{display:flex;flex-direction:column;gap:5px}
+.valinp-lbl{font-size:10px;color:var(--tx3);font-family:monospace;letter-spacing:.05em}
+.valinp{width:100%;padding:8px 10px;background:var(--sf2);border:1px solid var(--br2);border-radius:7px;font-size:13px;font-family:monospace;color:var(--tx);outline:none;transition:border-color .2s}
+.valinp:focus{border-color:var(--val);box-shadow:0 0 0 2px var(--vald)}
+.valselect{width:100%;padding:8px 10px;background:var(--sf2);border:1px solid var(--br2);border-radius:7px;font-size:12px;color:var(--tx);outline:none;cursor:pointer}
+.valselect:focus{border-color:var(--val)}
+.valtextarea{width:100%;padding:10px 12px;background:var(--sf2);border:1px solid var(--br2);border-radius:7px;font-size:12px;color:var(--tx);outline:none;resize:vertical;min-height:70px;font-family:'Segoe UI',system-ui}
+.valtextarea:focus{border-color:var(--val)}
+.valrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px}
+
+/* COMPARISON TABLE */
+.cmptbl td.agree{color:var(--gn);font-weight:600}
+.cmptbl td.partial{color:var(--am);font-weight:600}
+.cmptbl td.disagree{color:var(--rd);font-weight:600}
+.cmptbl td.ai{color:var(--cy)}
+.cmptbl td.expert{color:var(--val)}
+
+/* SESSION PANEL */
+.sesspanel{margin-top:20px;background:var(--sf);border:1px solid var(--br);border-radius:12px;padding:18px 20px}
+.sessrow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.sessstat{background:var(--sf2);border:1px solid var(--br);border-radius:8px;padding:10px;text-align:center}
+.sessval{font-size:20px;font-weight:700;font-family:monospace;color:var(--cy)}
+.sesslbl{font-size:9px;color:var(--tx3);margin-top:2px;text-transform:uppercase;letter-spacing:.04em}
+
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- LOCK -->
+<div id="lock">
+  <div class="lbg"></div>
+  <div class="lgr"></div>
+  <div class="lcard">
+    <div class="leyebrow">Vamsipedia &middot; Clinical AI</div>
+    <div class="ltitle">Sputum <span>Inflammometry</span></div>
+    <div class="lsub">Analysis Platform &middot; Restricted Access</div>
+    <div class="ldiv"></div>
+    <div class="flbl">Access Password</div>
+    <div class="fwrap">
+      <input type="password" id="pwin" class="finput" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" autocomplete="off">
+      <button class="eyebtn" onclick="toggleEye('pwin')">&#128065;</button>
+    </div>
+    <div class="flbl">Anthropic API Key</div>
+    <div class="fwrap">
+      <input type="password" id="akin" class="finput" placeholder="sk-ant-api03-..." autocomplete="off">
+      <button class="eyebtn" onclick="toggleEye('akin')">&#128065;</button>
+    </div>
+    <div class="anote">Get free at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> &rarr; API Keys</div>
+    <button class="ulbtn" onclick="doUnlock()">Unlock Platform &rarr;</button>
+    <div class="pwerr" id="pwerr"></div>
+    <div class="lfooter">Authorised users only &middot; Vamsipedia Clinical AI Suite</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="aline"></div>
+  <div class="hdr">
+    <div style="display:flex;align-items:center">
+      <span class="hbrand">Vamsipedia</span>
+      <span class="hdiv"></span>
+      <span class="htitle"><b>Sputum Inflammometry</b> &middot; Analysis Platform v2</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px">
+      <div class="sidwrap">
+        <span class="sidlbl">Sample ID</span>
+        <input type="text" id="sidinput" class="sidinput" placeholder="SINFL-..." spellcheck="false">
+        <span class="sidhint">&#9998; editable</span>
+      </div>
+      <button class="lkbtn" onclick="doLock()">&#9167; Lock</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="sbar">
+      <div class="si sact" id="s1"><div class="sn">01</div><div class="sl">Select Mode</div></div>
+      <div class="sline"></div>
+      <div class="si spend" id="s2"><div class="sn">02</div><div class="sl">Upload Image</div></div>
+      <div class="sline"></div>
+      <div class="si spend" id="s3"><div class="sn">03</div><div class="sl">AI Analysis</div></div>
+      <div class="sline"></div>
+      <div class="si spend" id="s4"><div class="sn">04</div><div class="sl">Expert Validation</div></div>
+    </div>
+
+    <!-- MODE CARDS -->
+    <div class="slbl">Microscope Mode</div>
+    <div class="mgrid">
+      <div class="mcard inv" id="mc-inv">
+        <div class="micon" style="background:rgba(251,191,36,.1)">&#128300;</div>
+        <div class="mname">Inverted Microscope</div>
+        <div class="mdesc">Select imaging context:</div>
+        <div class="sgrid">
+          <div class="sbtn" id="sub-petri" onclick="setMode('petri')" style="background:rgba(253,230,138,.08);border:1px solid rgba(253,230,138,.2)">
+            <div class="sbicon">&#129645;</div>
+            <div class="sbname" style="color:#fde68a">Petri dish</div>
+            <div class="sbdesc">Sputum quality &amp; plug selection</div>
+          </div>
+          <div class="sbtn" id="sub-hemo" onclick="setMode('inverted')" style="background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2)">
+            <div class="sbicon">&#128290;</div>
+            <div class="sbname" style="color:#34d399">Hemocytometer</div>
+            <div class="sbdesc">TCC + trypan blue viability</div>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag" style="background:rgba(253,230,138,.1);color:#fde68a;border-color:rgba(253,230,138,.2)">MP</span>
+          <span class="tag" style="background:rgba(52,211,153,.1);color:#34d399;border-color:rgba(52,211,153,.2)">V</span>
+          <span class="tag" style="background:rgba(96,165,250,.1);color:#60a5fa;border-color:rgba(96,165,250,.2)">D</span>
+          <span class="tag" style="background:rgba(248,113,113,.1);color:#f87171;border-color:rgba(248,113,113,.2)">Sq</span>
+          <span class="tag" style="background:rgba(240,192,96,.1);color:#f0c060;border-color:rgba(240,192,96,.2)">+Misc</span>
+        </div>
+      </div>
+      <div class="mcard upr" id="mc-upr">
+        <div class="micon" style="background:rgba(167,139,250,.1)">&#129516;</div>
+        <div class="mname">Upright Microscope</div>
+        <div class="mdesc">Select imaging context:</div>
+        <div class="sgrid" style="grid-template-columns:1fr 1fr">
+          <div class="sbtn" id="sub-diff" onclick="setMode('upright')" style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2)">
+            <div class="sbicon">&#129514;</div>
+            <div class="sbname" style="color:#a78bfa">Leishman</div>
+            <div class="sbdesc">DC - India/UK/Asia standard</div>
+          </div>
+          <div class="sbtn" id="sub-mgg" onclick="setMode('upright_mgg')" style="background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.2)">
+            <div class="sbicon">&#127981;</div>
+            <div class="sbname" style="color:#7c3aed">MGG</div>
+            <div class="sbdesc">DC - European/ERS standard</div>
+          </div>
+          <div class="sbtn" id="sub-dq" onclick="setMode('upright_dq')" style="background:rgba(236,72,153,.08);border:1px solid rgba(236,72,153,.2)">
+            <div class="sbicon">&#9889;</div>
+            <div class="sbname" style="color:#ec4899">Diff-Quik</div>
+            <div class="sbdesc">DC - Rapid (ICC 0.98-1.00 vs MGG)</div>
+          </div>
+          <div class="sbtn" id="sub-uhemo" onclick="setMode('upright_hemo')" style="background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.2)">
+            <div class="sbicon">&#128290;</div>
+            <div class="sbname" style="color:#2dd4bf">Hemocytometer</div>
+            <div class="sbdesc">TCC + trypan blue</div>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag" style="background:rgba(167,139,250,.1);color:#a78bfa;border-color:rgba(167,139,250,.2)">Ma</span>
+          <span class="tag" style="background:rgba(96,165,250,.1);color:#60a5fa;border-color:rgba(96,165,250,.2)">N</span>
+          <span class="tag" style="background:rgba(251,191,36,.1);color:#fbbf24;border-color:rgba(251,191,36,.2)">Eo</span>
+          <span class="tag" style="background:rgba(52,211,153,.1);color:#34d399;border-color:rgba(52,211,153,.2)">Ly</span>
+          <span class="tag" style="background:rgba(240,192,96,.1);color:#f0c060;border-color:rgba(240,192,96,.2)">FEG</span>
+          <span class="tag" style="background:rgba(124,58,237,.1);color:#7c3aed;border-color:rgba(124,58,237,.2)">MGG</span>
+          <span class="tag" style="background:rgba(236,72,153,.1);color:#ec4899;border-color:rgba(236,72,153,.2)">DQ</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- UPLOAD -->
+    <div id="upsec" class="hidden">
+      <div class="sep"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div class="slbl" style="margin-bottom:0">Upload Image</div>
+        <button class="rbtn" onclick="resetAll()">&#10005; Reset session</button>
+      </div>
+      <div class="dzone" id="dzone" onclick="document.getElementById('fin').click()"
+        ondragover="event.preventDefault();this.classList.add('drag')"
+        ondragleave="this.classList.remove('drag')"
+        ondrop="onDrop(event)">
+        <div class="dzicon">&#128194;</div>
+        <div class="dzm">Drop microscopy image here, or click to browse</div>
+        <div class="dzs" id="dzs">JPEG or PNG</div>
+      </div>
+      <input type="file" id="fin" style="display:none" accept="image/*" onchange="loadFile(this.files[0])">
+    </div>
+
+    <!-- ANALYSE -->
+    <div id="ansec" class="hidden">
+      <div class="sep"></div>
+      <div class="pwrap">
+        <img id="pimg" class="pimg" alt="Preview">
+        <div class="pbadge" id="pbadge">--</div>
+      </div>
+      <div class="brow">
+        <button class="btn btnp" id="anbtn" onclick="doAnalyse()">&#10017; Analyse with Claude Vision</button>
+        <button class="btn btno" onclick="document.getElementById('fin').click()">Change image</button>
+        <div class="loader" id="ldr"><div class="spin"></div>Analysing with Claude Vision (PICOT-informed)...</div>
+      </div>
+      <div class="ebox" id="ebox"></div>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="ressec" class="hidden">
+      <div class="sep"></div>
+      <div id="progpanel" class="hidden" style="background:var(--sf);border:1px solid var(--br);border-radius:12px;padding:18px 20px;margin-bottom:20px"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+        <div class="slbl" style="margin-bottom:0">AI Analysis Results</div>
+        <div class="brow">
+          <button class="btn btnd" onclick="dlPNG()">&#11015; Annotated (.png)</button>
+          <button class="btn btnd" onclick="dlPDF()">&#11015; PDF report</button>
+          <button class="rbtn" onclick="resetAll()">&#10005; New session</button>
+        </div>
+      </div>
+      <div class="rgrid">
+        <div>
+          <div class="slbl">Annotated Image</div>
+          <div class="cwrap">
+            <div id="cph" style="color:var(--tx3);font-size:13px;padding:32px;text-align:center">Rendering...</div>
+            <canvas id="cv" style="display:none"></canvas>
+          </div>
+          <div id="fdbox" class="fdbox hidden">
+            <div class="fdlbl">Field Assessment (AI)</div>
+            <div class="fdtxt" id="fdtxt"></div>
+          </div>
+        </div>
+        <div>
+          <div id="sumpanel"></div>
+          <div id="insbox" class="insbox hidden">
+            <div class="inslbl">Sample Insights</div>
+            <div id="inscontent"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sep"></div>
+      <div class="slbl">AI Cell Data</div>
+      <div class="twrap" id="dtbl"></div>
+      <div id="miscsec" class="hidden">
+        <div class="sep"></div>
+        <div class="slbl">Miscellaneous &amp; Incidental Findings</div>
+        <div class="twrap" id="misctbl"></div>
+      </div>
+      <div id="gridsec" class="hidden">
+        <div class="sep"></div>
+        <div class="slbl">Neubauer Grid - Square-by-Square</div>
+        <div class="twrap" id="gridtbl"></div>
+      </div>
+      <div id="notesarea" class="hidden">
+        <div class="nbox" id="notescontent"></div>
+      </div>
+
+      <!-- VALIDATION PANEL -->
+      <div class="valpanel" id="valpanel">
+        <div class="valhdr" onclick="toggleVal()">
+          <span class="valtitle">Expert Validation Entry</span>
+          <span style="font-size:11px;color:var(--val);font-family:monospace" id="valtoggle-lbl">Click to open &#9660;</span>
+        </div>
+        <div class="valbody" id="valbody">
+          <div id="val-dc" class="hidden">
+            <div style="font-size:11px;color:var(--tx3);margin-bottom:14px;line-height:1.6">
+              Enter your manual differential count percentages below. Platform will auto-calculate concordance with AI results.<br>
+              <span style="color:var(--val);font-weight:500">FEG = Free Eosinophil Granules (semi-quantitative per Nair 2021 Firestone protocol)</span>
+            </div>
+            <div style="font-size:10px;color:var(--tx3);font-family:monospace;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Expert Differential Count (%)</div>
+            <div class="valgrid">
+              <div class="valinp-wrap"><div class="valinp-lbl">Macrophage %</div><input type="number" class="valinp" id="v-mac" min="0" max="100" placeholder="0" oninput="autoCalcTotal()"></div>
+              <div class="valinp-wrap"><div class="valinp-lbl">Neutrophil %</div><input type="number" class="valinp" id="v-neu" min="0" max="100" placeholder="0" oninput="autoCalcTotal()"></div>
+              <div class="valinp-wrap"><div class="valinp-lbl">Eosinophil %</div><input type="number" class="valinp" id="v-eos" min="0" max="100" placeholder="0" oninput="autoCalcTotal()"></div>
+              <div class="valinp-wrap"><div class="valinp-lbl">Lymphocyte %</div><input type="number" class="valinp" id="v-lym" min="0" max="100" placeholder="0" oninput="autoCalcTotal()"></div>
+              <div class="valinp-wrap"><div class="valinp-lbl">Basophil %</div><input type="number" class="valinp" id="v-bas" min="0" max="100" placeholder="0" oninput="autoCalcTotal()"></div>
+              <div class="valinp-wrap"><div class="valinp-lbl">Mast cell %</div><input type="number" class="valinp" id="v-mast" min="0" max="100" placeholder="0" oninput="autoCalcTotal()"></div>
+              <div class="valinp-wrap"><div class="valinp-lbl">Bronchial epith %</div><input type="number" class="valinp" id="v-be" min="0" max="100" placeholder="0" oninput="autoCalcTotal()"></div>
+              <div class="valinp-wrap"><div class="valinp-lbl">Squamous %</div><input type="number" class="valinp" id="v-sq" min="0" max="100" placeholder="0" oninput="autoCalcTotal()"></div>
+            </div>
+            <div style="font-size:11px;color:var(--tx3);margin-bottom:14px">Total entered: <span id="val-total" style="font-family:monospace;color:var(--cy)">0%</span> &nbsp;(non-squamous cells should total 100%)</div>
+            <div class="valrow">
+              <div class="valinp-wrap">
+                <div class="valinp-lbl">FEG Count (per HPF)</div>
+                <select class="valselect" id="v-feg">
+                  <option value="none">None</option>
+                  <option value="few">Few (1-2 per HPF)</option>
+                  <option value="moderate">Moderate (2-3 per HPF)</option>
+                  <option value="many">Many (>3 per HPF)</option>
+                </select>
+              </div>
+              <div class="valinp-wrap">
+                <div class="valinp-lbl">Expert Inflammatory Pattern</div>
+                <select class="valselect" id="v-pattern">
+                  <option value="">Select...</option>
+                  <option value="eosinophilic">Eosinophilic (Eo >=3%)</option>
+                  <option value="neutrophilic">Neutrophilic (N >=61%)</option>
+                  <option value="mixed">Mixed Granulocytic</option>
+                  <option value="paucigranulocytic">Paucigranulocytic</option>
+                </select>
+              </div>
+              <div class="valinp-wrap">
+                <div class="valinp-lbl">Sample Adequacy (Expert)</div>
+                <select class="valselect" id="v-adq">
+                  <option value="adequate">Adequate</option>
+                  <option value="inadequate">Inadequate - High Squamous</option>
+                  <option value="inadequate-cells">Inadequate - Low Cellularity</option>
+                </select>
+              </div>
+              <div class="valinp-wrap" id="v-stain-wrap" style="display:none">
+                <div class="valinp-lbl">Stain Used (Expert confirm)</div>
+                <select class="valselect" id="v-stain">
+                  <option value="Leishman">Leishman</option>
+                  <option value="MGG">May-Grunwald Giemsa (MGG)</option>
+                  <option value="Diff-Quik">Diff-Quik (Rapid)</option>
+                  <option value="Wright">Wright</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div id="val-hemo" class="hidden">
+            <div style="font-size:11px;color:var(--tx3);margin-bottom:14px">Enter your manual TCC and viability counts:</div>
+            <div class="valrow">
+              <div class="valinp-wrap"><div class="valinp-lbl">Viable cells counted</div><input type="number" class="valinp" id="v-viable" min="0" placeholder="0"></div>
+              <div class="valinp-wrap"><div class="valinp-lbl">Dead cells counted</div><input type="number" class="valinp" id="v-dead" min="0" placeholder="0"></div>
+              <div class="valinp-wrap"><div class="valinp-lbl">Expert Viability %</div><input type="number" class="valinp" id="v-viab-pct" min="0" max="100" step="0.1" placeholder="0.0"></div>
+            </div>
+          </div>
+
+          <div id="val-petri" class="hidden">
+            <div style="font-size:11px;color:var(--tx3);margin-bottom:14px">Enter your expert assessment of this Petri dish image:</div>
+            <div class="valrow">
+              <div class="valinp-wrap">
+                <div class="valinp-lbl">Mucus Plugs Present</div>
+                <select class="valselect" id="v-plugs"><option value="yes">Yes</option><option value="no">No</option><option value="few">Few / questionable</option></select>
+              </div>
+              <div class="valinp-wrap">
+                <div class="valinp-lbl">Overall Sample Quality</div>
+                <select class="valselect" id="v-quality"><option value="adequate">Adequate</option><option value="poor">Poor</option><option value="excellent">Excellent</option></select>
+              </div>
+              <div class="valinp-wrap">
+                <div class="valinp-lbl">Predominant material</div>
+                <select class="valselect" id="v-predom"><option value="sputum">Lower airway sputum</option><option value="saliva">Predominantly saliva</option><option value="mixed">Mixed</option></select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shared fields -->
+          <div style="margin-top:10px">
+            <div class="valinp-wrap" style="margin-bottom:10px">
+              <div class="valinp-lbl">Expert Comments / Observations</div>
+              <textarea class="valtextarea" id="v-comments" placeholder="Free text — describe any notable findings, disagreements with AI, morphological observations, clinical context..."></textarea>
+            </div>
+            <div class="brow">
+              <button class="btn btnv" onclick="saveValidation()">&#10003; Save Validation Record</button>
+              <button class="btn btno" onclick="showComparison()">&#8651; Show AI vs Expert Comparison</button>
+              <span style="font-size:11px;color:var(--tx3)" id="val-saved-msg"></span>
+            </div>
+          </div>
+
+          <!-- Comparison table -->
+          <div id="comptbl-wrap" class="hidden" style="margin-top:20px">
+            <div class="twrap cmptbl">
+              <div class="thdr val">AI vs Expert Comparison</div>
+              <div id="comptbl"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SESSION DATA PANEL -->
+      <div class="sesspanel" id="sesspanel">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <div class="slbl" style="margin-bottom:0">Validation Session Data</div>
+          <div class="brow">
+            <button class="btn btnd" onclick="dlCSV()">&#11015; Download CSV (training data)</button>
+            <span style="font-size:11px;color:var(--tx3)" id="sess-count">0 validations recorded</span>
+          </div>
+        </div>
+        <div class="sessrow">
+          <div class="sessstat"><div class="sessval" id="sess-total">0</div><div class="sesslbl">Samples validated</div></div>
+          <div class="sessstat"><div class="sessval" id="sess-agree" style="color:var(--gn)">0%</div><div class="sesslbl">Overall concordance</div></div>
+          <div class="sessstat"><div class="sessval" id="sess-eos-match" style="color:var(--am)">--</div><div class="sesslbl">Eosinophil agreement</div></div>
+          <div class="sessstat"><div class="sessval" id="sess-pheno-match" style="color:var(--pu)">--</div><div class="sesslbl">Phenotype match</div></div>
+        </div>
+        <div id="sess-table-wrap" class="hidden">
+          <div class="twrap" style="margin-top:0">
+            <div class="thdr val">Recent Validations</div>
+            <table>
+              <thead><tr><th>Sample ID</th><th>Mode</th><th>AI Eos%</th><th>Expert Eos%</th><th>AI Pattern</th><th>Expert Pattern</th><th>Concordance</th><th>Time</th></tr></thead>
+              <tbody id="sess-rows"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var PW = 'SQAVAMSI';
+var SK = '';
+var CM = null;
+var CDU = null;
+var CB64 = null;
+var CMIME = 'image/jpeg';
+var CPNG = null;
+var CUR_RESULT = null;
+var SESS = {imgs:0,dcNS:0,tccV:0,tccD:0,tccSq:0};
+var VAL_RECORDS = [];
+
+var MCFG = {
+  petri:       {badge:'Inverted - Petri Dish',         dz:'JPEG or PNG - Petri dish (pre-processing quality)',    par:'inv'},
+  inverted:    {badge:'Inverted - Hemocytometer (TB)', dz:'JPEG or PNG - Hemocytometer with trypan blue',         par:'inv'},
+  upright:     {badge:'Upright - Leishman Cytospin',   dz:'JPEG or PNG - Leishman-stained cytospin',             par:'upr'},
+  upright_mgg: {badge:'Upright - MGG Cytospin (ERS)',  dz:'JPEG or PNG - May-Grunwald Giemsa stained cytospin',  par:'upr'},
+  upright_dq:  {badge:'Upright - Diff-Quik Cytospin',  dz:'JPEG or PNG - Diff-Quik rapid stained cytospin',      par:'upr'},
+  upright_hemo:{badge:'Upright - Hemocytometer (TB)',  dz:'JPEG or PNG - Hemocytometer with trypan blue',         par:'upr'}
+};
+
+var CMETA = {
+  viable_cell:         {label:'Viable cell',           code:'V',  color:'#34d399',g:'p'},
+  dead_cell:           {label:'Dead cell (TB+)',        code:'D',  color:'#60a5fa',g:'p'},
+  squamous:            {label:'Squamous epithelial',    code:'Sq', color:'#ef4444',g:'p'},
+  rbc:                 {label:'Red blood cell',         code:'RBC',color:'#fb923c',g:'p'},
+  debris:              {label:'Debris / mucus',         code:'Db', color:'#64748b',g:'p'},
+  mucus_plug:          {label:'Mucus plug',             code:'MP', color:'#fde68a',g:'p'},
+  saliva:              {label:'Saliva / watery',        code:'Sa', color:'#7dd3fc',g:'p'},
+  blood_streak:        {label:'Blood streak',           code:'Bl', color:'#f87171',g:'p'},
+  macrophage:          {label:'Alveolar macrophage',    code:'Ma', color:'#a855f7',g:'p'},
+  neutrophil:          {label:'Neutrophil',             code:'N',  color:'#3b82f6',g:'p'},
+  eosinophil:          {label:'Eosinophil',             code:'Eo', color:'#f97316',g:'p'},
+  lymphocyte:          {label:'Lymphocyte',             code:'Ly', color:'#10b981',g:'p'},
+  basophil:            {label:'Basophil',               code:'Ba', color:'#818cf8',g:'p'},
+  mast_cell:           {label:'Mast cell',              code:'Mc', color:'#f472b6',g:'p'},
+  bronchial_epithelial:{label:'Bronchial epithelial',   code:'BE', color:'#14b8a6',g:'p'},
+  feg:                 {label:'Free eosinophil granules',code:'FEG',color:'#fbbf24',g:'m'},
+  refractile_cell:     {label:'Refractile structure',   code:'Rf', color:'#e2e8f0',g:'m'},
+  mucin:               {label:'Mucin',                  code:'Mu', color:'#93c5fd',g:'m'},
+  cocci:               {label:'Cocci',                  code:'Co', color:'#fde68a',g:'m'},
+  bacilli:             {label:'Bacilli',                code:'Bc', color:'#86efac',g:'m'},
+  coccobacilli:        {label:'Coccobacilli',           code:'Cb', color:'#bbf7d0',g:'m'},
+  afb:                 {label:'AFB / Mycobacteria',     code:'AFB',color:'#fca5a5',g:'m'},
+  fungal_hyphae:       {label:'Fungal hyphae',          code:'FH', color:'#c4b5fd',g:'m'},
+  fungal_spores:       {label:'Fungal spores',          code:'FS', color:'#ddd6fe',g:'m'},
+  charcot_leyden:      {label:'Charcot-Leyden crystals',code:'CL', color:'#fcd34d',g:'m'},
+  curschmann:          {label:'Curschmann spirals',     code:'CS', color:'#6ee7b7',g:'m'},
+  creola:              {label:'Creola bodies',          code:'Cr', color:'#7dd3fc',g:'m'},
+  pollen:              {label:'Pollen grains',          code:'Po', color:'#fde047',g:'m'},
+  vegetable_matter:    {label:'Vegetable/food matter',  code:'VM', color:'#86efac',g:'m'},
+  food_matter:         {label:'Food/vegetable matter',  code:'FM', color:'#86efac',g:'m'}
+};
+
+var MNOTES = {
+  feg:'FREE EOSINOPHIL GRANULES - Critical finding per Nair 2021 (Firestone). Underestimates eosinophilia by 45% if not counted. Score: none/few/moderate/many per HPF.',
+  charcot_leyden:'Charcot-Leyden crystals - Derived from eosinophil granule proteins. Confirms eosinophilic inflammation even when intact eosinophils are reduced.',
+  curschmann:'Curschmann spirals - Coiled mucus from small airway plugging. Associated with asthma and mucus hypersecretion.',
+  creola:'Creola bodies - Clusters of shed bronchial epithelial cells. Marker of airway epithelial damage; strongly associated with asthma exacerbations.',
+  refractile_cell:'May indicate lipid-laden macrophages, crystals or spores. Context-dependent significance.',
+  mucin:'Note quantity - heavy mucin may affect processing quality.',
+  cocci:'Gram stain and culture recommended.',
+  bacilli:'Gram stain and culture recommended.',
+  coccobacilli:'H. influenzae typical pattern. Culture recommended.',
+  afb:'ZN stain mandatory to confirm. Clinical suspicion essential.',
+  fungal_hyphae:'KOH and fungal culture recommended. Consider ABPA in eosinophilic context.',
+  fungal_spores:'KOH and fungal culture recommended.',
+  pollen:'Environmental contaminant. Seasonal/occupational context.',
+  vegetable_matter:'Oral contamination marker.',
+  food_matter:'Oral contamination marker.'
+};
+
+function G(id){return document.getElementById(id);}
+function show(id){G(id).classList.remove('hidden');}
+function hide(id){G(id).classList.add('hidden');}
+function setStep(n){
+  [1,2,3,4].forEach(function(i){
+    G('s'+i).className='si '+(i<n?'sdone':i===n?'sact':'spend');
+  });
+}
+function toggleEye(inp){var el=G(inp);el.type=(el.type==='password'?'text':'password');}
+function newSID(){
+  var d=new Date(),p=function(n){return String(n).padStart(2,'0');};
+  return 'SINFL-'+d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+'-'+Math.random().toString(36).substr(2,6).toUpperCase();
+}
+function getSID(){return G('sidinput').value.trim()||newSID();}
+
+function doUnlock(){
+  var pw=G('pwin').value.trim(),ak=G('akin').value.trim(),err=G('pwerr');
+  err.textContent='';
+  if(pw!==PW){G('pwin').classList.add('err');err.textContent='Incorrect password.';setTimeout(function(){G('pwin').classList.remove('err');},400);return;}
+  if(!ak.startsWith('sk-')){err.textContent='Please enter a valid API key (starts with sk-).';return;}
+  SK=ak;G('lock').style.display='none';G('app').style.display='block';G('sidinput').value=newSID();
+}
+function doLock(){
+  G('lock').style.display='flex';G('app').style.display='none';SK='';
+  G('pwin').value='';G('akin').value='';G('pwerr').textContent='';resetAll();
+}
+
+function setMode(m){
+  CM=m;
+  var cfg=MCFG[m];
+  ['sub-petri','sub-hemo','sub-diff','sub-uhemo'].forEach(function(id){var el=G(id);if(el){el.style.opacity='0.5';el.style.filter='';}});
+  var map={petri:'sub-petri',inverted:'sub-hemo',upright:'sub-diff',upright_mgg:'sub-mgg',upright_dq:'sub-dq',upright_hemo:'sub-uhemo'};
+  var sel=G(map[m]);if(sel){sel.style.opacity='1';sel.style.filter='brightness(1.25)';}
+  G('mc-inv').classList.toggle('sel',cfg.par==='inv');
+  G('mc-upr').classList.toggle('sel',cfg.par==='upr');
+  G('dzs').textContent=cfg.dz;
+  show('upsec');setStep(2);
+}
+
+function onDrop(e){e.preventDefault();G('dzone').classList.remove('drag');loadFile(e.dataTransfer.files[0]);}
+function loadFile(file){
+  if(!file||!file.type.startsWith('image/')){alert('Please upload a JPEG or PNG image.');return;}
+  if(!CM){alert('Please select a microscope mode first.');return;}
+  CMIME=file.type;clearErr();
+  var reader=new FileReader();
+  reader.onload=function(e){
+    CDU=e.target.result;CB64=e.target.result.split(',')[1];
+    G('pimg').src=CDU;G('pbadge').textContent=MCFG[CM].badge;
+    show('ansec');hide('ressec');setStep(3);
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── PROMPTS (PICOT-informed) ────────────────────────────────
+
+function getPrompt(m){
+  if(m==='petri'){return 'You are a sputum inflammometry expert performing pre-processing quality assessment per ERS/Pizzichini protocol. This shows sputum in a Petri dish under an INVERTED microscope.\n\nFIELD BOUNDARY CRITICAL: Only identify structures WITHIN the visible illuminated field. Never annotate dark surrounding areas.\n\nMUCUS PLUG IDENTIFICATION (primary task - identify by OPTICAL DENSITY not cellular detail):\n- mucus_plug: DENSE, OPAQUE, whitish-yellow or grey-white material contrasting sharply against transparent background. Viscid, irregular surface. These are the portions to SELECT for processing per Efthimiadis selective plug method.\n- saliva: THIN, TRANSPARENT, uniform watery background. Clear or glassy. AVOID selecting. Selective processing reduces squamous contamination from 24% to 2%.\n- blood_streak: Reddish-brown or pinkish areas.\n- squamous: Large flat irregular epithelial cells visible at low power.\n- refractile_cell: Bright shiny particles WITHIN field only.\n- mucin: Stringy thread-like translucent material.\n- debris: Amorphous non-specific material.\n- fungal_hyphae: Branching filamentous structures.\n- food_matter: Plant cell fragments.\n\nFor EACH structure, give x,y as percentage 0-100 from top-left corner.\n\nIn fieldNarrative write 5 sentences: (1) overall sample volume and macroscopic appearance; (2) mucus plug characteristics - density, opacity, colour, specific quadrant locations; (3) proportion of salivary vs lower-airway material; (4) any blood, squamous contamination, or debris noted; (5) specific recommendation of which quadrant/area to select for processing per ERS protocol.\n\nIMPORTANT OUTPUT LIMITS to ensure complete valid JSON: annotate at most 40 representative cells (prioritise eosinophils and any degranulating eosinophils first, then a representative sample of neutrophils, macrophages, lymphocytes, squamous and bronchial cells - you do not need to mark every single neutrophil if there are hundreds, but you MUST mark every eosinophil and degranulating eosinophil you see). Keep fieldNarrative to 4-5 concise sentences. Keep all percentages as numbers. Ensure the JSON is COMPLETE and properly closed.\n\nReturn ONLY valid JSON:\n{"mode":"petri","imageQuality":"good","cells":[{"id":1,"type":"mucus_plug","x":40.0,"y":50.0,"confidence":"high"}],"summary":{"mucus_plug_present":true,"saliva_dominant":false,"blood_present":false,"squamous_contamination":"low","overall_quality":"adequate","best_selection_area":"centre","adequacy":"adequate","adequacyNote":"","recommendation":"Select dense opaque plugs from centre quadrant"},"fieldNarrative":"Description here.","miscFindings":[],"notes":""}';}
+
+  if(m==='inverted'||m==='upright_hemo'){return 'You are a sputum inflammometry expert. Analyse this hemocytometer image with trypan blue staining for total cell count (TCC) and viability assessment per ERS protocol.\n\nFIELD BOUNDARY CRITICAL: Only annotate cells WITHIN the visible illuminated grid area.\n\nCELL IDENTIFICATION (Trypan blue exclusion - Belda 2000 protocol):\n- viable_cell: BRIGHT, REFRACTILE, TRANSLUCENT cells - membrane intact, trypan blue EXCLUDED. Appear shiny/glowing. LIVE leukocytes.\n- dead_cell: DISTINCTLY BLUE-STAINED cells - trypan blue POSITIVE, membrane compromised.\n- squamous: ENORMOUSLY LARGE flat irregular cells - many times bigger than leukocytes. Oral contamination.\n- rbc: Small anucleate biconcave cells - smaller than leukocytes, no nucleus.\n- debris: Amorphous background, mucus strands, cell fragments.\n- refractile_cell: Unusually bright structures NOT typical leukocytes. WITHIN FIELD ONLY.\n- charcot_leyden: Needle-shaped elongated crystals - indicator of eosinophil breakdown.\n\nNeubauer grid counting: If grid visible, count per square: TL=top-left, TR=top-right, C=centre, BL=bottom-left, BR=bottom-right.\nTCC formula: avg cells per square x dilution factor x 10,000 = cells/mL.\nTarget 50-100 cells per large square for accurate count.\n\nFor EACH structure, give x,y as percentage 0-100 from top-left.\n\nIn fieldNarrative write 4-5 sentences: cell density impression, proportion viable vs dead, any RBCs or squamous, staining quality, viability assessment and adequacy per ERS criteria (>=50% viable = adequate after DTT processing).\n\nIMPORTANT OUTPUT LIMITS to ensure complete valid JSON: annotate at most 40 representative cells (prioritise eosinophils and any degranulating eosinophils first, then a representative sample of neutrophils, macrophages, lymphocytes, squamous and bronchial cells - you do not need to mark every single neutrophil if there are hundreds, but you MUST mark every eosinophil and degranulating eosinophil you see). Keep fieldNarrative to 4-5 concise sentences. Keep all percentages as numbers. Ensure the JSON is COMPLETE and properly closed.\n\nReturn ONLY valid JSON:\n{"mode":"'+m+'","gridDetected":false,"imageQuality":"good","cells":[{"id":1,"type":"viable_cell","x":30.0,"y":50.0,"confidence":"high"}],"gridSquares":{"detected":[],"counts":{"TL":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"TR":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"C":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"BL":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0},"BR":{"viable_cell":0,"dead_cell":0,"squamous":0,"rbc":0,"debris":0}}},"summary":{"totalViable":0,"totalDead":0,"totalSquamous":0,"totalRBC":0,"totalDebris":0,"viabilityPercent":0.0,"squamousPercent":0.0,"adequacy":"adequate","adequacyNote":""},"fieldNarrative":"Description here.","miscFindings":[],"notes":""}';}
+
+  if(m==='upright_mgg'){return 'You are a sputum inflammometry expert. Analyse this May-Grunwald Giemsa (MGG) stained cytospin slide from an upright microscope for differential cell count per ERS protocol. MGG is a two-step Romanowsky stain (May-Grunwald + Giemsa/azure B) and is the European/ERS laboratory standard for sputum cytology.\n\nFIELD BOUNDARY CRITICAL: Only annotate cells WITHIN the visible circular illuminated microscopic field. Never annotate the dark area outside the circular field.\n\nUSE THIS SYSTEMATIC DECISION TREE FOR EVERY CELL:\nSTEP 1 - SIZE vs red blood cell (RBC about 7um reference): same as RBC with dense round nucleus and almost no cytoplasm = LYMPHOCYTE; 1.5-2x RBC = GRANULOCYTE (go to Step 2); 2-4x RBC with foamy vacuolated cytoplasm = ALVEOLAR MACROPHAGE; very large flat angular polygonal with tiny nucleus = SQUAMOUS; tall columnar (taller than wide), possible cilia = BRONCHIAL EPITHELIAL.\nSTEP 2 - GRANULOCYTE granule colour + nucleus: BRILLIANT ORANGE-RED to RED coarse granules with bilobed nucleus = EOSINOPHIL (orange-red is unique - most important diagnostic cell); no orange-red granules, pale pink-lilac cytoplasm, MULTILOBED nucleus (3-5 lobes) = NEUTROPHIL (usually most numerous); DEEP METACHROMATIC BLUE-PURPLE granules = BASOPHIL (rare, MGG shows these granules especially intensely).\nSTEP 3 - CONFIRM: NEUTROPHIL needs a multilobed nucleus (single round nucleus = lymphocyte instead); EOSINOPHIL needs orange-red granules (degranulated eosinophil keeps bilobed nucleus - still an eosinophil, do not call it a neutrophil); MACROPHAGE is large + vacuolated + single eccentric nucleus (not columnar like bronchial cells, not flat-angular like squamous); LYMPHOCYTE is smallest with a single round dense nucleus.\n\nEOSINOPHIL MORPHOLOGY SPECTRUM - COUNT ALL AS EOSINOPHILS (eosinophil percentage determines phenotype - missing any form causes misclassification): (1) INTACT: bilobed nucleus + cytoplasm full of brilliant orange-red granules. (2) DEGRANULATING - CRITICAL: free orange-red granules scattered AROUND or ADJACENT TO a bilobed/rounded nucleus = degranulating eosinophil (type degranulating_eosinophil). Most commonly missed form. (3) FULLY DEGRANULATED: bilobed nucleus, pale empty cytoplasm, few granules - still eosinophil. (4) CYTOLYTIC: bare bilobed nucleus in a cloud of free orange-red granules - eosinophil. (5) FREE EOSINOPHIL GRANULES (feg): extracellular orange-red granule clusters with no nucleus - record as feg semi-quantitatively (Nair 2021: omission underestimates eosinophilia 45 percent). (6) CHARCOT-LEYDEN: needle/bipyramidal crystals - record as charcot_leyden. NUCLEAR CAVEAT: eosinophil nucleus is bilobed in ~68 percent but can be 1 lobe (6 percent), 3 lobes (22 percent) or 4-5 lobes (4 percent) - so GRANULE COLOUR (orange-red), NOT lobe count, is definitive. A trilobed cell with orange-red granules is an EOSINOPHIL not a neutrophil; only call neutrophil if multilobed AND no orange-red granules. GOLDEN RULE: any orange-red granular material signals eosinophil activity and must be captured; when uncertain between degranulating eosinophil and neutrophil, ANY orange-red granules favour eosinophil.\nCOMMON ERRORS: degranulated eosinophil mistaken for neutrophil; lymphocyte mistaken for neutrophil; bronchial epithelial mistaken for macrophage; squamous mistaken for macrophage.\n\nCOUNTING CALIBRATION - address these known failure modes:\nA) MACROPHAGE OVER-IDENTIFICATION (do not over-call macrophages): only label a cell a macrophage if it is genuinely LARGE (2-4x an RBC) AND has abundant foamy/vacuolated cytoplasm AND a single eccentric kidney/oval nucleus. A medium cell with scant cytoplasm is NOT a macrophage. A degranulated eosinophil with pale cytoplasm is NOT a macrophage. Debris and mucus clumps are NOT macrophages. If unsure, mark confidence low or do not annotate.\nB) SQUAMOUS CELLS ARE OFTEN PRESENT - actively look for squamous epithelial cells: scan the whole field for VERY LARGE, flat, angular polygonal cells with abundant pale cytoplasm and a small central nucleus. Far larger than any leukocyte, often folded or overlapping. Squamous >=20 percent of total = inadequate sample, so they must be reported. Do not overlook them because they are pale or near the field edge (but still inside the illuminated circle).\nC) LYMPHOCYTE IDENTIFICATION (avoid misidentifying lymphocytes): the SMALLEST leukocyte (about RBC size), single ROUND DENSE dark nucleus filling almost the whole cell, thin cytoplasm rim. Do NOT call a lymphocyte a neutrophil (neutrophil nucleus is MULTILOBED, not round). Do NOT call a small degranulated eosinophil a lymphocyte (look for residual orange granules). A bare/naked nucleus from a ruptured cell is NOT a lymphocyte.\nD) WHEN UNCERTAIN: better to mark confidence low than to guess. Only annotate cells identifiable with reasonable confidence. Never place an annotation where there is no clear cell.\n\nMGG STAIN KEY CHARACTERISTICS (know these before identifying cells):\n- Nuclei are stained VERY DEEP BLUE-PURPLE (more intense than Leishman - azure B component of Giemsa gives deeper nuclear staining)\n- Eosinophil granules are BRILLIANT ORANGE-RED to RED (slightly more vivid/brilliant than Leishman - more intense eosin interaction)\n- Basophil and mast cell granules are DEEP METACHROMATIC BLUE-PURPLE (much more intensely metachromatic than Leishman - key MGG advantage)\n- Mucin background stains PALE BLUE-GREY (methylene blue component)\n- Bacteria stain DEEP BLUE-PURPLE (azure B intensification - easier to see than in Leishman)\n- Lymphocytes have the DARKEST nuclei of any cell in MGG (azure B effect)\n\nPRIMARY CELLS - MGG-specific morphology:\n- macrophage: LARGEST cell (15-25um, normal 61-93% Belda 2000). Pale BLUE-GREY cytoplasm, VACUOLATED (vacuoles often more prominently punched-out in MGG). Nucleus: eccentric kidney/oval, VERY DEEP BLUE-PURPLE. May contain FEG inclusions (orange-red) or dark debris. Key: LARGEST SIZE + VACUOLATION + deep blue-purple nucleus.\n- neutrophil: 12-15um (threshold neutrophilia >=61% ERS). Nucleus MULTI-LOBED (3-5 lobes), SHARPLY DEFINED DEEP BLUE-PURPLE lobes (azure B makes lobes clearer than Leishman). Cytoplasm pale PINK-LILAC, fine granules may show slight granularity in MGG. Key: SHARPLY DEFINED MULTILOBED NUCLEUS.\n- eosinophil: 10-15um (threshold >=3% ERS universal). Bilobed nucleus DEEP PURPLE. Cytoplasm BRILLIANT ORANGE-RED to RED COARSE GRANULES - typically MORE VIVID than Leishman. CRITICAL: DEGRANULATED EOSINOPHILS - only bilobed nucleus with pale cytoplasm remains - STILL LABEL AS EOSINOPHIL. Sparse granules may be easier to spot in MGG due to enhanced eosin. Key: BRILLIANT ORANGE-RED GRANULES (colour primary identifier).\n- lymphocyte: SMALLEST cell (7-10um, normal <5%). Nucleus VERY DARK BLUE-PURPLE - typically the DARKEST nuclear staining of any cell in MGG (azure B effect). Thin pale blue cytoplasm. Key: SMALL SIZE + VERY DARK NUCLEUS (even darker than in Leishman).\n- basophil: 10-15um. DEEP METACHROMATIC BLUE-PURPLE granules (much more intensely coloured than Leishman - major MGG advantage). Bilobed nucleus often obscured. Distinguish from eosinophil: basophil = BLUE-PURPLE granules; eosinophil = ORANGE-RED granules.\n- mast_cell: Dense DEEP METACHROMATIC PURPLE-VIOLET granules filling entire cell - best visualised in MGG. Round nucleus obscured. More intensely stained than in Leishman.\n- bronchial_epithelial: COLUMNAR shape (taller than wide). DEEP BLUE-PURPLE basal nucleus. Pale blue cytoplasm. Cilia at apex. Often in clusters (Creola bodies = tight clusters).\n- squamous: VERY LARGE flat polygonal cell. Small dense DEEP PURPLE nucleus. Cytoplasm may appear ORANGE-PINK in MGG (eosin stains squamous cytoplasm more pink). >=20% = inadequate (Pizzichini 1996).\n\nMISCELLANEOUS (WITHIN CIRCULAR FIELD ONLY - use dashed circles):\n- feg: FREE EOSINOPHIL GRANULES - extracellular BRILLIANT ORANGE-RED to RED refractile granules - slightly more vivid in MGG than Leishman. Semi-quantify: none/few(1-2)/moderate(2-3)/many(>3) per HPF. Critical per Nair 2021 Firestone - underestimates eosinophilia by 45%.\n- charcot_leyden: Pale PINK-EOSINOPHILIC elongated needle-shaped crystals - may appear more clearly defined in MGG.\n- curschmann: Pale BLUE-GREY coiled mucus plugs (methylene blue stains mucin).\n- creola: Clusters of columnar cells with DEEP BLUE-PURPLE nuclei.\n- mucin: Pale BLUE-GREY amorphous background - more visible than in Leishman.\n- cocci: DEEP BLUE-PURPLE round dots (azure B intensification - easier than Leishman).\n- bacilli: DEEP BLUE-PURPLE rods (azure B - may be more visible than Leishman).\n- coccobacilli, afb, fungal_hyphae, fungal_spores, pollen, vegetable_matter\n\nFor EACH cell WITHIN CIRCULAR FIELD: x,y as percentage 0-100 from top-left.\nIn nonSquamousCells: count of non-squamous nucleated cells.\nIn fegSemiquant: none/few/moderate/many.\n\nIn fieldNarrative write 6 sentences: (1) overall cellularity; (2) predominant cell type with MGG-specific colour description; (3) each cell type with MGG colour and morphology vs expected appearance; (4) STAIN QUALITY ASSESSMENT - is azure B nuclear intensification evident? Are eosinophil granules brilliant orange-red? Are basophil/mast cell granules deeply metachromatic? Is pH correct (if nuclei appear red-purple = too acidic; if cytoplasm over-stained blue = too alkaline)?; (5) FEGs and misc findings; (6) inflammatory phenotype per ERS criteria (>=3% eosinophilia; >=61% neutrophilia).\n\nIMPORTANT OUTPUT LIMITS to ensure complete valid JSON: annotate at most 40 representative cells (prioritise eosinophils and any degranulating eosinophils first, then a representative sample of neutrophils, macrophages, lymphocytes, squamous and bronchial cells - you do not need to mark every single neutrophil if there are hundreds, but you MUST mark every eosinophil and degranulating eosinophil you see). Keep fieldNarrative to 4-5 concise sentences. Keep all percentages as numbers. Ensure the JSON is COMPLETE and properly closed.\n\nReturn ONLY valid JSON:\n{"mode":"upright_mgg","imageQuality":"good","stainQuality":"good","stainType":"MGG","azureBIntensification":"adequate","cells":[{"id":1,"type":"macrophage","x":30.0,"y":50.0,"confidence":"high"}],"summary":{"totalCellsIdentified":0,"macrophage":0,"neutrophil":0,"eosinophil":0,"lymphocyte":0,"basophil":0,"mast_cell":0,"bronchial_epithelial":0,"squamous":0,"nonSquamousCells":0,"macrophagePercent":0.0,"neutrophilPercent":0.0,"eosinophilPercent":0.0,"lymphocytePercent":0.0,"basophilPercent":0.0,"mast_cellPercent":0.0,"bronchial_epithelialPercent":0.0,"squamousPercent":0.0,"fegSemiquant":"none","adequacy":"adequate","adequacyNote":"","inflammatoryPattern":"paucigranulocytic"},"fieldNarrative":"MGG-specific description here.","miscFindings":[],"notes":""}';}
+
+  if(m==='upright_dq'){return 'You are a sputum inflammometry expert. Analyse this Diff-Quik rapid stained cytospin slide from an upright microscope for differential cell count. Diff-Quik is a rapid Romanowsky stain (azure B eosinophilic + thiazine dye) validated against MGG with ICC 0.98-1.00 for neutrophil, eosinophil, and macrophage counts (Ronchi 2014, PMC4109197). Staining time 2 min vs 34 min for MGG.\n\nFIELD BOUNDARY CRITICAL: Only annotate cells WITHIN the visible circular illuminated microscopic field.\n\nUSE THIS SYSTEMATIC DECISION TREE FOR EVERY CELL:\nSTEP 1 - SIZE vs red blood cell (RBC about 7um): same as RBC with dense round nucleus = LYMPHOCYTE; 1.5-2x RBC = GRANULOCYTE (go to Step 2); 2-4x RBC, foamy vacuolated cytoplasm = ALVEOLAR MACROPHAGE; very large flat angular = SQUAMOUS; tall columnar = BRONCHIAL EPITHELIAL.\nSTEP 2 - GRANULOCYTE granule colour + nucleus: ORANGE-RED coarse granules + bilobed nucleus = EOSINOPHIL (most important cell); no orange-red granules, pale cytoplasm, MULTILOBED nucleus = NEUTROPHIL (usually most numerous); purple granules = BASOPHIL.\nSTEP 3 - CONFIRM: NEUTROPHIL = multilobed nucleus mandatory; EOSINOPHIL = orange-red granules (degranulated ones keep bilobed nucleus, still eosinophil); MACROPHAGE = large + vacuolated + eccentric nucleus; LYMPHOCYTE = smallest, single round dense nucleus. NOTE: in Diff-Quik lymphocyte identification is less reliable (ICC 0.76-0.83) - examine nucleus carefully.\n\nEOSINOPHIL MORPHOLOGY SPECTRUM - COUNT ALL AS EOSINOPHILS (eosinophil percentage determines phenotype): (1) INTACT: bilobed nucleus + orange-red granules. (2) DEGRANULATING - CRITICAL: free orange-red granules around or adjacent to a bilobed/rounded nucleus = degranulating eosinophil (type degranulating_eosinophil); most commonly missed. (3) FULLY DEGRANULATED: bilobed nucleus, pale cytoplasm, few granules - still eosinophil. (4) CYTOLYTIC: bare bilobed nucleus with cloud of free orange-red granules. (5) FREE EOSINOPHIL GRANULES (feg): extracellular orange-red clusters, no nucleus - record as feg. (6) CHARCOT-LEYDEN crystals - record as charcot_leyden. NUCLEAR CAVEAT: eosinophil nucleus is bilobed in ~68 percent but can be 1, 3 or 4-5 lobes - GRANULE COLOUR (orange-red), NOT lobe count, is definitive. A trilobed cell with orange-red granules is an EOSINOPHIL; only call neutrophil if multilobed AND no orange-red granules. GOLDEN RULE: any orange-red granular material signals eosinophil activity; when uncertain, orange-red granules favour eosinophil.\nCOMMON ERRORS: degranulated eosinophil mistaken for neutrophil; lymphocyte mistaken for neutrophil; bronchial epithelial mistaken for macrophage.\n\nCOUNTING CALIBRATION - address these known failure modes:\nA) MACROPHAGE OVER-IDENTIFICATION (do not over-call macrophages): only label a cell a macrophage if it is genuinely LARGE (2-4x an RBC) AND has abundant foamy/vacuolated cytoplasm AND a single eccentric kidney/oval nucleus. A medium cell with scant cytoplasm is NOT a macrophage. A degranulated eosinophil with pale cytoplasm is NOT a macrophage. Debris and mucus clumps are NOT macrophages. If unsure, mark confidence low or do not annotate.\nB) SQUAMOUS CELLS ARE OFTEN PRESENT - actively look for squamous epithelial cells: scan the whole field for VERY LARGE, flat, angular polygonal cells with abundant pale cytoplasm and a small central nucleus. Far larger than any leukocyte, often folded or overlapping. Squamous >=20 percent of total = inadequate sample, so they must be reported. Do not overlook them because they are pale or near the field edge (but still inside the illuminated circle).\nC) LYMPHOCYTE IDENTIFICATION (avoid misidentifying lymphocytes): the SMALLEST leukocyte (about RBC size), single ROUND DENSE dark nucleus filling almost the whole cell, thin cytoplasm rim. Do NOT call a lymphocyte a neutrophil (neutrophil nucleus is MULTILOBED, not round). Do NOT call a small degranulated eosinophil a lymphocyte (look for residual orange granules). A bare/naked nucleus from a ruptured cell is NOT a lymphocyte.\nD) WHEN UNCERTAIN: better to mark confidence low than to guess. Only annotate cells identifiable with reasonable confidence. Never place an annotation where there is no clear cell.\n\nDIFF-QUIK STAIN CHARACTERISTICS:\n- Nuclei: PURPLE-BLUE (less intensely blue than MGG due to simpler azure B formula; less deep than MGG)\n- Eosinophil granules: ORANGE-RED coarse granules (slightly less vivid than MGG/Leishman but clearly identifiable)\n- Basophil granules: PURPLE (less intensely metachromatic than MGG)\n- Cytoplasm: generally paler than MGG\n- Lymphocytes: purple nucleus, less dark than MGG - ICC 0.76-0.83 vs MGG (lower reliability than for other cells)\n\nPRIMARY CELLS - Diff-Quik morphology:\n- macrophage: LARGEST cell (15-25um). Pale grey-blue VACUOLATED cytoplasm. Eccentric kidney/oval purple nucleus. Key: LARGEST SIZE + VACUOLATION.\n- neutrophil: 12-15um. Nucleus MULTI-LOBED (3-5 lobes), purple. Pale pink cytoplasm. Key: MULTILOBED NUCLEUS.\n- eosinophil: 10-15um. Bilobed purple nucleus. ORANGE-RED COARSE GRANULES (may be slightly less brilliant than MGG/Leishman but still clearly orange-red and distinctive). CRITICAL: DEGRANULATED EOSINOPHILS - bilobed nucleus only, sparse/absent granules - STILL LABEL EOSINOPHIL. Key: ORANGE-RED GRANULES.\n- lymphocyte: SMALLEST cell (7-10um). Purple nucleus. CAUTION: ICC 0.76-0.83 for lymphocytes vs MGG - less reliable than other cells. Thin pale cytoplasm. Key: SMALL SIZE + DARK ROUND NUCLEUS.\n- basophil: Bilobed nucleus, PURPLE granules (less metachromatic than MGG).\n- mast_cell: Dense purple granules filling cell. Less intensely metachromatic than MGG.\n- bronchial_epithelial: Columnar shape, purple basal nucleus, pale cytoplasm.\n- squamous: Very large flat polygonal cell, small pyknotic nucleus.\n\nMISCELLANEOUS (WITHIN CIRCULAR FIELD ONLY):\n- feg: Free eosinophil granules - orange-red extracellular granules. May be slightly less visible than in MGG/Leishman. Semi-quantify: none/few/moderate/many per HPF.\n- charcot_leyden, curschmann, creola, mucin, cocci, bacilli, coccobacilli, afb, fungal_hyphae, fungal_spores, pollen, vegetable_matter\n\nFor EACH cell WITHIN CIRCULAR FIELD: x,y as percentage 0-100 from top-left.\nIn nonSquamousCells: count of non-squamous nucleated cells.\nIn fegSemiquant: none/few/moderate/many.\n\nIn fieldNarrative write 5 sentences: (1) overall cellularity; (2) predominant cell type and Diff-Quik morphology; (3) each cell type with percentage and morphological description; (4) stain quality - note any lymphocyte identification uncertainty (lower ICC in rapid stain); (5) inflammatory phenotype per ERS criteria.\n\nIMPORTANT OUTPUT LIMITS to ensure complete valid JSON: annotate at most 40 representative cells (prioritise eosinophils and any degranulating eosinophils first, then a representative sample of neutrophils, macrophages, lymphocytes, squamous and bronchial cells - you do not need to mark every single neutrophil if there are hundreds, but you MUST mark every eosinophil and degranulating eosinophil you see). Keep fieldNarrative to 4-5 concise sentences. Keep all percentages as numbers. Ensure the JSON is COMPLETE and properly closed.\n\nReturn ONLY valid JSON:\n{"mode":"upright_dq","imageQuality":"good","stainQuality":"good","stainType":"Diff-Quik","cells":[{"id":1,"type":"macrophage","x":30.0,"y":50.0,"confidence":"high"}],"summary":{"totalCellsIdentified":0,"macrophage":0,"neutrophil":0,"eosinophil":0,"lymphocyte":0,"basophil":0,"mast_cell":0,"bronchial_epithelial":0,"squamous":0,"nonSquamousCells":0,"macrophagePercent":0.0,"neutrophilPercent":0.0,"eosinophilPercent":0.0,"lymphocytePercent":0.0,"basophilPercent":0.0,"mast_cellPercent":0.0,"bronchial_epithelialPercent":0.0,"squamousPercent":0.0,"fegSemiquant":"none","adequacy":"adequate","adequacyNote":"","inflammatoryPattern":"paucigranulocytic"},"fieldNarrative":"Diff-Quik description here.","miscFindings":[],"notes":""}';}
+
+    // UPRIGHT LEISHMAN - Full PICOT-based prompt with discrimination decision tree
+  return 'You are an expert sputum cytologist performing a differential cell count on a Leishman-stained induced sputum cytospin per ERS/Hargreave/Nair protocol. Accurate identification of neutrophils, eosinophils, alveolar macrophages, lymphocytes, squamous cells and bronchial epithelial cells is the core task.\n\nFIELD BOUNDARY CRITICAL: Only annotate cells WITHIN the visible circular illuminated field. Never annotate the dark area outside the circular field.\n\nUSE THIS SYSTEMATIC DECISION TREE FOR EVERY CELL:\n\nSTEP 1 - JUDGE SIZE relative to a red blood cell (RBC ~7 micrometres, the smallest reference object):\n- About the SAME size as an RBC, with a dense round nucleus filling the cell and almost no cytoplasm = LYMPHOCYTE (smallest leukocyte, 7-10um).\n- 1.5 to 2x RBC size = GRANULOCYTE (neutrophil, eosinophil or basophil) - go to Step 2.\n- 2 to 4x RBC size, abundant foamy/vacuolated cytoplasm = ALVEOLAR MACROPHAGE (largest common cell, 15-40um).\n- VERY LARGE, flat, angular polygonal sheet with a tiny central nucleus = SQUAMOUS EPITHELIAL CELL (30-60um, oral contamination).\n- Tall COLUMNAR cell (taller than wide), sometimes with cilia/terminal bar at one end = BRONCHIAL EPITHELIAL CELL.\n\nSTEP 2 - FOR GRANULOCYTES, judge GRANULE COLOUR and NUCLEUS:\n- BRIGHT ORANGE-RED / BRICK-RED coarse granules packing the cytoplasm, bilobed (spectacle-shaped) nucleus = EOSINOPHIL. The orange-red colour is unique - no other cell has it. This is the single most important diagnostic cell.\n- NO orange-red granules; pale neutral pink-lilac cytoplasm; nucleus MULTILOBED (3-5 lobes joined by thin chromatin strands) = NEUTROPHIL. The multilobed nucleus is the defining feature. Neutrophils are usually the most numerous cell in inflamed sputum.\n- DARK BLUE-PURPLE coarse granules (NOT orange-red), nucleus often obscured = BASOPHIL (rare).\n\nSTEP 3 - CONFIRM the four high-priority cells against these checks:\n- NEUTROPHIL: multilobed nucleus is mandatory. If the nucleus is a single round dense mass, it is NOT a neutrophil (likely lymphocyte). If granules are orange-red, it is an eosinophil not a neutrophil.\n- EOSINOPHIL: orange-red granules are mandatory. A degranulated eosinophil (bilobed nucleus, pale cytoplasm, sparse/absent granules) IS STILL an eosinophil - look for the bilobed nucleus and any residual orange tint. Do not miscall degranulated eosinophils as neutrophils.\n\nEOSINOPHIL MORPHOLOGY SPECTRUM - COUNT ALL OF THESE AS EOSINOPHILS (eosinophil percentage determines the inflammatory phenotype, so missing any form causes misclassification):\n1. INTACT EOSINOPHIL: bilobed (spectacle-shaped) nucleus, cytoplasm packed with bright orange-red coarse granules. Classic form.\n2. DEGRANULATING EOSINOPHIL - CRITICAL RULE: whenever you see free orange-red granules scattered immediately AROUND or ADJACENT TO a bilobed or rounded nucleus, this is a DEGRANULATING EOSINOPHIL - label it as an eosinophil (type degranulating_eosinophil). The granules spilling next to the bilobed nucleus are the diagnostic clue. This is the most commonly MISSED form and the main cause of eosinophil undercounting.\n3. FULLY DEGRANULATED EOSINOPHIL (per CAP Hematology Glossary): only a FEW orange-red granules remaining visible within FAINT PINK cytoplasm; nucleus typically bilobed but may be multilobed. The residual orange granules plus pink cytoplasm are the clue. Still an eosinophil - this is a major source of undercounting.\n4. CYTOLYTIC / LYSED EOSINOPHIL: ruptured cell with a bare bilobed nucleus surrounded by a cloud of free orange-red granules and cellular debris. Count as eosinophil.\n5. FREE EOSINOPHIL GRANULES (FEGs): clusters of extracellular orange-red granules with NO nucleus - do not count as a whole eosinophil but RECORD as feg and report semi-quantitatively (none/few/moderate/many per HPF). Per Nair 2021, FEGs indicate eosinophil activity and their omission underestimates eosinophilia by 45 percent.\n6. CHARCOT-LEYDEN CRYSTALS: needle-shaped or bipyramidal pinkish-orange crystals formed from eosinophil granule proteins - record as charcot_leyden; they confirm eosinophilic inflammation even when intact eosinophils are scarce.\n7. EOSINOPHIL INSIDE A MACROPHAGE: macrophages may contain ingested orange-red granules - identify the cell as a macrophage but note the eosinophil activity.\nNUCLEAR SHAPE CAVEAT: the eosinophil nucleus is bilobed in about 68 percent of cells, but 6 percent are single-lobed (non-segmented), 22 percent have three lobes and 4 percent have four to five lobes. THEREFORE THE GRANULE COLOUR (ORANGE-RED), NOT THE NUMBER OF NUCLEAR LOBES, IS THE DEFINITIVE IDENTIFIER. A cell with three nuclear lobes AND orange-red granules is an EOSINOPHIL, not a neutrophil. Only call a cell a neutrophil if it has a multilobed nucleus AND no orange-red granules (pale neutral cytoplasm). GOLDEN RULE: any orange-red granular material, whether inside an intact cell, spilling from a nucleus, or free in the background, signals eosinophil activity and must be captured. When uncertain between a degranulating eosinophil and a neutrophil, the presence of ANY orange-red granules favours eosinophil.\n- ALVEOLAR MACROPHAGE: must be large with vacuolated/foamy cytoplasm and a single eccentric kidney/oval nucleus. Presence confirms the sample is genuine lower-airway sputum, not saliva. Do not confuse with bronchial epithelial cells (which are columnar) or squamous cells (which are flat and angular).\n- LYMPHOCYTE: smallest cell, dense round nucleus, scant cytoplasm rim, high nuclear-to-cytoplasmic ratio. Distinguish from neutrophil by the SINGLE ROUND (not multilobed) nucleus and smaller size.\n\nCOMMON ERRORS TO AVOID:\n- Calling a degranulated eosinophil a neutrophil (check for bilobed nucleus and orange residue).\n- Calling a lymphocyte a neutrophil (lymphocyte nucleus is round and single, not multilobed).\n- Calling a bronchial epithelial cell a macrophage (bronchial cells are columnar with basal nucleus; macrophages are rounded with central/eccentric nucleus and vacuoles).\n- Calling a squamous cell a macrophage (squamous cells are far larger, flat, angular, with a tiny nucleus).\n\nCOUNTING CALIBRATION - address these known failure modes:\nA) MACROPHAGE OVER-IDENTIFICATION (do not over-call macrophages): only label a cell a macrophage if it is genuinely LARGE (2-4x an RBC) AND has abundant foamy/vacuolated cytoplasm AND a single eccentric kidney/oval nucleus. A medium cell with scant cytoplasm is NOT a macrophage. A degranulated eosinophil with pale cytoplasm is NOT a macrophage. Debris and mucus clumps are NOT macrophages. If you are unsure whether something is a macrophage, mark confidence as low or do not annotate it.\nB) SQUAMOUS CELLS ARE OFTEN PRESENT - actively look for squamous epithelial cells: scan the whole field for VERY LARGE, flat, angular polygonal cells with abundant pale cytoplasm and a small central nucleus. They are far larger than any leukocyte and often partly folded or overlapping. Squamous contamination is common in sputum and must be reported (squamous >=20 percent of total = inadequate sample). Do not overlook them just because they are pale or at the field edge (but still inside the illuminated circle).\nC) LYMPHOCYTE IDENTIFICATION (avoid misidentifying lymphocytes): a lymphocyte is the SMALLEST leukocyte (about the size of an RBC), with a single ROUND DENSE dark nucleus filling almost the whole cell and only a thin rim of cytoplasm. Do NOT call a lymphocyte a neutrophil (neutrophil nucleus is MULTILOBED, not round) and do NOT call a small degranulated eosinophil a lymphocyte (look for residual orange granules). A bare/naked nucleus from a ruptured cell is NOT a lymphocyte.\nD) WHEN UNCERTAIN: it is better to mark a cell confidence as low than to guess. Only annotate cells you can identify with reasonable confidence. Do not place an annotation where there is no clear cell.\n\nLEISHMAN STAIN COLOURS: nuclei blue-purple; eosinophil granules bright orange-red; neutrophil cytoplasm pale pink; macrophage cytoplasm pale grey-blue; lymphocyte nucleus dark purple.\n\nDETAILED MORPHOLOGY (Belda 2000 reference ranges):\n\n- macrophage: LARGEST cell (15-25um, normal 61-93% in healthy adults - Belda 2000). Pale grey-blue cytoplasm VACUOLATED (clear spaces from phagocytic activity). Eccentric kidney/oval nucleus pale purple. May contain ingested debris, carbon, lipid, or FREE EOSINOPHIL GRANULES (ingested FEGs appear as orange-red inclusions within macrophage cytoplasm). Key: LARGEST SIZE + VACUOLATION.\n\n- neutrophil: 12-15um (normal <61%, threshold for neutrophilia >=61% per ERS). Nucleus MULTI-LOBED: 3-5 lobes joined by thin strands, dark purple. Pale pink cytoplasm fine granules. Band forms may be present. Key: MULTILOBED NUCLEUS.\n\n- eosinophil: 10-15um (normal <3%, threshold >=3% per ERS; >=2.3% per Firestone/Nair Wright stain). Bilobed purple nucleus. Cytoplasm filled with BRIGHT ORANGE-RED COARSE GRANULES - most distinctive feature. CRITICAL: DEGRANULATED EOSINOPHILS have sparse/absent granules but retain bilobed nucleus - STILL LABEL AS EOSINOPHIL. Failure to count degranulated eosinophils is major source of undercounting. Key: BRIGHT ORANGE-RED GRANULES or BILOBED NUCLEUS WITH PALE CYTOPLASM.\n\n- lymphocyte: SMALLEST cell (7-10um, normal <5%). Large round DARK PURPLE nucleus filling most of cell. Very thin pale blue cytoplasm rim. Key: SMALL SIZE + LARGE DARK ROUND NUCLEUS.\n\n- basophil: 10-15um. Bilobed/irregular nucleus (often obscured). DARK BLUE-PURPLE COARSE GRANULES - less bright than eosinophil, colour is BLUE not orange. Rare in sputum (<1%).\n\n- mast_cell: Round nucleus densely packed with METACHROMATIC purple granules filling entire cell. More granule-dense than basophil. Toluidine blue preferred for definitive identification.\n\n- bronchial_epithelial: COLUMNAR shape - taller than wide. Nucleus at base. Pale cytoplasm. May show cilia at apex. Often in clusters/sheets. Normal <3%.\n\n- squamous: VERY LARGE flat polygonal cell - dwarfs all other cells (30-60+um). Small dense pyknotic nucleus. Oral contamination. >=20% = inadequate sample per Pizzichini 1996.\n\nMISCELLANEOUS - WITHIN CIRCULAR FIELD ONLY:\n- feg: FREE EOSINOPHIL GRANULES - extracellular bright orange-red refractile granules scattered in background (NOT inside cells). Critical per Nair 2021: FEGs indicate eosinophil degranulation; failure to count FEGs underestimates eosinophilia by 45%. Semi-quantify: none/few(1-2)/moderate(2-3)/many(>3) per HPF.\n- charcot_leyden: Elongated needle-shaped or bipyramidal pale pink crystals. Derived from eosinophil granule proteins. Confirm eosinophilic inflammation even when intact eosinophils reduced.\n- curschmann: Coiled mucus plugs from small airway plugging. Associated with asthma.\n- creola: Tight clusters of shed bronchial epithelial cells. Marker of airway epithelial damage strongly associated with asthma.\n- refractile_cell: Bright refractile structures WITHIN illuminated circular field ONLY.\n- mucin, cocci, bacilli, coccobacilli, afb, fungal_hyphae, fungal_spores, pollen, vegetable_matter\n\nFor EACH cell WITHIN CIRCULAR FIELD: x,y as percentage 0-100 from top-left.\nIn nonSquamousCells: count of non-squamous nucleated cells this field (tracking toward 400-cell ERS target).\nFor fegSemiquant: semi-quantitative FEG count (none/few/moderate/many).\n\nIn fieldNarrative write 6 sentences: (1) overall cellularity and density; (2) predominant cell type with specific Leishman morphology description; (3) each present cell type with morphological description and approximate proportion vs ERS normal ranges; (4) staining quality - are orange-red eosinophil granules well-preserved? Are neutrophil nuclear lobes clearly distinguishable? Are there degranulated eosinophils?; (5) FEGs and miscellaneous findings (Charcot-Leyden, Creola, organisms); (6) inflammatory phenotype classification per ERS criteria with clinical significance.\n\nIMPORTANT OUTPUT LIMITS to ensure complete valid JSON: annotate at most 40 representative cells (prioritise eosinophils and any degranulating eosinophils first, then a representative sample of neutrophils, macrophages, lymphocytes, squamous and bronchial cells - you do not need to mark every single neutrophil if there are hundreds, but you MUST mark every eosinophil and degranulating eosinophil you see). Keep fieldNarrative to 4-5 concise sentences. Keep all percentages as numbers. Ensure the JSON is COMPLETE and properly closed.\n\nReturn ONLY valid JSON:\n{"mode":"upright","imageQuality":"good","stainQuality":"good","cells":[{"id":1,"type":"macrophage","x":30.0,"y":50.0,"confidence":"high"}],"summary":{"totalCellsIdentified":0,"macrophage":0,"neutrophil":0,"eosinophil":0,"lymphocyte":0,"basophil":0,"mast_cell":0,"bronchial_epithelial":0,"squamous":0,"nonSquamousCells":0,"macrophagePercent":0.0,"neutrophilPercent":0.0,"eosinophilPercent":0.0,"lymphocytePercent":0.0,"basophilPercent":0.0,"mast_cellPercent":0.0,"bronchial_epithelialPercent":0.0,"squamousPercent":0.0,"fegSemiquant":"none","adequacy":"adequate","adequacyNote":"","inflammatoryPattern":"paucigranulocytic"},"fieldNarrative":"Description here.","miscFindings":[],"notes":""}';
+}
+
+function repairJSON(s){
+  // Attempt to recover a valid JSON object from a possibly-truncated string.
+  if(!s)return null;
+  // Trim to the first opening brace
+  var start=s.indexOf('{');
+  if(start>0)s=s.substring(start);
+  // Try progressively: close any open string, then balance brackets.
+  // Step 1: if we're inside an unterminated string, close it.
+  // Count unescaped quotes; if odd, the last string is open.
+  var inStr=false,esc=false,lastSafe=-1,depthObj=0,depthArr=0;
+  var stack=[];
+  for(var i=0;i<s.length;i++){
+    var ch=s[i];
+    if(esc){esc=false;continue;}
+    if(ch==='\\'){esc=true;continue;}
+    if(inStr){
+      if(ch==='"'){inStr=false;}
+      continue;
+    }
+    if(ch==='"'){inStr=true;continue;}
+    if(ch==='{'){stack.push('}');}
+    else if(ch==='['){stack.push(']');}
+    else if(ch==='}'||ch===']'){if(stack.length)stack.pop();}
+    // Record a safe truncation point at the end of a complete value (after } ] or ")
+    if(ch==='}'||ch===']'){lastSafe=i;}
+  }
+  // Build candidate 1: from current position, close open string + brackets
+  var candidates=[];
+  var c1=s;
+  if(inStr)c1+='"';
+  // Remove trailing incomplete content after last comma if it looks partial
+  // Close all open brackets in reverse
+  var close1=stack.slice().reverse().join('');
+  candidates.push(c1+close1);
+  // Candidate 2: truncate to last safe complete value, then close brackets
+  if(lastSafe>0){
+    var s2=s.substring(0,lastSafe+1);
+    // recompute open brackets for s2
+    var st2=[],inS2=false,es2=false;
+    for(var j=0;j<s2.length;j++){
+      var c2=s2[j];
+      if(es2){es2=false;continue;}
+      if(c2==='\\'){es2=true;continue;}
+      if(inS2){if(c2==='"')inS2=false;continue;}
+      if(c2==='"'){inS2=true;continue;}
+      if(c2==='{')st2.push('}');
+      else if(c2==='[')st2.push(']');
+      else if(c2==='}'||c2===']'){if(st2.length)st2.pop();}
+    }
+    // strip a trailing comma
+    s2=s2.replace(/,\s*$/,'');
+    candidates.push(s2+st2.slice().reverse().join(''));
+  }
+  // Candidate 3: cut off any dangling ',"key":...' fragment and close
+  var lastComma=s.lastIndexOf(',');
+  if(lastComma>0){
+    var s3=s.substring(0,lastComma);
+    var st3=[],inS3=false,es3=false;
+    for(var k=0;k<s3.length;k++){
+      var c3=s3[k];
+      if(es3){es3=false;continue;}
+      if(c3==='\\'){es3=true;continue;}
+      if(inS3){if(c3==='"')inS3=false;continue;}
+      if(c3==='"'){inS3=true;continue;}
+      if(c3==='{')st3.push('}');
+      else if(c3==='[')st3.push(']');
+      else if(c3==='}'||c3===']'){if(st3.length)st3.pop();}
+    }
+    candidates.push(s3+st3.slice().reverse().join(''));
+  }
+  for(var n=0;n<candidates.length;n++){
+    try{var r=JSON.parse(candidates[n]);if(r&&r.summary)return r;}catch(e){}
+  }
+  // Last resort: try each candidate without requiring summary
+  for(var m=0;m<candidates.length;m++){
+    try{var r2=JSON.parse(candidates[m]);if(r2)return r2;}catch(e2){}
+  }
+  return null;
+}
+
+async function doAnalyse(){
+  if(!CB64||!CM||!SK)return;
+  setLoad(true);clearErr();
+  ['ressec','miscsec','gridsec','notesarea'].forEach(hide);
+  CPNG=null;CUR_RESULT=null;
+  try{
+    var resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':SK,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:8000,messages:[{role:'user',content:[
+        {type:'image',source:{type:'base64',media_type:CMIME,data:CB64}},
+        {type:'text',text:getPrompt(CM)}
+      ]}]})
+    });
+    if(!resp.ok){var ed=await resp.json();throw new Error(ed.error?ed.error.message:'API error '+resp.status);}
+    var data=await resp.json();
+    var txt='';
+    if(data.content){for(var i=0;i<data.content.length;i++){if(data.content[i].type==='text'){txt=data.content[i].text;break;}}}
+    var clean=txt.replace(/```json/g,'').replace(/```/g,'').trim();
+    var si=clean.indexOf('{'),ei=clean.lastIndexOf('}');
+    if(si!==-1&&ei!==-1)clean=clean.substring(si,ei+1);
+    var result=null;
+    try{
+      result=JSON.parse(clean);
+    }catch(je){
+      // Truncation-aware repair: the response may have been cut off mid-JSON.
+      result=repairJSON(clean);
+    }
+    if(!result){throw new Error('Could not parse AI response. The image may be too complex - try a clearer/cropped image, or retry.');}
+    CUR_RESULT=result;
+    SESS.imgs++;
+    if(result.mode==='upright'||result.mode==='upright_mgg'||result.mode==='upright_dq'){SESS.dcNS+=(result.summary.nonSquamousCells||result.summary.totalCellsIdentified||0);}
+    else if(result.mode==='inverted'||result.mode==='upright_hemo'){
+      SESS.tccV+=(result.summary.totalViable||0);SESS.tccD+=(result.summary.totalDead||0);
+      if(result.gridSquares&&result.gridSquares.detected)SESS.tccSq+=result.gridSquares.detected.length;
+    }
+    showResults(result);setStep(3);
+    setupValidationPanel(result);
+  }catch(e){showErr('Analysis failed: '+e.message);}
+  finally{setLoad(false);}
+}
+
+function showResults(r){
+  show('ressec');
+  G('cph').style.display='flex';G('cv').style.display='none';
+  drawCanvas(r);renderSum(r);renderDtbl(r);renderMisc(r);renderProg(r);
+  if(r.fieldNarrative){G('fdtxt').textContent=r.fieldNarrative;show('fdbox');}else hide('fdbox');
+  renderIns(r);
+  if((r.mode==='inverted'||r.mode==='upright_hemo')&&r.gridDetected&&r.gridSquares&&r.gridSquares.detected&&r.gridSquares.detected.length){renderGrid(r);show('gridsec');}
+  if(r.notes){G('notescontent').innerHTML='<strong>Additional notes:</strong> '+r.notes;show('notesarea');}
+}
+
+function setupValidationPanel(r){
+  hide('val-dc');hide('val-hemo');hide('val-petri');
+  if(r.mode==='upright'||r.mode==='upright_mgg'||r.mode==='upright_dq'){show('val-dc');}
+  else if(r.mode==='inverted'||r.mode==='upright_hemo'){show('val-hemo');}
+  else if(r.mode==='petri'){show('val-petri');}
+  G('valbody').classList.remove('open');
+  G('valtoggle-lbl').textContent='Click to open ▼';
+  G('val-saved-msg').textContent='';
+  G('comptbl-wrap').classList.add('hidden');
+  // Clear inputs
+  ['v-mac','v-neu','v-eos','v-lym','v-bas','v-mast','v-be','v-sq','v-viable','v-dead','v-viab-pct'].forEach(function(id){var el=G(id);if(el)el.value='';});
+  G('v-comments').value='';
+  G('val-total').textContent='0%';
+  show('valpanel');
+}
+
+function toggleVal(){
+  var body=G('valbody');
+  body.classList.toggle('open');
+  G('valtoggle-lbl').textContent=body.classList.contains('open')?'Click to close ▲':'Click to open ▼';
+  if(body.classList.contains('open'))setStep(4);
+}
+
+function autoCalcTotal(){
+  var fields=['v-mac','v-neu','v-eos','v-lym','v-bas','v-mast','v-be'];
+  var total=fields.reduce(function(a,id){var el=G(id);return a+(el&&el.value?parseFloat(el.value)||0:0);},0);
+  G('val-total').textContent=total.toFixed(1)+'%';
+  G('val-total').style.color=Math.abs(total-100)<5?'var(--gn)':'var(--am)';
+}
+
+function getAgreement(ai,expert,type){
+  var diff=Math.abs((ai||0)-(expert||0));
+  if(type==='eos'){return diff<=1?'Agree':diff<=3?'Partial':'Disagree';}
+  if(type==='neu'){return diff<=5?'Agree':diff<=15?'Partial':'Disagree';}
+  if(type==='mac'){return diff<=10?'Agree':diff<=20?'Partial':'Disagree';}
+  if(type==='lym'){return diff<=2?'Agree':diff<=5?'Partial':'Disagree';}
+  return diff<=5?'Agree':diff<=10?'Partial':'Disagree';
+}
+
+function showComparison(){
+  if(!CUR_RESULT||CUR_RESULT.mode!=='upright'){alert('Comparison available for Leishman cytospin mode only.');return;}
+  var s=CUR_RESULT.summary;
+  var rows=[
+    ['Macrophage','macrophagePercent','v-mac','mac'],
+    ['Neutrophil','neutrophilPercent','v-neu','neu'],
+    ['Eosinophil','eosinophilPercent','v-eos','eos'],
+    ['Lymphocyte','lymphocytePercent','v-lym','lym'],
+    ['Basophil','basophilPercent','v-bas','any'],
+    ['Mast cell','mast_cellPercent','v-mast','any'],
+    ['Bronchial epith.','bronchial_epithelialPercent','v-be','any'],
+    ['Squamous','squamousPercent','v-sq','any'],
+  ];
+  var html='<table><thead><tr><th>Cell type</th><th style="color:var(--cy)">AI %</th><th style="color:var(--val)">Expert %</th><th>Difference</th><th>Agreement</th></tr></thead><tbody>';
+  var agrees=0;
+  rows.forEach(function(row){
+    var ai=s[row[1]]||0;
+    var expert=parseFloat(G(row[2]).value)||0;
+    var diff=(expert-ai).toFixed(1);
+    var agr=getAgreement(ai,expert,row[3]);
+    var agrClass=agr==='Agree'?'agree':agr==='Partial'?'partial':'disagree';
+    if(agr==='Agree')agrees++;
+    html+='<tr><td>'+row[0]+'</td><td class="mono ai">'+ai.toFixed(1)+'%</td><td class="mono expert">'+expert.toFixed(1)+'%</td><td class="mono">'+(diff>0?'+':'')+diff+'%</td><td class="'+agrClass+'">'+agr+'</td></tr>';
+  });
+  html+='</tbody></table>';
+  var aiPat=s.inflammatoryPattern||'--';
+  var expPat=G('v-pattern').value||'--';
+  var patMatch=aiPat===expPat?'<span style="color:var(--gn)">&#10003; Match</span>':'<span style="color:var(--rd)">&#10007; Mismatch</span>';
+  html+='<div style="padding:10px 14px;border-top:1px solid var(--br);font-size:12px;display:flex;gap:20px;">'
+    +'<span>AI pattern: <b style="color:var(--cy)">'+aiPat+'</b></span>'
+    +'<span>Expert pattern: <b style="color:var(--val)">'+expPat+'</b></span>'
+    +'<span>'+patMatch+'</span>'
+    +'<span style="margin-left:auto;color:var(--tx3)">FEG (expert): <b style="color:var(--val)">'+G('v-feg').value+'</b></span>'
+    +'</div>';
+  G('comptbl').innerHTML=html;
+  show('comptbl-wrap');
+}
+
+function saveValidation(){
+  if(!CUR_RESULT){alert('Run an AI analysis first.');return;}
+  var s=CUR_RESULT.summary||{};
+  var rec={
+    sample_id:getSID(),
+    timestamp:new Date().toISOString(),
+    mode:CUR_RESULT.mode,
+    image_quality:CUR_RESULT.imageQuality||'',
+    stain_quality:CUR_RESULT.stainQuality||'',
+    stain_type:CUR_RESULT.stainType||(CUR_RESULT.mode==='upright_mgg'?'MGG':CUR_RESULT.mode==='upright_dq'?'Diff-Quik':'Leishman'),
+    expert_stain:G('v-stain').value||'',
+    ai_adequacy:s.adequacy||'',
+    ai_inflammatory_pattern:s.inflammatoryPattern||'',
+    ai_macrophage:s.macrophagePercent||0,
+    ai_neutrophil:s.neutrophilPercent||0,
+    ai_eosinophil:s.eosinophilPercent||0,
+    ai_lymphocyte:s.lymphocytePercent||0,
+    ai_basophil:s.basophilPercent||0,
+    ai_mast_cell:s.mast_cellPercent||0,
+    ai_bronchial_epith:s.bronchial_epithelialPercent||0,
+    ai_squamous:s.squamousPercent||0,
+    ai_feg_semiquant:s.fegSemiquant||'none',
+    ai_total_cells:s.totalCellsIdentified||0,
+    ai_viable:s.totalViable||0,
+    ai_dead:s.totalDead||0,
+    ai_viability:s.viabilityPercent||0,
+    expert_macrophage:parseFloat(G('v-mac').value)||0,
+    expert_neutrophil:parseFloat(G('v-neu').value)||0,
+    expert_eosinophil:parseFloat(G('v-eos').value)||0,
+    expert_lymphocyte:parseFloat(G('v-lym').value)||0,
+    expert_basophil:parseFloat(G('v-bas').value)||0,
+    expert_mast_cell:parseFloat(G('v-mast').value)||0,
+    expert_bronchial_epith:parseFloat(G('v-be').value)||0,
+    expert_squamous:parseFloat(G('v-sq').value)||0,
+    expert_feg:G('v-feg').value||'none',
+    expert_inflammatory_pattern:G('v-pattern').value||'',
+    expert_adequacy:G('v-adq').value||G('v-quality').value||'',
+    expert_viable:parseFloat(G('v-viable').value)||0,
+    expert_dead:parseFloat(G('v-dead').value)||0,
+    expert_viability:parseFloat(G('v-viab-pct').value)||0,
+    expert_plugs:G('v-plugs').value||'',
+    comments:G('v-comments').value||'',
+    agreement_eosinophil:getAgreement(s.eosinophilPercent||0,parseFloat(G('v-eos').value)||0,'eos'),
+    agreement_neutrophil:getAgreement(s.neutrophilPercent||0,parseFloat(G('v-neu').value)||0,'neu'),
+    phenotype_match:(s.inflammatoryPattern||'')===G('v-pattern').value?'Yes':'No',
+    field_narrative:G('fdtxt').textContent||''
+  };
+  rec.agreement_overall=([rec.agreement_eosinophil,rec.agreement_neutrophil].filter(function(a){return a==='Agree';}).length===2)?'Agree':'Partial';
+  VAL_RECORDS.push(rec);
+  updateSessionStats();
+  G('val-saved-msg').textContent='Saved! ('+VAL_RECORDS.length+' records total)';
+  G('val-saved-msg').style.color='var(--gn)';
+  show('sess-table-wrap');
+  updateSessTable();
+}
+
+function updateSessionStats(){
+  var n=VAL_RECORDS.length;
+  G('sess-total').textContent=n;
+  G('sess-count').textContent=n+' validation'+(n!==1?'s':'')+' recorded';
+  if(n===0)return;
+  var dc=VAL_RECORDS.filter(function(r){return r.mode==='upright';});
+  if(dc.length){
+    var eosAgree=dc.filter(function(r){return r.agreement_eosinophil==='Agree';}).length;
+    var phenoMatch=dc.filter(function(r){return r.phenotype_match==='Yes';}).length;
+    G('sess-eos-match').textContent=Math.round(eosAgree/dc.length*100)+'%';
+    G('sess-pheno-match').textContent=Math.round(phenoMatch/dc.length*100)+'%';
+    var allAgree=dc.filter(function(r){return r.agreement_overall==='Agree';}).length;
+    G('sess-agree').textContent=Math.round(allAgree/dc.length*100)+'%';
+  }
+}
+
+function updateSessTable(){
+  var tbody=G('sess-rows');
+  tbody.innerHTML='';
+  var recent=VAL_RECORDS.slice(-5).reverse();
+  recent.forEach(function(r){
+    var tr=document.createElement('tr');
+    var time=new Date(r.timestamp).toLocaleTimeString();
+    var agrcls=r.agreement_eosinophil==='Agree'?'agree':r.agreement_eosinophil==='Partial'?'partial':'disagree';
+    tr.innerHTML='<td class="mono" style="font-size:11px">'+r.sample_id+'</td>'
+      +'<td>'+r.mode+'</td>'
+      +'<td class="mono ai">'+r.ai_eosinophil.toFixed(1)+'%</td>'
+      +'<td class="mono expert">'+r.expert_eosinophil.toFixed(1)+'%</td>'
+      +'<td>'+r.ai_inflammatory_pattern+'</td>'
+      +'<td>'+r.expert_inflammatory_pattern+'</td>'
+      +'<td class="'+agrcls+'">'+r.agreement_eosinophil+'</td>'
+      +'<td style="font-size:11px;color:var(--tx3)">'+time+'</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function dlCSV(){
+  if(!VAL_RECORDS.length){alert('No validation records yet. Run an analysis and save validation first.');return;}
+  var keys=Object.keys(VAL_RECORDS[0]);
+  var csv=keys.join(',')+'\n';
+  VAL_RECORDS.forEach(function(r){
+    csv+=keys.map(function(k){
+      var v=r[k]===null||r[k]===undefined?'':String(r[k]);
+      if(v.indexOf(',')!==-1||v.indexOf('"')!==-1||v.indexOf('\n')!==-1)v='"'+v.replace(/"/g,'""')+'"';
+      return v;
+    }).join(',')+'\n';
+  });
+  var blob=new Blob([csv],{type:'text/csv'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;a.download='Sputum_Validation_'+new Date().toISOString().slice(0,10)+'.csv';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(function(){URL.revokeObjectURL(url);},1000);
+}
+
+// ── CANVAS ──────────────────────────────────────────────────
+
+function drawCanvas(r){
+  var cv=G('cv'),ctx=cv.getContext('2d'),img=new Image();
+  img.onload=function(){
+    var MAX=900,sc=img.width>MAX?MAX/img.width:1;
+    cv.width=Math.round(img.width*sc);cv.height=Math.round(img.height*sc);
+    ctx.drawImage(img,0,0,cv.width,cv.height);
+
+    // ── GEOMETRIC FIELD DETECTION ────────────────────────────────
+    // Detect the illuminated circular field by sampling pixels.
+    // The field is bright (high luminance); outside is dark.
+    // We scan the image data to find the bounding box of bright pixels,
+    // then compute the inscribed circle as the field boundary.
+    var imgData=ctx.getImageData(0,0,cv.width,cv.height);
+    var px=imgData.data;
+    var BRIGHT_THRESH=60; // min luminance to be considered "in field"
+    var minX=cv.width,maxX=0,minY=cv.height,maxY=0;
+    var step=4; // sample every 4th pixel for speed
+    for(var row=0;row<cv.height;row+=step){
+      for(var col=0;col<cv.width;col+=step){
+        var idx=(row*cv.width+col)*4;
+        var lum=(px[idx]*0.299+px[idx+1]*0.587+px[idx+2]*0.114);
+        if(lum>BRIGHT_THRESH){
+          if(col<minX)minX=col;if(col>maxX)maxX=col;
+          if(row<minY)minY=row;if(row>maxY)maxY=row;
+        }
+      }
+    }
+    // Field centre and radius from bounding box
+    var FCX=Math.round((minX+maxX)/2);
+    var FCY=Math.round((minY+maxY)/2);
+    // Use slightly smaller radius to stay strictly inside field
+    var FR=Math.round(Math.min(maxX-minX,maxY-minY)/2*0.90);
+    // Fallback: if detection fails (very dark/overexposed image), use full image centre
+    if(FR<50||minX===cv.width){FCX=Math.round(cv.width/2);FCY=Math.round(cv.height/2);FR=Math.round(Math.min(cv.width,cv.height)*0.45);}
+
+    // Draw field boundary indicator (subtle)
+    ctx.beginPath();ctx.arc(FCX,FCY,FR,0,Math.PI*2);
+    ctx.strokeStyle='rgba(34,211,238,0.25)';ctx.lineWidth=1.5;ctx.setLineDash([6,4]);ctx.stroke();ctx.setLineDash([]);
+
+    // ── FILTER AND ANNOTATE CELLS ────────────────────────────────
+    var cells=r.cells||[];
+    // Filter 1: confidence (drop low confidence)
+    var filtered=cells.filter(function(cell){return cell.confidence!=='low';});
+    // Filter 2: must be inside field circle (geometric check)
+    filtered=filtered.filter(function(cell){
+      var cx=(cell.x/100)*cv.width,cy=(cell.y/100)*cv.height;
+      var dx=cx-FCX,dy=cy-FCY;
+      return Math.sqrt(dx*dx+dy*dy)<=FR;
+    });
+
+    var rad=Math.min(cv.width,cv.height)*0.018; // slightly smaller circles
+    var fs=Math.max(8,rad*0.7);
+
+    filtered.forEach(function(cell){
+      var m=CMETA[cell.type];if(!m)return;
+      var cx=(cell.x/100)*cv.width,cy=(cell.y/100)*cv.height;
+
+      // Draw annotation circle on cell
+      ctx.beginPath();ctx.arc(cx,cy,rad,0,Math.PI*2);
+      ctx.strokeStyle=m.color;ctx.lineWidth=Math.max(1.5,rad*0.2);
+      if(m.g==='m'){ctx.setLineDash([3,2]);}else{ctx.setLineDash([]);}
+      ctx.stroke();ctx.setLineDash([]);
+      // Centre dot
+      ctx.beginPath();ctx.arc(cx,cy,rad*0.15,0,Math.PI*2);
+      ctx.fillStyle=m.color;ctx.fill();
+
+      // Smart label placement: find best direction away from cell
+      // to place label, keeping it inside field
+      var labelOffset=rad+6;
+      var angles=[0,Math.PI/4,Math.PI/2,3*Math.PI/4,Math.PI,-Math.PI/4,-Math.PI/2,-3*Math.PI/4];
+      ctx.font='bold '+fs+'px monospace';
+      var tw=ctx.measureText(m.code).width;
+      var lbx=cx+labelOffset,lby=cy-fs*0.5; // default: right
+      // Try to find a direction where label stays in field
+      var bestDist=0;
+      angles.forEach(function(ang){
+        var tx=cx+Math.cos(ang)*(labelOffset+tw/2);
+        var ty=cy+Math.sin(ang)*labelOffset;
+        var dFromCentre=Math.sqrt((tx-FCX)*(tx-FCX)+(ty-FCY)*(ty-FCY));
+        if(dFromCentre<FR && dFromCentre>bestDist){bestDist=dFromCentre;lbx=cx+Math.cos(ang)*labelOffset;lby=cy+Math.sin(ang)*labelOffset;}
+      });
+
+      // Draw pointer line from cell to label
+      ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(lbx,lby);
+      ctx.strokeStyle=m.color;ctx.lineWidth=0.8;ctx.globalAlpha=0.6;ctx.stroke();ctx.globalAlpha=1;
+
+      // Draw label background and text
+      var lpad=3;
+      ctx.fillStyle='rgba(0,0,0,0.82)';
+      ctx.fillRect(lbx-lpad,lby-fs,tw+lpad*2,fs+lpad*2);
+      ctx.fillStyle=m.color;
+      ctx.fillText(m.code,lbx,lby);
+    });
+
+    // ── LEGEND ───────────────────────────────────────────────────
+    var types=[],seen={};
+    filtered.forEach(function(c){if(CMETA[c.type]&&!seen[c.type]){types.push(c.type);seen[c.type]=true;}});
+    if(types.length){
+      var lfs2=10,lh=17,lpad2=8,lw=195;
+      var lht=types.length*lh+lpad2*2+20;
+      var lx=8,ly=cv.height-lht-8;
+      ctx.fillStyle='rgba(7,11,20,0.92)';ctx.fillRect(lx,ly,lw,lht);
+      ctx.strokeStyle='rgba(34,211,238,0.2)';ctx.lineWidth=0.5;ctx.strokeRect(lx,ly,lw,lht);
+      // Title
+      ctx.font='bold 9px monospace';ctx.fillStyle='#22d3ee';
+      ctx.fillText('ANNOTATIONS ('+filtered.length+' of '+cells.length+')',lx+lpad2,ly+lpad2+8);
+      if(filtered.length<cells.length){
+        ctx.font='8px sans-serif';ctx.fillStyle='#94a3b8';
+        ctx.fillText((cells.length-filtered.length)+' outside field filtered',lx+lpad2,ly+lpad2+18);
+      }
+      types.forEach(function(type,i){
+        var m=CMETA[type],y=ly+20+lpad2+i*lh+lh*0.6;
+        ctx.fillStyle=m.color;ctx.fillRect(lx+lpad2,y-4,9,9);
+        ctx.font='bold '+lfs2+'px monospace';ctx.fillStyle=m.color;ctx.fillText(m.code,lx+lpad2+13,y+3);
+        ctx.font=lfs2+'px sans-serif';ctx.fillStyle='#e2e8f0';
+        var cw=ctx.measureText(m.code+'  ').width;ctx.fillText(m.label,lx+lpad2+13+cw,y+3);
+      });
+    }
+
+    // ── WATERMARK ────────────────────────────────────────────────
+    ctx.font='bold 9px monospace';ctx.fillStyle='rgba(255,255,255,0.28)';
+    var sid=getSID(),idw=ctx.measureText(sid).width;
+    ctx.fillText(sid,cv.width-idw-8,cv.height-8);
+
+    G('cph').style.display='none';cv.style.display='block';
+    CPNG=cv.toDataURL('image/png');
+  };
+  img.onerror=function(){G('cph').textContent='Could not render annotation.';};
+  img.src=CDU;
+}
+
+// ── RENDER HELPERS ───────────────────────────────────────────
+
+function st(v,l,c){return '<div class="stat"><div class="stval" style="color:'+(c||'var(--tx)')+'">'+v+'</div><div class="stlbl">'+l+'</div></div>';}
+function irw(k,v){return '<div class="ir"><span class="ik">'+k+'</span><span class="iv">'+v+'</span></div>';}
+function irv(k,v,c){return '<div class="insrow"><span class="insk">'+k+'</span><span class="insv" style="color:'+(c||'var(--tx)')+'">'+v+'</span></div>';}
+function dot(c){return '<span class="cdot" style="background:'+c+'"></span>';}
+
+function renderSum(r){
+  var s=r.summary,ok=s.adequacy==='adequate';
+  var adq='<div class="adqb '+(ok?'adqok':'adqwarn')+'">'+(ok?'&#10003; Sample adequate':'&#9888; Sample inadequate')+(s.adequacyNote?' - '+s.adequacyNote:'')+'</div>';
+  var html='<div class="slbl">Summary</div>';
+  if(r.mode==='petri'){
+    html+='<div class="stgrid">'+st(s.mucus_plug_present?'Yes':'No','Mucus plug',s.mucus_plug_present?'var(--gn)':'var(--rd)')+st(s.blood_present?'Yes':'No','Blood',s.blood_present?'var(--rd)':'var(--gn)')+st(s.saliva_dominant?'High':'Low','Saliva',s.saliva_dominant?'var(--rd)':'var(--gn)')+'</div>'+adq+'<div class="icard">'+irw('Image quality',r.imageQuality||'--')+irw('Squamous contamination',s.squamous_contamination||'--')+irw('Overall quality',s.overall_quality||'--')+irw('Best selection area',s.best_selection_area||'--')+(s.recommendation?irw('Recommendation',s.recommendation):'')+'</div>';
+  } else if(r.mode==='inverted'||r.mode==='upright_hemo'){
+    var tot=(s.totalViable||0)+(s.totalDead||0);
+    html+='<div class="stgrid">'+st(s.totalViable||0,'Viable','var(--gn)')+st(s.totalDead||0,'Dead (TB+)','var(--bl)')+st(tot,'Total counted')+st((s.viabilityPercent||0).toFixed(1)+'%','Viability',(s.viabilityPercent||0)>=50?'var(--gn)':'var(--rd)')+st(s.totalSquamous||0,'Squamous')+st((s.squamousPercent||0).toFixed(1)+'%','Sq. contamination')+'</div>'+adq+'<div class="icard">'+irw('Image quality',r.imageQuality||'--')+irw('Grid detected',r.gridDetected?'Yes':'No')+irw('Total RBC',s.totalRBC||0)+irw('Viability threshold','>=50% (DTT-processed, Efthimiadis 1997)')+irw('Sq. threshold','<20% (Pizzichini 1996)')+'</div>';
+  } else {
+    var feg=s.fegSemiquant&&s.fegSemiquant!=='none'?'<span style="color:var(--am);font-weight:600">'+s.fegSemiquant.toUpperCase()+' - See Nair 2021</span>':'None detected';
+    html+='<div class="stgrid">'+st(s.totalCellsIdentified||0,'Identified')+st((s.macrophagePercent||0).toFixed(1)+'%','Macrophages (norm 61-93%)','var(--pu)')+st((s.neutrophilPercent||0).toFixed(1)+'%','Neutrophils (norm <61%)','var(--bl)')+st((s.eosinophilPercent||0).toFixed(1)+'%','Eosinophils (norm <3%)','var(--am)')+st((s.lymphocytePercent||0).toFixed(1)+'%','Lymphocytes (norm <5%)','var(--gn)')+st((s.squamousPercent||0).toFixed(1)+'%','Squamous')+'</div>'+adq+'<div class="icard">'+irw('Image quality',r.imageQuality||'--')+irw('Stain / Protocol',(r.stainType||'Leishman')+' | Quality: '+(r.stainQuality||'--'))+irw('Inflammatory pattern','<span class="pbadge2">'+(s.inflammatoryPattern||'--')+'</span>')+irw('FEG (AI)',feg)+irw('Non-squamous cells',(s.nonSquamousCells||s.totalCellsIdentified||0)+' / 400 target (ERS)')+irw('Sq. threshold','<20% (Pizzichini 1996)')+'</div>';
+  }
+  G('sumpanel').innerHTML=html;
+}
+
+function renderIns(r){
+  var s=r.summary,html='';
+  if(r.mode==='petri'){
+    html+=irv('Sample quality',(s.overall_quality||'--').toUpperCase(),s.overall_quality==='adequate'?'var(--gn)':'var(--rd)');
+    html+=irv('Mucus plugs',s.mucus_plug_present?'Yes - select for processing':'Not identified',s.mucus_plug_present?'var(--gn)':'var(--rd)');
+    html+=irv('Salivary contamination',s.saliva_dominant?'HIGH - predominantly saliva':'LOW - lower airway derived',s.saliva_dominant?'var(--rd)':'var(--gn)');
+    html+=irv('Blood',s.blood_present?'Yes - haemoptysis suspected':'Not detected',s.blood_present?'var(--rd)':'var(--tx2)');
+    if(s.recommendation)html+=irv('Action',s.recommendation,'var(--go)');
+  } else if(r.mode==='inverted'||r.mode==='upright_hemo'){
+    var vp=s.viabilityPercent||0;
+    html+=irv('Viability',vp.toFixed(1)+'%',vp>=70?'var(--gn)':vp>=50?'var(--am)':'var(--rd)');
+    html+=irv('Assessment',vp>=70?'Excellent - proceed':vp>=50?'Acceptable - DTT expected (Efthimiadis 1997)':'Poor - may be inadequate',vp>=70?'var(--gn)':vp>=50?'var(--am)':'var(--rd)');
+    html+=irv('Squares to count','Min 5 squares for valid TCC (Belda 2000 protocol)','var(--tx3)');
+  } else {
+    var pat=s.inflammatoryPattern||'paucigranulocytic';
+    var pc=pat==='eosinophilic'?'var(--am)':pat==='neutrophilic'?'var(--bl)':pat==='mixed'?'var(--rd)':'var(--tx2)';
+    html+=irv('Inflammatory pattern',pat.toUpperCase(),pc);
+    var clin='';
+    if(pat==='eosinophilic')clin='Eo >=3% (ERS) / >=2.3% (Firestone) - Steroid responsive. Consider ICS dose, anti-IL5 endotype.';
+    else if(pat==='neutrophilic')clin='N >=61% (ERS) - Steroid-unresponsive. Consider antibiotics, azithromycin, infection.';
+    else if(pat==='mixed')clin='Both Eo + N elevated - Most severe phenotype. Worst outcomes. Fibrinogen elevated.';
+    else clin='Eo <3%, N <61% - Non-eosinophilic. May be smooth muscle mast cell asthma. Variable steroid response.';
+    if(clin)html+=irv('Clinical interpretation',clin,'var(--tx2)');
+    html+=irv('Eosinophil',(s.eosinophilPercent||0).toFixed(1)+'% (ERS threshold >=3%; Firestone >=2.3%)',(s.eosinophilPercent||0)>=3?'var(--am)':'var(--tx2)');
+    html+=irv('Neutrophil',(s.neutrophilPercent||0).toFixed(1)+'% (ERS threshold >=61%)',(s.neutrophilPercent||0)>=61?'var(--bl)':'var(--tx2)');
+    if(s.fegSemiquant&&s.fegSemiquant!=='none')html+=irv('FEG warning','FEGs detected ('+s.fegSemiquant+') - Nair 2021: FEGs indicate eosinophil degranulation; eosinophilia may be underestimated by 45%','var(--am)');
+    html+=irv('DC progress',(s.nonSquamousCells||s.totalCellsIdentified||0)+' cells this field / 400 target (ERS standard)','var(--cy)');
+    var stainNote={upright:'Leishman (India/UK/Asia standard)',upright_mgg:'MGG (European/ERS standard) - azure B intensification',upright_dq:'Diff-Quik rapid stain (ICC 0.98-1.00 vs MGG - Ronchi 2014)'};
+    html+=irv('Stain used',stainNote[r.mode]||'Leishman','var(--cy)');
+    html+=irv('Stain quality',r.stainQuality||'--',r.stainQuality==='good'?'var(--gn)':'var(--am)');
+    if(r.mode==='upright_mgg'&&r.azureBIntensification)html+=irv('Azure B intensification',r.azureBIntensification,'var(--pu)');
+    if(r.mode==='upright_dq')html+=irv('Lymphocyte note','ICC 0.76-0.83 vs MGG - less reliable. Verify carefully.','var(--am)');
+  }
+  if(html){G('inscontent').innerHTML=html;show('insbox');}else hide('insbox');
+}
+
+function renderDtbl(r){
+  var cells=r.cells||[],s=r.summary;
+  var primary=cells.filter(function(c){return CMETA[c.type]&&CMETA[c.type].g==='p';});
+  var html='<div class="thdr">Primary Cell Identification</div>';
+  var types,total;
+  if(r.mode==='petri'){
+    types=['mucus_plug','saliva','squamous','blood_streak','debris'];total=primary.length;
+    html+='<table><thead><tr><th>Structure</th><th>Code</th><th>Count</th><th>% of frame</th></tr></thead><tbody>';
+    types.forEach(function(t){var m=CMETA[t];if(!m)return;var n=cells.filter(function(c){return c.type===t;}).length;html+='<tr style="opacity:'+(n===0?'0.35':'1')+'"><td>'+dot(m.color)+'<span class="tw">'+m.label+'</span></td><td class="mono bold" style="color:'+m.color+'">'+m.code+'</td><td class="mono">'+n+'</td><td class="mono">'+(total?((n/total)*100).toFixed(1):0)+'%</td></tr>';});
+  } else if(r.mode==='inverted'||r.mode==='upright_hemo'){
+    types=['viable_cell','dead_cell','squamous','rbc','debris'];total=primary.length;
+    html+='<table><thead><tr><th>Cell type</th><th>Code</th><th>Count</th><th>% of frame</th></tr></thead><tbody>';
+    types.forEach(function(t){var m=CMETA[t];if(!m)return;var n=cells.filter(function(c){return c.type===t;}).length;html+='<tr style="opacity:'+(n===0?'0.35':'1')+'"><td>'+dot(m.color)+'<span class="tw">'+m.label+'</span></td><td class="mono bold" style="color:'+m.color+'">'+m.code+'</td><td class="mono">'+n+'</td><td class="mono">'+(total?((n/total)*100).toFixed(1):0)+'%</td></tr>';});
+  } else {
+    types=['macrophage','neutrophil','eosinophil','lymphocyte','basophil','mast_cell','bronchial_epithelial','squamous'];
+    html+='<table><thead><tr><th>Cell type</th><th>Code</th><th>Count</th><th>% differential</th><th>ERS Normal</th></tr></thead><tbody>';
+    var norms={macrophage:'61-93%',neutrophil:'<61%',eosinophil:'<3%',lymphocyte:'<5%',basophil:'<1%',mast_cell:'rare',bronchial_epithelial:'<3%',squamous:'<20%'};
+    types.forEach(function(t){var m=CMETA[t];if(!m)return;var n=s[t]||0,pct=s[t+'Percent']||0;html+='<tr style="opacity:'+(n===0?'0.35':'1')+'"><td>'+dot(m.color)+'<span class="tw">'+m.label+'</span></td><td class="mono bold" style="color:'+m.color+'">'+m.code+'</td><td class="mono">'+n+'</td><td class="mono bold">'+pct.toFixed(1)+'%</td><td style="font-size:10px;color:var(--tx3)">'+(norms[t]||'--')+'</td></tr>';});
+  }
+  html+='</tbody></table>';
+  G('dtbl').innerHTML=html;
+}
+
+function renderMisc(r){
+  var cells=r.cells||[];
+  var misc=cells.filter(function(c){return CMETA[c.type]&&CMETA[c.type].g==='m';});
+  var s=r.summary;
+  var hasFeg=s&&s.fegSemiquant&&s.fegSemiquant!=='none';
+  if(!misc.length&&(!r.miscFindings||!r.miscFindings.length)&&!hasFeg){hide('miscsec');return;}
+  show('miscsec');
+  var types=[],seen={};
+  misc.forEach(function(c){if(!seen[c.type]){types.push(c.type);seen[c.type]=true;}});
+  var html='<div class="thdr go">Miscellaneous &amp; Incidental Findings (PICOT-informed)</div><table><thead><tr><th>Finding</th><th>Code</th><th>Count</th><th>Clinical note (evidence-based)</th></tr></thead><tbody>';
+  if(hasFeg&&!seen['feg']){
+    var m=CMETA['feg'];
+    html+='<tr><td>'+dot(m.color)+'<span class="tw" style="font-weight:600">'+m.label+'</span></td><td class="mono bold" style="color:'+m.color+'">FEG</td><td class="mono">'+s.fegSemiquant+'</td><td style="font-size:11px;color:var(--am);font-weight:500">'+(MNOTES['feg']||'--')+'</td></tr>';
+  }
+  types.forEach(function(t){var m=CMETA[t],n=misc.filter(function(c){return c.type===t;}).length;html+='<tr><td>'+dot(m.color)+'<span class="tw">'+m.label+'</span></td><td class="mono bold" style="color:'+m.color+'">'+m.code+'</td><td class="mono">'+n+'</td><td style="font-size:11px;color:var(--tx3)">'+(MNOTES[t]||'--')+'</td></tr>';});
+  if(r.miscFindings&&r.miscFindings.length){r.miscFindings.forEach(function(f){html+='<tr><td colspan="4" style="color:var(--go);font-size:12px">&#9671; '+f+'</td></tr>';});}
+  html+='</tbody></table>';
+  G('misctbl').innerHTML=html;
+}
+
+function renderGrid(r){
+  var gs=r.gridSquares,types=['viable_cell','dead_cell','squamous','rbc','debris'];
+  var squares=(gs.detected&&gs.detected.length)?gs.detected:['TL','TR','C','BL','BR'];
+  var sqL={TL:'Top-left',TR:'Top-right',C:'Centre',BL:'Bottom-left',BR:'Bottom-right'};
+  var html='<div class="thdr">Neubauer Grid Square Counts</div><table><thead><tr><th>Square</th>';
+  types.forEach(function(t){html+='<th>'+dot(CMETA[t].color)+CMETA[t].code+'</th>';});
+  html+='<th>Total</th></tr></thead><tbody>';
+  squares.forEach(function(sq){
+    var row=(gs.counts&&gs.counts[sq])?gs.counts[sq]:{},tot=types.reduce(function(a,t){return a+(row[t]||0);},0);
+    html+='<tr><td><span class="tw bold">'+(sqL[sq]||sq)+'</span> <span style="color:var(--tx3);font-size:10px;font-family:monospace">'+sq+'</span></td>';
+    types.forEach(function(t){html+='<td class="mono">'+(row[t]||0)+'</td>';});
+    html+='<td class="mono bold tw">'+tot+'</td></tr>';
+  });
+  G('gridtbl').innerHTML=html+'</tbody></table>';
+}
+
+function renderProg(r){
+  var pp=G('progpanel');
+  if(r.mode==='upright'||r.mode==='upright_mgg'||r.mode==='upright_dq'){
+    var ns=SESS.dcNS,pct=Math.min(100,Math.round((ns/400)*100)),rem=Math.max(0,400-ns);
+    var avg=SESS.imgs>0?Math.round(ns/SESS.imgs):50,needed=avg>0?Math.ceil(rem/avg):'?';
+    show('progpanel');
+    pp.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'
+      +'<div style="font-size:10px;font-family:monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--tx3)">DC Progress (ERS: 400 non-squamous cells)</div>'
+      +'<div style="font-size:11px;font-family:monospace;color:var(--cy)">Image '+SESS.imgs+' &middot; '+ns+' / 400 cells</div>'
+      +'</div>'
+      +'<div style="background:var(--sf2);border-radius:20px;height:8px;overflow:hidden;border:1px solid var(--br)">'
+      +'<div style="height:100%;width:'+pct+'%;background:'+(pct>=100?'var(--gn)':'linear-gradient(90deg,#0891b2,#22d3ee)')+';border-radius:20px;transition:width .5s ease"></div>'
+      +'</div>'
+      +'<div style="display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--tx3)">'
+      +'<span>'+(pct>=100?'400 cells reached - DC complete (Belda 2000 / ERS standard)':'~'+rem+' more cells needed')+'</span>'
+      +'<span>'+(pct<100?'~'+needed+' more image'+(needed!==1?'s':'')+' at current density':'')+'</span>'
+      +'</div>'
+      +(pct>=100?'<div style="margin-top:10px;padding:8px 12px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);border-radius:8px;font-size:11px;color:var(--gn);font-family:monospace">Valid differential count achieved. Proceed to calculate final percentages per ERS protocol.</div>':'');
+  } else if(r.mode==='inverted'||r.mode==='upright_hemo'){
+    var tot2=SESS.tccV+SESS.tccD,vp=tot2>0?(SESS.tccV/tot2*100).toFixed(1):'--';
+    show('progpanel');
+    pp.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">'
+      +'<div style="font-size:10px;font-family:monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--tx3)">TCC Session Accumulator</div>'
+      +'<div style="font-size:11px;font-family:monospace;color:var(--cy)">Image '+SESS.imgs+'</div>'
+      +'</div>'
+      +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px">'
+      +'<div style="background:var(--sf2);border:1px solid var(--br);border-radius:8px;padding:10px;text-align:center"><div style="font-size:18px;font-weight:700;color:var(--gn);font-family:monospace">'+SESS.tccV+'</div><div style="font-size:9px;color:var(--tx3);text-transform:uppercase;margin-top:2px">Viable</div></div>'
+      +'<div style="background:var(--sf2);border:1px solid var(--br);border-radius:8px;padding:10px;text-align:center"><div style="font-size:18px;font-weight:700;color:var(--bl);font-family:monospace">'+SESS.tccD+'</div><div style="font-size:9px;color:var(--tx3);text-transform:uppercase;margin-top:2px">Dead</div></div>'
+      +'<div style="background:var(--sf2);border:1px solid var(--br);border-radius:8px;padding:10px;text-align:center"><div style="font-size:18px;font-weight:700;color:var(--tx);font-family:monospace">'+tot2+'</div><div style="font-size:9px;color:var(--tx3);text-transform:uppercase;margin-top:2px">Total</div></div>'
+      +'<div style="background:var(--sf2);border:1px solid var(--br);border-radius:8px;padding:10px;text-align:center"><div style="font-size:18px;font-weight:700;font-family:monospace;color:'+(tot2>0?(parseFloat(vp)>=50?'var(--gn)':'var(--rd)'):'var(--tx3)')+'">'+vp+(tot2>0?'%':'')+'</div><div style="font-size:9px;color:var(--tx3);text-transform:uppercase;margin-top:2px">Viability</div></div>'
+      +'</div>'
+      +'<div style="font-size:11px;color:var(--tx3)">Squares counted: '+SESS.tccSq+' &middot; Min 5 squares for valid TCC. Viability >=50% adequate (after DTT, per Efthimiadis 1997 ERJ).</div>';
+  } else {
+    hide('progpanel');
+  }
+}
+
+// ── DOWNLOADS ────────────────────────────────────────────────
+
+function dlPNG(){
+  if(!CPNG){alert('Annotated image not ready. Please wait for analysis to complete.');return;}
+  try{
+    fetch(CPNG).then(function(res){return res.blob();}).then(function(blob){
+      var url=URL.createObjectURL(blob),a=document.createElement('a');
+      a.href=url;a.download=getSID()+'_annotated.png';
+      document.body.appendChild(a);a.click();document.body.removeChild(a);
+      setTimeout(function(){URL.revokeObjectURL(url);},1000);
+    }).catch(function(){
+      var w=window.open('','_blank');
+      w.document.write('<img src="'+CPNG+'" style="max-width:100%"><br><p style="font-family:monospace;font-size:13px;padding:16px">Right-click - Save image as '+getSID()+'_annotated.png</p>');
+      w.document.close();
+    });
+  }catch(e){window.open(CPNG,'_blank');}
+}
+
+function dlPDF(){
+  if(!CUR_RESULT){alert('Run an analysis first.');return;}
+  var sid=getSID();
+  var sp=G('sumpanel')?G('sumpanel').innerHTML:'';
+  var dt=G('dtbl')?G('dtbl').innerHTML:'';
+  var mt=(G('misctbl')&&!G('miscsec').classList.contains('hidden'))?G('misctbl').innerHTML:'';
+  var gt=(G('gridtbl')&&!G('gridsec').classList.contains('hidden'))?G('gridtbl').innerHTML:'';
+  var fd=(G('fdbox')&&!G('fdbox').classList.contains('hidden'))?G('fdtxt').textContent:'';
+  var ins=(G('insbox')&&!G('insbox').classList.contains('hidden'))?G('inscontent').innerHTML:'';
+  var pw=window.open('','_blank');
+  if(!pw){alert('Please allow popups to generate PDF.');return;}
+  pw.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Sputum Inflammometry Report - '+sid+'</title>'
+    +'<style>body{font-family:system-ui,sans-serif;padding:32px;color:#1e293b;max-width:960px;margin:0 auto}'
+    +'h1{font-size:20px;margin-bottom:4px}.meta{font-size:12px;color:#64748b;margin-bottom:4px}.sid{font-family:monospace;font-weight:700;color:#0891b2}'
+    +'img{max-width:100%;border-radius:8px;margin:16px 0;border:1px solid #e2e8f0}'
+    +'table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:14px}'
+    +'th{background:#f8fafc;padding:7px 10px;border:1px solid #e2e8f0;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#64748b}'
+    +'td{padding:7px 10px;border:1px solid #f1f5f9;color:#334155}'
+    +'.sec{margin-bottom:20px}.st{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:#64748b;margin-bottom:6px;padding-bottom:4px;border-bottom:2px solid #0891b2}'
+    +'.fd{background:#f0f9ff;border:1px solid #bae6fd;border-radius:6px;padding:10px 14px;font-size:12px;color:#0c4a6e;line-height:1.7;margin-bottom:14px}'
+    +'.ref{font-size:11px;color:#94a3b8;border-top:1px solid #f1f5f9;padding-top:12px;margin-top:20px}'
+    +'@media print{body{padding:16px}}</style></head><body>'
+    +'<h1>Sputum Inflammometry Analysis Report</h1>'
+    +'<div class="meta">Sample ID: <span class="sid">'+sid+'</span></div>'
+    +'<div class="meta">'+new Date().toLocaleString()+' &middot; Vamsipedia Clinical AI Suite v2 &middot; PICOT-informed analysis &middot; Image '+SESS.imgs+'</div>'
+    +'<div class="meta">Stain: <b>'+(CUR_RESULT&&CUR_RESULT.stainType?CUR_RESULT.stainType:(CUR_RESULT&&CUR_RESULT.mode==='upright_mgg'?'MGG - May-Grunwald Giemsa':CUR_RESULT&&CUR_RESULT.mode==='upright_dq'?'Diff-Quik (Rapid)':'Leishman'))+'</b> | ERS threshold: Eosinophilia >=3%, Neutrophilia >=61% (Belda 2000)</div>'
+    +'<div class="meta" style="color:#d97706;font-weight:500">AI-assisted analysis - Expert review and validation required. Not for standalone clinical use.</div>'
+    +(CPNG?'<img src="'+CPNG+'" alt="Annotated image">':'')
+    +(fd?'<div class="sec"><div class="st">Field Assessment (AI)</div><div class="fd">'+fd+'</div></div>':'')
+    +'<div class="sec"><div class="st">Summary</div>'+sp+'</div>'
+    +(ins?'<div class="sec"><div class="st">Sample Insights</div>'+ins+'</div>':'')
+    +'<div class="sec"><div class="st">Cell Data</div>'+dt+'</div>'
+    +(mt?'<div class="sec"><div class="st">Miscellaneous Findings</div>'+mt+'</div>':'')
+    +(gt?'<div class="sec"><div class="st">Grid Counts</div>'+gt+'</div>':'')
+    +'<div class="ref">Reference thresholds: Eosinophilia >=3% (ERS/Belda 2000); Neutrophilia >=61% (ERS); Adequacy: squamous <20% (Pizzichini 1996), viability >=50% DTT-treated (Efthimiadis 1997). FEG counting per Nair/Kjarsgaard 2021.</div>'
+    +'</body></html>');
+  pw.document.close();
+  setTimeout(function(){pw.print();},800);
+}
+
+function setLoad(on){G('ldr').classList.toggle('show',on);G('anbtn').disabled=on;}
+function showErr(msg){var e=G('ebox');e.textContent=msg;e.style.display='block';}
+function clearErr(){G('ebox').style.display='none';}
+
+function resetAll(){
+  CM=null;CDU=null;CB64=null;CPNG=null;CUR_RESULT=null;
+  SESS={imgs:0,dcNS:0,tccV:0,tccD:0,tccSq:0};
+  ['mc-inv','mc-upr'].forEach(function(id){G(id).classList.remove('sel');});
+  ['sub-petri','sub-hemo','sub-diff','sub-mgg','sub-dq','sub-uhemo'].forEach(function(id){var el=G(id);if(el){el.style.opacity='0.6';el.style.filter='';}});
+  ['upsec','ansec','ressec','miscsec','gridsec','notesarea','progpanel','fdbox','insbox','valpanel','comptbl-wrap','sess-table-wrap'].forEach(hide);
+  clearErr();
+  G('sidinput').value=newSID();
+  setStep(1);
+}
+</script>
+</body>
+</html>
